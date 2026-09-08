@@ -131,5 +131,25 @@ class TestHoneyChainMLService(unittest.TestCase):
         finally:
             os.environ.pop('ML_API_KEY', None)
 
+    def test_06_dashboard_endpoints(self):
+        for path in ['/', '/dashboard', '/frontend', '/ui']:
+            req = urllib.request.Request(f"{BASE_URL}{path}")
+            with urllib.request.urlopen(req) as resp:
+                self.assertEqual(resp.status, 200)
+                self.assertIn("text/html", resp.headers.get("Content-Type", ""))
+                html = resp.read().decode('utf-8')
+                self.assertIn("HoneyChain ML Diagnostic Studio", html)
+
+        # Ensure Accept: application/json on / returns JSON
+        req_json = urllib.request.Request(
+            f"{BASE_URL}/",
+            headers={"Accept": "application/json"}
+        )
+        with urllib.request.urlopen(req_json) as resp:
+            self.assertEqual(resp.status, 200)
+            self.assertIn("application/json", resp.headers.get("Content-Type", ""))
+            data = json.loads(resp.read().decode('utf-8'))
+            self.assertEqual(data["status"], "ok")
+
 if __name__ == '__main__':
     unittest.main()

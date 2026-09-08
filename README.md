@@ -42,9 +42,17 @@ The service operates on a **6-Tier Continuous Inference Hierarchy** (`T1` throug
 
 ---
 
-## 📡 API Specification
+## 📡 API & Interface Specification
 
-### 1. Health Probe
+### 1. Interactive Diagnostic Studio (Web GUI)
+```http
+GET / (or /dashboard, /frontend, /ui)
+```
+Opens the interactive browser GUI for testing telemetry scenarios, reviewing anomaly metrics, visualizing time-series charts, and testing predictions directly.
+
+---
+
+### 2. Health Probe (Express & Cloud Probe)
 ```http
 GET /health
 ```

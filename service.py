@@ -41,6 +41,19 @@ def init_model():
         logger.info(f"Model successfully loaded. Available tiers: {list(_HIVE_MODEL.tiers.keys())}")
     return _HIVE_MODEL
 
+DASHBOARD_FILE = os.path.join(BASE_DIR, 'dashboard.html')
+_DASHBOARD_HTML = None
+
+def get_dashboard_html():
+    global _DASHBOARD_HTML
+    if _DASHBOARD_HTML is None or os.environ.get('ENV') == 'development':
+        if os.path.exists(DASHBOARD_FILE):
+            with open(DASHBOARD_FILE, 'r', encoding='utf-8') as f:
+                _DASHBOARD_HTML = f.read()
+        else:
+            _DASHBOARD_HTML = "<!DOCTYPE html><html><body><h1>HoneyChain ML Diagnostic Studio</h1><p>dashboard.html not found</p></body></html>"
+    return _DASHBOARD_HTML
+
 def get_configured_api_key():
     key = os.environ.get('ML_API_KEY', '').strip()
     return key if key else None
@@ -62,6 +75,15 @@ class MLRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(response_bytes)
 
+    def _send_html(self, status_code, html_content):
+        response_bytes = html_content.encode('utf-8')
+        self.send_response(status_code)
+        self.send_header('Content-Type', 'text/html; charset=utf-8')
+        self.send_header('Content-Length', str(len(response_bytes)))
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
+        self.wfile.write(response_bytes)
+
     def do_OPTIONS(self):
         self.send_response(204)
         self.send_header('Access-Control-Allow-Origin', '*')
@@ -78,7 +100,8 @@ class MLRequestHandler(BaseHTTPRequestHandler):
         return provided_key == expected_key
 
     def do_GET(self):
-        if self.path == '/health' or self.path == '/':
+        clean_path = self.path.split('?')[0].rstrip('/')
+        if clean_path == '/health':
             try:
                 model = init_model()
                 tiers = list(model.tiers.keys()) if model else []
@@ -98,6 +121,32 @@ class MLRequestHandler(BaseHTTPRequestHandler):
                     "modelLoaded": False,
                     "error": str(e)
                 })
+        elif clean_path in ('', '/dashboard', '/frontend', '/ui'):
+            accept = self.headers.get('Accept', '')
+            if clean_path == '' and 'application/json' in accept and 'text/html' not in accept:
+                try:
+                    model = init_model()
+                    tiers = list(model.tiers.keys()) if model else []
+                    self._send_json(200, {
+                        "status": "ok",
+                        "service": "honeychain-hive-health-ml",
+                        "version": "1.0.0",
+                        "modelLoaded": model is not None,
+                        "tiers": tiers
+                    })
+                except Exception as e:
+                    self._send_json(503, {"status": "error", "error": str(e)})
+            else:
+                html = get_dashboard_html()
+                self._send_html(200, html)
+        elif clean_path == '/api/sample-input':
+            sample_path = os.path.join(MODELS_DIR, 'sample_input.json')
+            if os.path.exists(sample_path):
+                with open(sample_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                self._send_json(200, data)
+            else:
+                self._send_json(404, {"error": "sample_input.json not found"})
         else:
             self._send_json(404, {"error": "Not Found", "path": self.path})
 
