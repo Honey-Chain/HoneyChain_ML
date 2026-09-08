@@ -1,0 +1,383 @@
+{
+  "tiers": {
+    "T1": {
+      "hours": 1,
+      "rows": 1,
+      "features": [
+        "temperature",
+        "humidity",
+        "flow",
+        "flow_abs",
+        "flow_abs_dev",
+        "temperature_dev",
+        "hour_sin",
+        "hour_cos",
+        "is_daylight"
+      ],
+      "has_xgb": false
+    },
+    "T6": {
+      "hours": 6,
+      "rows": 7,
+      "features": [
+        "temperature",
+        "humidity",
+        "flow",
+        "flow_abs",
+        "flow_abs_dev",
+        "temperature_dev",
+        "hour_sin",
+        "hour_cos",
+        "is_daylight",
+        "weight_change_1h",
+        "weight_change_3h",
+        "weight_change_6h",
+        "weight_change_6h_dev",
+        "weight_roll_std_6h",
+        "flow_roll_3h",
+        "flow_roll_6h",
+        "flow_trend_6h",
+        "flow_ratio_6h",
+        "temp_change_3h",
+        "temp_change_6h"
+      ],
+      "has_xgb": true
+    },
+    "T12": {
+      "hours": 12,
+      "rows": 13,
+      "features": [
+        "temperature",
+        "humidity",
+        "flow",
+        "flow_abs",
+        "flow_abs_dev",
+        "temperature_dev",
+        "hour_sin",
+        "hour_cos",
+        "is_daylight",
+        "weight_change_1h",
+        "weight_change_3h",
+        "weight_change_6h",
+        "weight_change_6h_dev",
+        "weight_roll_std_6h",
+        "flow_roll_3h",
+        "flow_roll_6h",
+        "flow_trend_6h",
+        "flow_ratio_6h",
+        "temp_change_3h",
+        "temp_change_6h",
+        "weight_change_12h",
+        "weight_change_12h_dev",
+        "weight_trend_12h",
+        "weight_roll_std_12h",
+        "flow_roll_12h",
+        "flow_ratio_12h",
+        "flow_trend_12h",
+        "humid_roll_12h"
+      ],
+      "has_xgb": true
+    },
+    "T24": {
+      "hours": 24,
+      "rows": 25,
+      "features": [
+        "temperature",
+        "humidity",
+        "flow",
+        "flow_abs",
+        "flow_abs_dev",
+        "temperature_dev",
+        "hour_sin",
+        "hour_cos",
+        "is_daylight",
+        "weight_change_1h",
+        "weight_change_3h",
+        "weight_change_6h",
+        "weight_change_6h_dev",
+        "weight_roll_std_6h",
+        "flow_roll_3h",
+        "flow_roll_6h",
+        "flow_trend_6h",
+        "flow_ratio_6h",
+        "temp_change_3h",
+        "temp_change_6h",
+        "weight_change_12h",
+        "weight_change_12h_dev",
+        "weight_trend_12h",
+        "weight_roll_std_12h",
+        "flow_roll_12h",
+        "flow_ratio_12h",
+        "flow_trend_12h",
+        "humid_roll_12h",
+        "weight_change_24h",
+        "weight_change_24h_dev",
+        "weight_trend_24h",
+        "weight_roll_std_24h",
+        "flow_roll_24h",
+        "flow_trend_24h",
+        "temp_roll_24h"
+      ],
+      "has_xgb": true
+    },
+    "T36": {
+      "hours": 36,
+      "rows": 37,
+      "features": [
+        "temperature",
+        "humidity",
+        "flow",
+        "flow_abs",
+        "flow_abs_dev",
+        "temperature_dev",
+        "hour_sin",
+        "hour_cos",
+        "is_daylight",
+        "weight_change_1h",
+        "weight_change_3h",
+        "weight_change_6h",
+        "weight_change_6h_dev",
+        "weight_roll_std_6h",
+        "flow_roll_3h",
+        "flow_roll_6h",
+        "flow_trend_6h",
+        "flow_ratio_6h",
+        "temp_change_3h",
+        "temp_change_6h",
+        "weight_change_12h",
+        "weight_change_12h_dev",
+        "weight_trend_12h",
+        "weight_roll_std_12h",
+        "flow_roll_12h",
+        "flow_ratio_12h",
+        "flow_trend_12h",
+        "humid_roll_12h",
+        "weight_change_24h",
+        "weight_change_24h_dev",
+        "weight_trend_24h",
+        "weight_roll_std_24h",
+        "flow_roll_24h",
+        "flow_trend_24h",
+        "temp_roll_24h",
+        "weight_trend_36h",
+        "weight_change_36h",
+        "flow_roll_36h"
+      ],
+      "has_xgb": true
+    },
+    "T48": {
+      "hours": 48,
+      "rows": 49,
+      "features": [
+        "temperature",
+        "humidity",
+        "flow",
+        "flow_abs",
+        "flow_abs_dev",
+        "temperature_dev",
+        "hour_sin",
+        "hour_cos",
+        "is_daylight",
+        "weight_change_1h",
+        "weight_change_3h",
+        "weight_change_6h",
+        "weight_change_6h_dev",
+        "weight_roll_std_6h",
+        "flow_roll_3h",
+        "flow_roll_6h",
+        "flow_trend_6h",
+        "flow_ratio_6h",
+        "temp_change_3h",
+        "temp_change_6h",
+        "weight_change_12h",
+        "weight_change_12h_dev",
+        "weight_trend_12h",
+        "weight_roll_std_12h",
+        "flow_roll_12h",
+        "flow_ratio_12h",
+        "flow_trend_12h",
+        "humid_roll_12h",
+        "weight_change_24h",
+        "weight_change_24h_dev",
+        "weight_trend_24h",
+        "weight_roll_std_24h",
+        "flow_roll_24h",
+        "flow_trend_24h",
+        "temp_roll_24h",
+        "weight_trend_36h",
+        "weight_change_36h",
+        "flow_roll_36h",
+        "weight_trend_48h",
+        "weight_change_48h",
+        "flow_roll_48h",
+        "weight_roll_std_48h"
+      ],
+      "has_xgb": true
+    }
+  },
+  "tier_order": [
+    "T48",
+    "T36",
+    "T24",
+    "T12",
+    "T6",
+    "T1"
+  ],
+  "health_cols": {
+    "T1": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "T6": [
+      null,
+      null,
+      "weight_change_6h",
+      6
+    ],
+    "T12": [
+      "weight_trend_12h",
+      12,
+      "weight_change_12h",
+      12
+    ],
+    "T24": [
+      "weight_trend_24h",
+      24,
+      "weight_change_12h",
+      12
+    ],
+    "T36": [
+      "weight_trend_36h",
+      36,
+      "weight_change_24h",
+      24
+    ],
+    "T48": [
+      "weight_trend_48h",
+      48,
+      "weight_change_24h",
+      24
+    ]
+  },
+  "health_weights": {
+    "trend": 150,
+    "drop": 90,
+    "activity": 5,
+    "anomaly": 0.25
+  },
+  "stress_thresholds": {
+    "weight_trend_48h": -1.0,
+    "weight_change_24h": -2.0,
+    "weight_change_6h": -1.5,
+    "flow_abs_dev_low": -1.671,
+    "flow_abs_dev_high": 2.174
+  },
+  "dev_cols": [
+    "flow_abs",
+    "temperature",
+    "weight_change_6h",
+    "weight_change_12h",
+    "weight_change_24h"
+  ],
+  "dev_log_cols": [
+    "flow_abs"
+  ],
+  "dev_clip": 10.0,
+  "dev_baseline_hive": "wurzburg",
+  "xgb_trusted_tiers": [
+    "T24",
+    "T36",
+    "T48"
+  ],
+  "dev_global_std": {
+    "flow_abs": 2.216450808601608,
+    "temperature": 8.873915614369608,
+    "weight_change_6h": 0.5776966807051613,
+    "weight_change_12h": 0.6664755909853338,
+    "weight_change_24h": 0.6725676748051457
+  },
+  "valid_ranges": {
+    "temperature": [
+      -30,
+      50
+    ],
+    "humidity": [
+      0,
+      100
+    ],
+    "weight": [
+      0,
+      150
+    ],
+    "flow": [
+      -50000,
+      50000
+    ]
+  },
+  "min_hive_kg": 20.0,
+  "metrics": {
+    "T1": {
+      "n_feat": 9,
+      "schwartau_rows": 20595,
+      "iso_flag_train": 0.05,
+      "iso_flag_unseen": 0.341,
+      "val_pr_auc": null,
+      "unseen_pr_auc": null,
+      "unseen_recall": null,
+      "unseen_precision": null
+    },
+    "T6": {
+      "n_feat": 20,
+      "schwartau_rows": 19343,
+      "iso_flag_train": 0.05,
+      "iso_flag_unseen": 0.151,
+      "val_pr_auc": 0.107,
+      "unseen_pr_auc": 0.257,
+      "unseen_recall": 0.188,
+      "unseen_precision": 0.646
+    },
+    "T12": {
+      "n_feat": 28,
+      "schwartau_rows": 19280,
+      "iso_flag_train": 0.05,
+      "iso_flag_unseen": 0.144,
+      "val_pr_auc": 0.149,
+      "unseen_pr_auc": 0.305,
+      "unseen_recall": 0.158,
+      "unseen_precision": 0.667
+    },
+    "T24": {
+      "n_feat": 35,
+      "schwartau_rows": 19205,
+      "iso_flag_train": 0.05,
+      "iso_flag_unseen": 0.164,
+      "val_pr_auc": 0.715,
+      "unseen_pr_auc": 0.693,
+      "unseen_recall": 0.624,
+      "unseen_precision": 0.757
+    },
+    "T36": {
+      "n_feat": 38,
+      "schwartau_rows": 19142,
+      "iso_flag_train": 0.05,
+      "iso_flag_unseen": 0.158,
+      "val_pr_auc": 0.849,
+      "unseen_pr_auc": 0.831,
+      "unseen_recall": 0.776,
+      "unseen_precision": 0.81
+    },
+    "T48": {
+      "n_feat": 42,
+      "schwartau_rows": 19079,
+      "iso_flag_train": 0.05,
+      "iso_flag_unseen": 0.17,
+      "val_pr_auc": 0.846,
+      "unseen_pr_auc": 0.858,
+      "unseen_recall": 0.83,
+      "unseen_precision": 0.721
+    }
+  },
+  "notes": "Temperature is AMBIENT, not brood-nest. Stress labels are weakly supervised from physical apiculture rules (weight + flow), NOT from the anomaly score. Six tiers: 1/6/12/24/36/48 hours. No 7-day tier. flow_abs_dev is a z-score of log1p(flow_abs) against a single-hive day-of-year baseline; unseen-hive metrics are measured under that same saved baseline, so they reflect what predict.py can actually reproduce. stressRisk comes from the classifier only on T24/T36/T48; T1/T6/T12 derive it from the anomaly percentile and return stressProbability=null."
+}

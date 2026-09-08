@@ -1,0 +1,26 @@
+{
+  "hiveId": "WURZBURG",
+  "timestamp": "2017-05-12T13:00:00",
+  "status": "OK",
+  "tier": "T48",
+  "hoursAvailable": 49,
+  "hoursObserved": 49,
+  "healthScore": 52.3,
+  "stressRisk": "HIGH",
+  "stressProbability": 0.999,
+  "abnormalityRisk": 98.2,
+  "detectionScope": [
+    "colony activity anomaly",
+    "fast weight drop (robbing / swarm)",
+    "sustained weight decline (starvation)"
+  ],
+  "drivers": {
+    "activityDeviation": -1.086,
+    "temperatureDeviation": 1.981,
+    "netFlow": -120.0,
+    "weightTrend": 1.236,
+    "weightDrop": -4.73
+  },
+  "recommendation": "Sharp weight loss with abnormal activity - inspect for swarming or robbing.",
+  "stressBasis": "classifier"
+}
