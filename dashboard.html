@@ -3,25 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HoneyChain ML - Hive Health Diagnostic Studio</title>
+  <title>HoneyChain ML Diagnostic Studio • Hive Health Telemetry</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐝</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --bg-main: #0a0e17;
-      --bg-card: #111827;
-      --bg-input: #1f2937;
-      --border: #374151;
+      --bg-base: #060911;
+      --bg-surface: #0d1322;
+      --bg-card: #121a2d;
+      --bg-card-hover: #16223b;
+      --bg-input: #1a253e;
+      --border: rgba(255, 255, 255, 0.08);
       --border-focus: #f59e0b;
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      
+      --honey-glow: rgba(245, 158, 11, 0.25);
+      --honey-300: #fcd34d;
       --honey-400: #fbbf24;
       --honey-500: #f59e0b;
       --honey-600: #d97706;
-      --green: #10b981;
-      --yellow: #f59e0b;
-      --red: #ef4444;
-      --blue: #3b82f6;
+      
+      --emerald: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.2);
+      --amber: #f59e0b;
+      --amber-glow: rgba(245, 158, 11, 0.2);
+      --rose: #f43f5e;
+      --rose-glow: rgba(244, 63, 94, 0.2);
+      --cyan: #06b6d4;
+      --cyan-glow: rgba(6, 182, 212, 0.2);
     }
 
     * {
@@ -31,16 +45,21 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg-main);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-base);
+      background-image: 
+        radial-gradient(circle at 15% 10%, rgba(245, 158, 11, 0.07) 0%, transparent 40%),
+        radial-gradient(circle at 85% 60%, rgba(6, 182, 212, 0.05) 0%, transparent 40%);
+      background-attachment: fixed;
       color: var(--text-main);
       line-height: 1.5;
       padding: 24px;
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
 
     .container {
-      max-width: 1440px;
+      max-width: 1480px;
       margin: 0 auto;
     }
 
@@ -59,56 +78,126 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
 
-    .brand-icon {
-      font-size: 32px;
+    .brand-logo-wrap {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.05) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 0 16px var(--honey-glow);
     }
 
     .brand h1 {
-      font-size: 22px;
-      font-weight: 700;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
       color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand h1 span.highlight {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .brand p {
       font-size: 13px;
       color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .status-badge {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       background: var(--bg-card);
-      padding: 8px 16px;
+      padding: 7px 14px;
       border-radius: 9999px;
       border: 1px solid var(--border);
-      font-size: 13px;
+      font-size: 12px;
+      font-weight: 500;
     }
 
-    .status-dot {
-      width: 10px;
-      height: 10px;
+    .status-pulse {
+      position: relative;
+      display: flex;
+      width: 9px;
+      height: 9px;
+    }
+
+    .status-pulse .dot {
+      position: absolute;
+      inset: 0;
       border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 8px var(--green);
+      background-color: var(--emerald);
     }
 
-    .status-dot.offline {
-      background: var(--red);
-      box-shadow: 0 0 8px var(--red);
+    .status-pulse .ping {
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background-color: var(--emerald);
+      opacity: 0.75;
+      animation: ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
     }
 
-    /* Layout Grid */
+    @keyframes ping {
+      75%, 100% {
+        transform: scale(2);
+        opacity: 0;
+      }
+    }
+
+    .status-pulse.offline .dot { background-color: var(--rose); }
+    .status-pulse.offline .ping { display: none; }
+
+    .btn-gh {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 7px 14px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+
+    .btn-gh:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+      background: var(--bg-card-hover);
+    }
+
+    /* Main 2-Column Grid */
     .grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
       gap: 24px;
+      align-items: start;
     }
 
-    @media (max-width: 1080px) {
+    @media (max-width: 1040px) {
       .grid {
         grid-template-columns: 1fr;
       }
@@ -118,179 +207,274 @@
     .card {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
+      border-radius: 16px;
+      padding: 22px;
       margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
     }
 
-    .card-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #fff;
+    .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
-    /* Preset Buttons */
-    .scenarios-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Scenarios Grid (Responsive flex-wrap) */
+    .scenarios-container {
+      display: flex;
+      flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
     .btn-scenario {
-      background: var(--bg-input);
-      color: var(--text-main);
+      flex: 1 1 calc(25% - 10px);
+      min-width: 140px;
+      background: var(--bg-surface);
       border: 1px solid var(--border);
-      padding: 10px 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      cursor: pointer;
+      border-radius: 12px;
+      padding: 12px 14px;
       text-align: left;
-      transition: all 0.15s ease;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      justify-content: space-between;
+      gap: 8px;
+      position: relative;
+    }
+
+    @media (max-width: 640px) {
+      .btn-scenario {
+        flex: 1 1 calc(50% - 10px);
+      }
     }
 
     .btn-scenario:hover {
-      border-color: var(--honey-400);
-      background: #283548;
+      background: var(--bg-card-hover);
+      border-color: rgba(245, 158, 11, 0.4);
+      transform: translateY(-2px);
     }
 
     .btn-scenario.active {
+      background: linear-gradient(145deg, #18233c, #131c30);
       border-color: var(--honey-500);
-      background: #2c384e;
-      box-shadow: 0 0 0 1px var(--honey-500);
+      box-shadow: 0 0 0 1px var(--honey-500), 0 4px 16px rgba(245, 158, 11, 0.15);
     }
 
-    .btn-scenario .name {
-      font-weight: 600;
+    .scenario-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .scenario-name {
+      font-size: 13px;
+      font-weight: 700;
       color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .btn-scenario .desc {
+    .scenario-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .btn-scenario.active .scenario-pill {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--honey-300);
+    }
+
+    .scenario-desc {
       font-size: 11px;
       color: var(--text-muted);
+      line-height: 1.35;
     }
 
     /* Form Controls */
-    .form-row {
+    .config-row {
       display: flex;
-      gap: 16px;
-      margin-bottom: 16px;
+      gap: 14px;
+      margin-bottom: 18px;
       flex-wrap: wrap;
     }
 
     .form-group {
       flex: 1;
-      min-width: 180px;
+      min-width: 170px;
     }
 
     label {
       display: block;
       font-size: 12px;
-      font-weight: 500;
+      font-weight: 600;
       color: var(--text-muted);
       margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
-    input, textarea, select {
+    input, textarea {
       width: 100%;
       background: var(--bg-input);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 10px;
       color: var(--text-main);
-      padding: 9px 12px;
+      padding: 10px 14px;
       font-size: 13px;
-      transition: border-color 0.15s;
+      font-family: inherit;
+      transition: all 0.15s;
     }
 
-    input:focus, textarea:focus, select:focus {
+    input:focus, textarea:focus {
       outline: none;
       border-color: var(--honey-400);
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+      background: #1e2b48;
     }
 
-    /* Tabs */
-    .tabs-header {
+    /* Tabs Header */
+    .tabs-bar {
       display: flex;
-      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
       border-bottom: 1px solid var(--border);
       margin-bottom: 14px;
-      padding-bottom: 8px;
+      padding-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tab-pills {
+      display: flex;
+      background: var(--bg-surface);
+      padding: 3px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      gap: 2px;
     }
 
     .tab-btn {
       background: transparent;
       border: none;
       color: var(--text-muted);
-      padding: 6px 12px;
-      border-radius: 6px;
+      padding: 6px 14px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 13px;
-      font-weight: 500;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.15s;
     }
 
     .tab-btn.active {
       color: #fff;
-      background: var(--bg-input);
-      font-weight: 600;
+      background: var(--bg-card);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
 
-    /* Telemetry Table */
-    .table-container {
-      max-height: 280px;
+    /* Table Styling with Responsive Wrapper */
+    .table-scroll {
+      max-height: 310px;
       overflow-y: auto;
+      overflow-x: auto;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 12px;
       margin-bottom: 16px;
+      background: var(--bg-surface);
+      -webkit-overflow-scrolling: touch;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       font-size: 12px;
-    }
-
-    th, td {
-      padding: 8px 10px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
+      font-family: 'JetBrains Mono', monospace;
     }
 
     th {
-      background: var(--bg-input);
+      background: #111a2f;
       position: sticky;
       top: 0;
       color: var(--text-muted);
       font-weight: 600;
-      z-index: 1;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      z-index: 2;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 6px 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      white-space: nowrap;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
     }
 
     td input {
-      padding: 4px 6px;
+      padding: 5px 8px;
       font-size: 12px;
-      border-radius: 4px;
+      border-radius: 6px;
+      background: #172138;
+      border: 1px solid rgba(255,255,255,0.06);
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    .btn-row-action {
+    td input:focus {
+      background: #1c2844;
+    }
+
+    .btn-delete-row {
       background: transparent;
       border: none;
-      color: var(--red);
+      color: var(--rose);
       cursor: pointer;
-      padding: 4px;
-      font-size: 14px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 15px;
+      opacity: 0.7;
+      transition: opacity 0.15s;
     }
 
-    /* Action Buttons */
+    .btn-delete-row:hover {
+      opacity: 1;
+      background: rgba(244, 63, 94, 0.15);
+    }
+
+    /* Actions Bar */
     .actions-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 12px;
+      flex-wrap: wrap;
     }
 
     .btn {
@@ -298,206 +482,412 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
+      padding: 11px 22px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
       cursor: pointer;
       border: none;
-      transition: all 0.15s ease;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .btn-primary {
-      background: var(--honey-500);
-      color: #000;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #060911;
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
     }
 
     .btn-primary:hover {
-      background: var(--honey-400);
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
     }
 
     .btn-primary:disabled {
       opacity: 0.6;
       cursor: not-allowed;
+      transform: none;
     }
 
     .btn-secondary {
-      background: var(--bg-input);
+      background: var(--bg-surface);
       color: var(--text-main);
       border: 1px solid var(--border);
       font-size: 12px;
       padding: 7px 12px;
+      border-radius: 8px;
+      font-weight: 600;
     }
 
     .btn-secondary:hover {
-      background: #2b384d;
+      background: var(--bg-card-hover);
+      border-color: rgba(255,255,255,0.2);
     }
 
-    /* Inference Output Styles */
-    .metric-grid {
+    kbd {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+    }
+
+    /* RIGHT COLUMN: Diagnostics Results */
+    .hero-metric-card {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      grid-template-columns: 160px 1fr;
+      gap: 20px;
+      background: linear-gradient(145deg, #131c33 0%, #0e1629 100%);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 22px;
       margin-bottom: 20px;
+      align-items: center;
     }
 
     @media (max-width: 640px) {
-      .metric-grid {
+      .hero-metric-card {
         grid-template-columns: 1fr;
+        text-align: center;
       }
     }
 
-    .metric-box {
-      background: var(--bg-input);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px;
-      text-align: center;
+    /* Circular SVG Health Gauge */
+    .gauge-wrapper {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .metric-box .label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-      margin-bottom: 6px;
+    .gauge-svg {
+      transform: rotate(-90deg);
+      width: 100%;
+      height: 100%;
     }
 
-    .metric-box .value {
-      font-size: 26px;
-      font-weight: 700;
+    .gauge-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.06);
+      stroke-width: 10;
+    }
+
+    .gauge-progress {
+      fill: none;
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-dasharray: 377;
+      stroke-dashoffset: 377;
+      transition: stroke-dashoffset 0.9s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.4s ease;
+    }
+
+    .gauge-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gauge-value {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
       color: #fff;
+    }
+
+    .gauge-sub {
+      font-size: 10px;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    /* Risk Summary Section */
+    .risk-summary {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .risk-badges-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .badge-tier {
-      display: inline-block;
-      padding: 4px 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
       border-radius: 9999px;
+      font-size: 12px;
       font-weight: 700;
-      font-size: 13px;
-      background: #2563eb;
-      color: #fff;
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid var(--cyan);
+      color: #67e8f9;
+      font-family: 'JetBrains Mono', monospace;
     }
 
     .badge-risk {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
     }
 
     .risk-LOW {
-      background: rgba(16, 185, 129, 0.2);
-      color: var(--green);
-      border: 1px solid var(--green);
+      background: var(--emerald-glow);
+      border: 1px solid var(--emerald);
+      color: #6ee7b7;
     }
 
     .risk-MEDIUM {
-      background: rgba(245, 158, 11, 0.2);
-      color: var(--yellow);
-      border: 1px solid var(--yellow);
+      background: var(--amber-glow);
+      border: 1px solid var(--amber);
+      color: #fde68a;
     }
 
     .risk-HIGH {
-      background: rgba(239, 68, 68, 0.2);
-      color: var(--red);
-      border: 1px solid var(--red);
+      background: var(--rose-glow);
+      border: 1px solid var(--rose);
+      color: #fca5a5;
     }
 
-    /* Recommendation Box */
-    .recommendation-box {
-      padding: 14px 16px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      border-left: 4px solid var(--honey-500);
-      background: #1e2638;
-      font-size: 14px;
-    }
-
-    .recommendation-box .title {
-      font-weight: 600;
-      color: var(--honey-400);
-      margin-bottom: 4px;
+    .progress-bar-wrap {
       display: flex;
-      align-items: center;
-      gap: 6px;
+      flex-direction: column;
+      gap: 4px;
     }
 
-    /* Drivers Grid */
-    .drivers-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .driver-card {
-      background: #172033;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 10px;
-    }
-
-    .driver-card .d-name {
+    .bar-labels {
+      display: flex;
+      justify-content: space-between;
       font-size: 11px;
       color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-
-    .driver-card .d-val {
-      font-size: 15px;
       font-weight: 600;
-      color: #fff;
-      font-family: monospace;
     }
 
-    /* Chart Container */
-    .chart-container {
-      position: relative;
-      height: 220px;
-      width: 100%;
-      margin-top: 14px;
+    .bar-track {
+      height: 6px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
     }
 
-    /* Collapsible JSON */
-    details {
-      background: #0d121c;
-      border: 1px solid var(--border);
+    .bar-fill {
+      height: 100%;
+      border-radius: 9999px;
+      transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Clinical Recommendation Alert */
+    .recommendation-banner {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(217, 119, 6, 0.02) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-left: 4px solid var(--honey-500);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .recommendation-banner.alert-high {
+      background: linear-gradient(135deg, rgba(244, 63, 94, 0.1) 0%, rgba(244, 63, 94, 0.02) 100%);
+      border-color: rgba(244, 63, 94, 0.35);
+      border-left-color: var(--rose);
+    }
+
+    .rec-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      line-height: 1.2;
+    }
+
+    .rec-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--honey-300);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 2px;
+    }
+
+    .alert-high .rec-title {
+      color: #fda4af;
+    }
+
+    .rec-body {
+      font-size: 13.5px;
+      color: #f1f5f9;
+      font-weight: 500;
+    }
+
+    /* Scope & Caveats tags */
+    .scope-tags-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+
+    .scope-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+    }
+
+    .caveat-banner {
+      font-size: 11.5px;
+      color: #cbd5e1;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 8px;
-      padding: 10px 14px;
-      margin-top: 16px;
+      padding: 8px 12px;
+      margin-bottom: 18px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    /* Diagnostic Drivers Cards */
+    .drivers-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .drivers-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .driver-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      transition: transform 0.15s;
+    }
+
+    .driver-box:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      background: var(--bg-card-hover);
+    }
+
+    .driver-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .driver-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Chart Card */
+    .chart-box {
+      position: relative;
+      height: 250px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    /* JSON Details */
+    details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-top: 18px;
     }
 
     summary {
       cursor: pointer;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
       color: var(--text-muted);
-      outline: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
     }
 
     summary:hover {
       color: #fff;
     }
 
-    pre {
+    .json-wrapper {
+      position: relative;
       margin-top: 10px;
-      font-family: monospace;
-      font-size: 12px;
+    }
+
+    pre {
+      background: #090e1a;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
       overflow-x: auto;
-      color: #a7f3d0;
-      max-height: 220px;
+      color: #67e8f9;
+      max-height: 240px;
+    }
+
+    .btn-copy-json {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.15s;
+    }
+
+    .btn-copy-json:hover {
+      background: rgba(255, 255, 255, 0.2);
     }
 
     .spinner {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(0,0,0,0.3);
+      width: 15px;
+      height: 15px;
+      border: 2px solid rgba(0, 0, 0, 0.2);
       border-radius: 50%;
-      border-top-color: #000;
-      animation: spin 0.8s linear infinite;
+      border-top-color: #060911;
+      animation: spin 0.7s linear infinite;
     }
 
     @keyframes spin {
@@ -507,18 +897,27 @@
 </head>
 <body>
   <div class="container">
-    <!-- Header -->
+    <!-- Top Header -->
     <header>
       <div class="brand">
-        <span class="brand-icon">🐝</span>
+        <div class="brand-logo-wrap">🐝</div>
         <div>
-          <h1>HoneyChain ML Diagnostic Studio</h1>
-          <p>Hive Health Anomaly Detection & Continuous Inference Engine</p>
+          <h1>HoneyChain <span class="highlight">ML Studio</span></h1>
+          <p>Hive Health Anomaly Diagnostics & 6-Tier Hierarchical Inference</p>
         </div>
       </div>
-      <div class="status-badge">
-        <div id="statusDot" class="status-dot"></div>
-        <span id="statusText">Checking Microservice...</span>
+      <div class="header-actions">
+        <div class="status-badge">
+          <div id="statusDot" class="status-pulse">
+            <span class="ping"></span>
+            <span class="dot"></span>
+          </div>
+          <span id="statusText">Checking Microservice...</span>
+        </div>
+        <a href="https://github.com/Dhritish-Mukherjee/HoneyChain_ML" target="_blank" rel="noopener" class="btn-gh">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          <span>GitHub</span>
+        </a>
       </div>
     </header>
 
@@ -527,61 +926,79 @@
       <!-- Left Column: Input Panel -->
       <div class="left-col">
         <div class="card">
-          <div class="card-title">
-            <span>⚡ Telemetry Scenarios</span>
-            <span style="font-size: 12px; color: var(--text-muted);">Quick Presets</span>
+          <div class="card-header">
+            <span class="card-title">🧪 Diagnostic Scenarios</span>
+            <span style="font-size: 11px; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">One-Click Presets</span>
           </div>
 
-          <div class="scenarios-grid">
-            <button class="btn-scenario active" onclick="loadScenario('healthy')">
-              <span class="name">🟢 Normal Colony</span>
-              <span class="desc">24h Diurnal cycle, stable weight</span>
+          <!-- Scenario Buttons (Responsive Grid) -->
+          <div class="scenarios-container">
+            <button class="btn-scenario active" data-scenario="healthy" onclick="loadScenario('healthy')">
+              <div class="scenario-top">
+                <span class="scenario-name">🟢 Normal</span>
+                <span class="scenario-pill">24h • T24</span>
+              </div>
+              <span class="scenario-desc">Stable weight & diurnal foraging rhythm</span>
             </button>
-            <button class="btn-scenario" onclick="loadScenario('swarm')">
-              <span class="name">🔴 Swarm Incident</span>
-              <span class="desc">6h Fast drop (-2.6kg) & flight surge</span>
+
+            <button class="btn-scenario" data-scenario="swarm" onclick="loadScenario('swarm')">
+              <div class="scenario-top">
+                <span class="scenario-name">🔴 Swarm</span>
+                <span class="scenario-pill">6h • T6</span>
+              </div>
+              <span class="scenario-desc">Sudden cluster drop (-2.6kg) & flight spike</span>
             </button>
-            <button class="btn-scenario" onclick="loadScenario('starvation')">
-              <span class="name">🟠 Starvation</span>
-              <span class="desc">48h Sustained multi-day weight loss</span>
+
+            <button class="btn-scenario" data-scenario="robbing" onclick="loadScenario('robbing')">
+              <div class="scenario-top">
+                <span class="scenario-name">🟡 Robbing</span>
+                <span class="scenario-pill">12h • T12</span>
+              </div>
+              <span class="scenario-desc">Fast depletion of stores (-2.16kg) & agitation</span>
             </button>
-            <button class="btn-scenario" onclick="loadScenario('thermal')">
-              <span class="name">🟡 Brood Chill</span>
-              <span class="desc">12h Extreme temperature deviation</span>
+
+            <button class="btn-scenario" data-scenario="starvation" onclick="loadScenario('starvation')">
+              <div class="scenario-top">
+                <span class="scenario-name">🟠 Depletion</span>
+                <span class="scenario-pill">48h • T48</span>
+              </div>
+              <span class="scenario-desc">Multi-day continuous starvation decline</span>
             </button>
           </div>
 
-          <div class="form-row">
+          <!-- Config inputs -->
+          <div class="config-row">
             <div class="form-group" style="flex: 1;">
               <label for="hiveIdInput">Hive Identifier</label>
               <input type="text" id="hiveIdInput" value="HIVE-KV-201" placeholder="e.g. HIVE-KV-201">
             </div>
-            <div class="form-group" style="flex: 1.5;">
-              <label for="apiKeyInput">API Key (X-ML-API-Key)</label>
-              <input type="password" id="apiKeyInput" placeholder="Optional (if ML_API_KEY configured)">
+            <div class="form-group" style="flex: 1.4;">
+              <label for="apiKeyInput">API Secret Key (X-ML-API-Key)</label>
+              <input type="password" id="apiKeyInput" placeholder="Optional (configured in Render)">
             </div>
           </div>
 
-          <div class="tabs-header">
-            <button id="tabTableBtn" class="tab-btn active" onclick="switchTab('table')">📊 Telemetry Table</button>
-            <button id="tabJsonBtn" class="tab-btn" onclick="switchTab('json')">💻 Raw JSON Editor</button>
+          <!-- Tabs Bar -->
+          <div class="tabs-bar">
+            <div class="tab-pills">
+              <button id="tabTableBtn" class="tab-btn active" onclick="switchTab('table')">📊 Telemetry Table</button>
+              <button id="tabJsonBtn" class="tab-btn" onclick="switchTab('json')">💻 Raw JSON Editor</button>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span id="rowCountBadge" style="font-size: 11px; font-weight: 700; color: var(--text-dim); font-family: 'JetBrains Mono', monospace;">25 READINGS</span>
+              <button id="btnAddRow" class="btn-secondary" onclick="addRow()">+ Add Hour</button>
+              <button class="btn-secondary" onclick="clearRows()">Clear</button>
+            </div>
           </div>
 
-          <!-- Table View -->
+          <!-- Table View (with horizontal and vertical scroll) -->
           <div id="tableView">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <span id="rowCountLabel" style="font-size: 12px; color: var(--text-muted);">25 readings loaded</span>
-              <div style="display: flex; gap: 6px;">
-                <button class="btn-secondary" onclick="addRow()">+ Add Hour</button>
-                <button class="btn-secondary" onclick="clearRows()">Clear</button>
-              </div>
-            </div>
-            <div class="table-container">
+            <div class="table-scroll">
               <table id="readingsTable">
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Timestamp</th>
+                    <th>Timestamp (Local)</th>
                     <th>Temp (°C)</th>
                     <th>Humidity (%)</th>
                     <th>Weight (kg)</th>
@@ -597,19 +1014,20 @@
           <!-- JSON View -->
           <div id="jsonView" style="display: none;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <span style="font-size: 12px; color: var(--text-muted);">Edit JSON payload directly:</span>
+              <span style="font-size: 11px; color: var(--text-muted);">Edit or paste JSON readings directly:</span>
               <button class="btn-secondary" onclick="formatJsonEditor()">Format JSON</button>
             </div>
-            <textarea id="jsonEditor" rows="12" style="font-family: monospace; font-size: 12px;"></textarea>
+            <textarea id="jsonEditor" rows="12" style="font-family: 'JetBrains Mono', monospace; font-size: 12px;"></textarea>
           </div>
 
-          <div class="actions-bar" style="margin-top: 16px;">
-            <div style="font-size: 12px; color: var(--text-muted);">
-              Press <kbd style="background: #222; padding: 2px 6px; border-radius: 4px;">Ctrl</kbd> + <kbd style="background: #222; padding: 2px 6px; border-radius: 4px;">Enter</kbd> to run
+          <!-- Run Action Button -->
+          <div class="actions-bar" style="margin-top: 14px;">
+            <div style="font-size: 12px; color: var(--text-dim);">
+              Press <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to run
             </div>
             <button id="btnRun" class="btn btn-primary" onclick="runInference()">
               <span id="btnRunIcon">⚡</span>
-              <span id="btnRunText">Run ML Health Diagnostic</span>
+              <span id="btnRunText">Run ML Diagnostic</span>
             </button>
           </div>
         </div>
@@ -618,82 +1036,111 @@
       <!-- Right Column: Inference Analytics Panel -->
       <div class="right-col">
         <div class="card">
-          <div class="card-title">
-            <span>📊 Inference Diagnostic Results</span>
-            <span id="inferenceTierBadge" class="badge-tier">Tier: T24</span>
+          <div class="card-header">
+            <span class="card-title">🔬 Diagnostic Evaluation</span>
+            <span id="inferenceTierBadge" class="badge-tier">Tier: T24 (25h)</span>
           </div>
 
-          <!-- Top Metrics Grid -->
-          <div class="metric-grid">
-            <div class="metric-box">
-              <div class="label">Health Score</div>
-              <div id="metricHealthScore" class="value" style="color: var(--green);">84.0<span style="font-size: 14px; font-weight: normal;"> / 100</span></div>
-            </div>
-            <div class="metric-box">
-              <div class="label">Stress Risk</div>
-              <div style="margin-top: 4px;">
-                <span id="metricStressRisk" class="badge-risk risk-LOW">LOW</span>
+          <!-- Hero Metric Card: Circular Gauge + Risk Info -->
+          <div class="hero-metric-card">
+            <div class="gauge-wrapper">
+              <svg class="gauge-svg" viewBox="0 0 140 140">
+                <circle class="gauge-bg" cx="70" cy="70" r="60"></circle>
+                <circle id="gaugeProgress" class="gauge-progress" cx="70" cy="70" r="60" stroke="var(--emerald)"></circle>
+              </svg>
+              <div class="gauge-text">
+                <span id="metricHealthScore" class="gauge-value">84.5</span>
+                <span class="gauge-sub">Health Score</span>
               </div>
-              <div id="metricStressProb" style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Prob: 0.0%</div>
             </div>
-            <div class="metric-box">
-              <div class="label">Anomaly Risk</div>
-              <div id="metricAbnormality" class="value" style="color: var(--honey-400);">16.0%</div>
+
+            <div class="risk-summary">
+              <div class="risk-badges-row">
+                <span id="metricStressRisk" class="badge-risk risk-LOW">LOW STRESS</span>
+                <span id="metricStressProb" style="font-size: 12px; font-weight: 600; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">Prob: 0.0%</span>
+              </div>
+
+              <!-- Abnormality Meter -->
+              <div class="progress-bar-wrap">
+                <div class="bar-labels">
+                  <span>Seasonal Anomaly Risk</span>
+                  <span id="metricAbnormalityLabel" style="font-family: 'JetBrains Mono', monospace; color: #fff;">35.9%</span>
+                </div>
+                <div class="bar-track">
+                  <div id="abnormalityBar" class="bar-fill" style="width: 35.9%; background: linear-gradient(90deg, #10b981, #f59e0b);"></div>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- Actionable Recommendation -->
-          <div class="recommendation-box">
-            <div class="title">
-              <span>🩺 Clinical Recommendation</span>
+          <!-- Recommendation Alert -->
+          <div id="recBanner" class="recommendation-banner">
+            <div class="rec-icon">🩺</div>
+            <div>
+              <div class="rec-title">Colony Health Advisory</div>
+              <div id="recText" class="rec-body">Colony within normal range. No action needed.</div>
             </div>
-            <div id="recText">Colony within normal range. No action needed.</div>
           </div>
 
-          <!-- Feature Drivers Breakdown -->
+          <!-- Caveat Banner (Dynamic for short tiers T1, T6, T12) -->
+          <div id="caveatBanner" class="caveat-banner" style="display: none;">
+            <span>ℹ️</span>
+            <span id="caveatText"></span>
+          </div>
+
+          <!-- Detection Scope Tags -->
+          <div class="scope-tags-wrap" id="scopeTags"></div>
+
+          <!-- Drivers Breakdown -->
           <div>
-            <div style="font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text-muted);">
-              Key Diagnostic Drivers
+            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); margin-bottom: 8px;">
+              Primary Telemetry Drivers
             </div>
-            <div class="drivers-grid">
-              <div class="driver-card">
-                <div class="d-name">Activity Dev</div>
-                <div id="drvActivity" class="d-val">-0.42</div>
+            <div class="drivers-row">
+              <div class="driver-box">
+                <div class="driver-label">Activity Dev</div>
+                <div id="drvActivity" class="driver-val">-0.42</div>
               </div>
-              <div class="driver-card">
-                <div class="d-name">Temp Dev</div>
-                <div id="drvTemp" class="d-val">+0.15°C</div>
+              <div class="driver-box">
+                <div class="driver-label">Temp Dev</div>
+                <div id="drvTemp" class="driver-val">+0.15°C</div>
               </div>
-              <div class="driver-card">
-                <div class="d-name">Weight Trend</div>
-                <div id="drvTrend" class="d-val">+0.02 kg</div>
+              <div class="driver-box">
+                <div class="driver-label">Weight Trend</div>
+                <div id="drvTrend" class="driver-val">+0.02kg</div>
               </div>
-              <div class="driver-card">
-                <div class="d-name">Weight Drop</div>
-                <div id="drvDrop" class="d-val">0.00 kg</div>
+              <div class="driver-box">
+                <div class="driver-label">Weight Drop</div>
+                <div id="drvDrop" class="driver-val">0.00kg</div>
               </div>
-              <div class="driver-card">
-                <div class="d-name">Net Flow</div>
-                <div id="drvFlow" class="d-val">+40/min</div>
+              <div class="driver-box">
+                <div class="driver-label">Net Flow</div>
+                <div id="drvFlow" class="driver-val">+45/min</div>
               </div>
             </div>
           </div>
 
-          <!-- Telemetry Trend Chart -->
-          <div style="margin-top: 16px;">
-            <div style="font-size: 13px; font-weight: 600; color: var(--text-muted); display: flex; justify-content: space-between;">
-              <span>Telemetry Trends</span>
-              <span id="chartRangeLabel" style="font-size: 11px; font-weight: normal;">25 hours observed</span>
+          <!-- Telemetry Time-Series Chart -->
+          <div>
+            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); display: flex; justify-content: space-between;">
+              <span>Telemetry Dynamics Timeline</span>
+              <span id="chartRangeLabel" style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">25 HOURS</span>
             </div>
-            <div class="chart-container">
+            <div class="chart-box">
               <canvas id="telemetryChart"></canvas>
             </div>
           </div>
 
           <!-- Collapsible Raw JSON Response -->
           <details>
-            <summary>View Complete Model Output (JSON)</summary>
-            <pre id="rawJsonResponse">{}</pre>
+            <summary>
+              <span>View Raw Model Inference Payload (JSON)</span>
+              <span style="font-size: 10px; font-family: monospace;">click to expand</span>
+            </summary>
+            <div class="json-wrapper">
+              <button class="btn-copy-json" onclick="copyRawJson(this)">Copy JSON</button>
+              <pre id="rawJsonResponse">{}</pre>
+            </div>
           </details>
         </div>
       </div>
@@ -701,122 +1148,126 @@
   </div>
 
   <script>
-    // State
+    // State variables
     let currentReadings = [];
     let currentTab = 'table';
     let chartInstance = null;
+    let selectedScenario = 'healthy';
 
-    // Load saved API Key if any
+    // Local Storage for API Key
     const savedKey = localStorage.getItem('honeychain_ml_key');
     if (savedKey) {
       document.getElementById('apiKeyInput').value = savedKey;
     }
-
-    document.getElementById('apiKeyInput').addEventListener('change', (e) => {
+    document.getElementById('apiKeyInput').addEventListener('input', (e) => {
       localStorage.setItem('honeychain_ml_key', e.target.value.trim());
     });
 
-    // Keyboard shortcut (Ctrl+Enter or Cmd+Enter)
+    // Keyboard shortcut (Ctrl + Enter or Cmd + Enter)
     document.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
         runInference();
       }
     });
 
-    // Check Microservice Health
+    // Health check with ping measurement
     async function checkHealth() {
+      const startTime = performance.now();
       try {
         const res = await fetch('/health');
+        const latency = Math.round(performance.now() - startTime);
         if (res.ok) {
           const data = await res.json();
-          document.getElementById('statusDot').className = 'status-dot';
-          document.getElementById('statusText').innerText = `Online • ${data.tiers ? data.tiers.length : 6} Tiers Loaded`;
+          document.getElementById('statusDot').className = 'status-pulse';
+          document.getElementById('statusText').innerText = `Online • ${latency}ms • ${data.tiers ? data.tiers.length : 6} Tiers Ready`;
         } else {
-          throw new Error('Non-200 response');
+          throw new Error('Service returned non-200');
         }
       } catch (err) {
-        document.getElementById('statusDot').className = 'status-dot offline';
+        document.getElementById('statusDot').className = 'status-pulse offline';
         document.getElementById('statusText').innerText = 'Microservice Offline';
       }
     }
 
-    // Scenarios Generator
+    // Telemetry Generator
     function getScenarioData(type) {
       const readings = [];
-      const now = new Date('2026-05-10T12:00:00');
 
       if (type === 'healthy') {
-        // 25 hours normal diurnal cycle
+        // 25 readings (T24): Diurnal foraging rhythm, stable weight
         for (let i = 0; i < 25; i++) {
-          const t = new Date(now.getTime() + i * 3600 * 1000);
-          const h = t.getHours();
-          const flow = (h >= 8 && h <= 18) ? Math.floor(30 + Math.random() * 25) : 0;
-          const temp = Number((34.6 + (h >= 11 && h <= 15 ? 0.6 : -0.2) + Math.random() * 0.2).toFixed(2));
+          const h = (12 + i) % 24;
+          const day = 10 + Math.floor((12 + i) / 24);
+          const isDay = (h >= 8 && h <= 18);
           readings.push({
-            timestamp: formatDate(t),
-            temperature: temp,
-            humidity: Number((60 + Math.random() * 4).toFixed(1)),
-            weight: Number((35.0 + (i * 0.02) + (Math.random() * 0.01)).toFixed(3)),
-            flow: flow
+            timestamp: `2026-05-${String(day).padStart(2, '0')} ${String(h).padStart(2, '0')}:00:00`,
+            temperature: Number((34.8 + (isDay ? 0.4 : -0.2)).toFixed(2)),
+            humidity: 60.0,
+            weight: Number((35.0 + (i * 0.02)).toFixed(3)),
+            flow: isDay ? 45 : 0
           });
         }
       } else if (type === 'swarm') {
-        // 7 hours sharp weight drop and flight surge
-        for (let i = 0; i < 7; i++) {
-          const t = new Date(now.getTime() + i * 3600 * 1000);
-          let w = 36.5;
-          let flow = 30;
-          let temp = 34.8;
-          if (i === 1) { w = 36.4; flow = 80; temp = 35.5; }
-          if (i === 2) { w = 36.2; flow = 180; temp = 36.8; }
-          if (i === 3) { w = 34.0; flow = -350; temp = 37.1; } // swarm leaves!
-          if (i === 4) { w = 33.9; flow = -80; temp = 35.8; }
-          if (i >= 5) { w = 33.8; flow = 5; temp = 34.6; }
+        // 7 readings (T6): Fast swarm cluster drop (-2.6kg) & flight spike
+        const swarmData = [
+          { h: 12, temp: 34.8, weight: 36.5, flow: 30 },
+          { h: 13, temp: 35.5, weight: 36.4, flow: 80 },
+          { h: 14, temp: 36.8, weight: 36.2, flow: 180 },
+          { h: 15, temp: 37.1, weight: 34.0, flow: -350 }, // sudden swarm departure!
+          { h: 16, temp: 35.8, weight: 33.9, flow: -80 },
+          { h: 17, temp: 34.6, weight: 33.8, flow: 5 },
+          { h: 18, temp: 34.6, weight: 33.8, flow: 5 }
+        ];
+        swarmData.forEach(item => {
           readings.push({
-            timestamp: formatDate(t),
-            temperature: temp,
+            timestamp: `2026-05-10 ${String(item.h).padStart(2, '0')}:00:00`,
+            temperature: item.temp,
             humidity: 50.0,
-            weight: w,
-            flow: flow
+            weight: item.weight,
+            flow: item.flow
+          });
+        });
+      } else if (type === 'robbing') {
+        // 13 readings (T12): Daytime robbing (-2.16kg in 12h)
+        for (let i = 0; i < 13; i++) {
+          const h = 8 + i;
+          readings.push({
+            timestamp: `2026-05-10 ${String(h).padStart(2, '0')}:00:00`,
+            temperature: Number((34.5 + (h >= 12 && h <= 15 ? 0.5 : 0)).toFixed(2)),
+            humidity: 52.0,
+            weight: Number((36.0 - (i * 0.18)).toFixed(3)),
+            flow: (i === 4 || i === 5 || i === 6) ? -120 : 15
           });
         }
       } else if (type === 'starvation') {
-        // 49 hours sustained decline (-3.4kg)
+        // 49 readings (T48): Multi-day starvation decline (-3.4kg)
         for (let i = 0; i < 49; i++) {
-          const t = new Date(now.getTime() + i * 3600 * 1000);
+          const h = (12 + i) % 24;
+          const day = 10 + Math.floor((12 + i) / 24);
           readings.push({
-            timestamp: formatDate(t),
+            timestamp: `2026-05-${String(day).padStart(2, '0')} ${String(h).padStart(2, '0')}:00:00`,
             temperature: Number((33.8 - (i * 0.04)).toFixed(2)),
             humidity: 58.0,
             weight: Number((35.0 - (i * 0.07)).toFixed(3)),
             flow: -5
           });
         }
-      } else if (type === 'thermal') {
-        // 13 hours brood chill anomaly
-        for (let i = 0; i < 13; i++) {
-          const t = new Date(now.getTime() + i * 3600 * 1000);
-          readings.push({
-            timestamp: formatDate(t),
-            temperature: Number((33.0 - (i * 0.8)).toFixed(2)), // drops down to 23.4°C
-            humidity: 75.0,
-            weight: 34.2,
-            flow: 0
-          });
-        }
       }
+
       return readings;
     }
 
-    function formatDate(d) {
-      const pad = (n) => String(n).padStart(2, '0');
-      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-    }
-
+    // Load Scenario handler
     function loadScenario(type) {
-      document.querySelectorAll('.btn-scenario').forEach(b => b.classList.remove('active'));
-      const activeBtn = event ? event.currentTarget : null;
-      if (activeBtn) activeBtn.classList.add('active');
+      selectedScenario = type;
+      document.querySelectorAll('.btn-scenario').forEach(b => {
+        if (b.getAttribute('data-scenario') === type) {
+          b.classList.add('active');
+        } else {
+          b.classList.remove('active');
+        }
+      });
 
       currentReadings = getScenarioData(type);
       renderTable();
@@ -824,26 +1275,27 @@
       runInference();
     }
 
+    // Render Table
     function renderTable() {
       const tbody = document.getElementById('readingsBody');
       tbody.innerHTML = '';
       currentReadings.forEach((r, idx) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td>${idx + 1}</td>
-          <td><input type="text" value="${r.timestamp}" onchange="updateRowField(${idx}, 'timestamp', this.value)" style="width: 140px;"></td>
-          <td><input type="number" step="0.1" value="${r.temperature}" onchange="updateRowField(${idx}, 'temperature', parseFloat(this.value))" style="width: 70px;"></td>
-          <td><input type="number" step="0.1" value="${r.humidity}" onchange="updateRowField(${idx}, 'humidity', parseFloat(this.value))" style="width: 65px;"></td>
-          <td><input type="number" step="0.01" value="${r.weight}" onchange="updateRowField(${idx}, 'weight', parseFloat(this.value))" style="width: 75px;"></td>
-          <td><input type="number" step="1" value="${r.flow}" onchange="updateRowField(${idx}, 'flow', parseFloat(this.value))" style="width: 65px;"></td>
-          <td><button class="btn-row-action" title="Delete" onclick="deleteRow(${idx})">×</button></td>
+          <td style="color: var(--text-dim); font-weight: 600;">${idx + 1}</td>
+          <td><input type="text" value="${r.timestamp}" onchange="updateRow(${idx}, 'timestamp', this.value)" style="width: 155px;"></td>
+          <td><input type="number" step="0.1" value="${r.temperature}" onchange="updateRow(${idx}, 'temperature', parseFloat(this.value))" style="width: 75px;"></td>
+          <td><input type="number" step="0.1" value="${r.humidity}" onchange="updateRow(${idx}, 'humidity', parseFloat(this.value))" style="width: 70px;"></td>
+          <td><input type="number" step="0.01" value="${r.weight}" onchange="updateRow(${idx}, 'weight', parseFloat(this.value))" style="width: 80px;"></td>
+          <td><input type="number" step="1" value="${r.flow}" onchange="updateRow(${idx}, 'flow', parseFloat(this.value))" style="width: 70px;"></td>
+          <td><button class="btn-delete-row" title="Delete Row" onclick="deleteRow(${idx})">×</button></td>
         `;
         tbody.appendChild(tr);
       });
-      document.getElementById('rowCountLabel').innerText = `${currentReadings.length} readings loaded`;
+      document.getElementById('rowCountBadge').innerText = `${currentReadings.length} READINGS`;
     }
 
-    function updateRowField(idx, field, val) {
+    function updateRow(idx, field, val) {
       if (currentReadings[idx]) {
         currentReadings[idx][field] = val;
         updateJsonFromReadings();
@@ -857,8 +1309,11 @@
       let newTemp = 34.8;
       if (last) {
         const d = new Date(last.timestamp.replace(' ', 'T'));
-        d.setHours(d.getHours() + 1);
-        newTime = formatDate(d);
+        if (!isNaN(d.getTime())) {
+          d.setHours(d.getHours() + 1);
+          const pad = n => String(n).padStart(2, '0');
+          newTime = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:00:00`;
+        }
         newWeight = last.weight;
         newTemp = last.temperature;
       }
@@ -885,6 +1340,7 @@
       updateJsonFromReadings();
     }
 
+    // Tabs Switcher
     function switchTab(tab) {
       currentTab = tab;
       if (tab === 'table') {
@@ -921,7 +1377,7 @@
           document.getElementById('hiveIdInput').value = parsed.hiveId;
         }
       } catch (e) {
-        // Invalid JSON, keep current readings
+        // preserve current
       }
     }
 
@@ -930,7 +1386,7 @@
         const parsed = JSON.parse(document.getElementById('jsonEditor').value);
         document.getElementById('jsonEditor').value = JSON.stringify(parsed, null, 2);
       } catch (e) {
-        alert('Invalid JSON: ' + e.message);
+        alert('Invalid JSON syntax: ' + e.message);
       }
     }
 
@@ -940,7 +1396,6 @@
       const btnText = document.getElementById('btnRunText');
       const btnIcon = document.getElementById('btnRunIcon');
 
-      // Sync if currently in JSON view
       if (currentTab === 'json') {
         updateReadingsFromJson();
       }
@@ -955,7 +1410,7 @@
 
       btn.disabled = true;
       btnIcon.innerHTML = '<div class="spinner"></div>';
-      btnText.innerText = 'Analyzing Telemetry...';
+      btnText.innerText = 'Evaluating ML Models...';
 
       const headers = { 'Content-Type': 'application/json' };
       if (apiKey) {
@@ -973,69 +1428,111 @@
         document.getElementById('rawJsonResponse').innerText = JSON.stringify(data, null, 2);
 
         if (!res.ok) {
-          alert(`Inference failed (${res.status}): ${data.message || data.error}`);
+          alert(`Inference Request Failed (${res.status}): ${data.message || data.error}`);
           return;
         }
 
         renderResults(data);
       } catch (err) {
-        alert('Failed to connect to ML microservice: ' + err.message);
+        alert('Failed to connect to ML Microservice: ' + err.message);
       } finally {
         btn.disabled = false;
         btnIcon.innerText = '⚡';
-        btnText.innerText = 'Run ML Health Diagnostic';
+        btnText.innerText = 'Run ML Diagnostic';
       }
     }
 
-    // Render Diagnostic Results
+    // Render Diagnostic Evaluation
     function renderResults(data) {
-      // Tier Badge
+      // 1. Tier Badge
       const tier = data.tier || 'N/A';
       const hours = data.hoursAvailable ? ` (${data.hoursAvailable}h window)` : '';
       document.getElementById('inferenceTierBadge').innerText = `Tier: ${tier}${hours}`;
 
-      // Health Score
+      // 2. Health Score Circular Gauge
       const score = (data.healthScore !== null && data.healthScore !== undefined) ? Number(data.healthScore).toFixed(1) : '--';
-      const scoreEl = document.getElementById('metricHealthScore');
-      scoreEl.innerHTML = `${score}<span style="font-size: 14px; font-weight: normal;"> / 100</span>`;
+      document.getElementById('metricHealthScore').innerText = score;
+
+      const gauge = document.getElementById('gaugeProgress');
+      const circumference = 377; // 2 * PI * 60
       if (score !== '--') {
         const numScore = Number(score);
-        scoreEl.style.color = numScore >= 75 ? 'var(--green)' : numScore >= 50 ? 'var(--yellow)' : 'var(--red)';
+        const offset = circumference - (numScore / 100) * circumference;
+        gauge.style.strokeDashoffset = offset;
+        if (numScore >= 75) {
+          gauge.style.stroke = 'var(--emerald)';
+        } else if (numScore >= 50) {
+          gauge.style.stroke = 'var(--amber)';
+        } else {
+          gauge.style.stroke = 'var(--rose)';
+        }
+      } else {
+        gauge.style.strokeDashoffset = circumference;
       }
 
-      // Stress Risk
+      // 3. Stress Risk & Probability
       const risk = data.stressRisk || 'UNKNOWN';
       const riskEl = document.getElementById('metricStressRisk');
-      riskEl.innerText = risk;
+      riskEl.innerText = `${risk} STRESS`;
       riskEl.className = `badge-risk risk-${risk}`;
 
-      const prob = data.stressProbability !== null && data.stressProbability !== undefined
-        ? `Prob: ${(data.stressProbability * 100).toFixed(1)}%`
-        : 'Basis: Anomaly Baseline';
-      document.getElementById('metricStressProb').innerText = prob;
+      let probText = 'Basis: Calibrated Baseline';
+      if (data.stressProbability !== null && data.stressProbability !== undefined) {
+        probText = `Prob: ${(data.stressProbability * 100).toFixed(1)}%`;
+      } else if (data.stressBasis) {
+        probText = `Basis: ${data.stressBasis.toUpperCase()} ANOMALY`;
+      }
+      document.getElementById('metricStressProb').innerText = probText;
 
-      // Abnormality Risk
-      const abn = data.abnormalityRisk !== null && data.abnormalityRisk !== undefined
-        ? `${Number(data.abnormalityRisk).toFixed(1)}%`
-        : '--';
-      document.getElementById('metricAbnormality').innerText = abn;
+      // 4. Abnormality Risk Bar
+      const abn = (data.abnormalityRisk !== null && data.abnormalityRisk !== undefined) ? Number(data.abnormalityRisk).toFixed(1) : 0;
+      document.getElementById('metricAbnormalityLabel').innerText = `${abn}%`;
+      document.getElementById('abnormalityBar').style.width = `${Math.min(100, Math.max(0, abn))}%`;
 
-      // Recommendation
-      document.getElementById('recText').innerText = data.recommendation || 'No recommendation available.';
+      // 5. Clinical Recommendation
+      const rec = data.recommendation || 'No recommendation provided.';
+      document.getElementById('recText').innerText = rec;
+      const recBanner = document.getElementById('recBanner');
+      if (risk === 'HIGH') {
+        recBanner.className = 'recommendation-banner alert-high';
+      } else {
+        recBanner.className = 'recommendation-banner';
+      }
 
-      // Drivers
+      // 6. Caveat Banner (short tiers)
+      const caveatEl = document.getElementById('caveatBanner');
+      if (data.caveat) {
+        caveatEl.style.display = 'flex';
+        document.getElementById('caveatText').innerText = data.caveat;
+      } else {
+        caveatEl.style.display = 'none';
+      }
+
+      // 7. Detection Scope Tags
+      const scopeContainer = document.getElementById('scopeTags');
+      scopeContainer.innerHTML = '';
+      if (data.detectionScope && Array.isArray(data.detectionScope)) {
+        data.detectionScope.forEach(scope => {
+          const tag = document.createElement('span');
+          tag.className = 'scope-tag';
+          tag.innerText = `✓ ${scope}`;
+          scopeContainer.appendChild(tag);
+        });
+      }
+
+      // 8. Drivers Breakdown
       const d = data.drivers || {};
       document.getElementById('drvActivity').innerText = d.activityDeviation !== undefined ? Number(d.activityDeviation).toFixed(2) : '--';
       document.getElementById('drvTemp').innerText = d.temperatureDeviation !== undefined ? `${d.temperatureDeviation > 0 ? '+' : ''}${Number(d.temperatureDeviation).toFixed(2)}°C` : '--';
-      document.getElementById('drvTrend').innerText = d.weightTrend !== undefined ? `${d.weightTrend > 0 ? '+' : ''}${Number(d.weightTrend).toFixed(3)} kg` : '--';
-      document.getElementById('drvDrop').innerText = d.weightDrop !== undefined ? `${Number(d.weightDrop).toFixed(2)} kg` : '--';
-      document.getElementById('drvFlow').innerText = d.netFlow !== undefined ? `${d.netFlow > 0 ? '+' : ''}${Number(d.netFlow).toFixed(0)}/min` : '--';
+      document.getElementById('drvTrend').innerText = d.weightTrend !== undefined ? `${d.weightTrend > 0 ? '+' : ''}${Number(d.weightTrend).toFixed(3)}kg` : '--';
+      document.getElementById('drvDrop').innerText = d.weightDrop !== undefined ? `${Number(d.weightDrop).toFixed(2)}kg` : '--';
+      document.getElementById('drvFlow').innerText = d.netFlow !== undefined ? `${d.netFlow > 0 ? '+' : ''}${Number(d.netFlow).toFixed(0)}/m` : '--';
 
-      // Update Chart
+      // 9. Interactive Chart.js Timeline
       renderChart(currentReadings);
     }
 
-    // Chart.js Timeline Visualization
+    // Chart.js Visualization (Adaptive for 6h, 12h, 24h, 48h)
     function renderChart(readings) {
       if (!readings || readings.length === 0) return;
 
@@ -1047,13 +1544,15 @@
       const temps = readings.map(r => r.temperature);
       const flows = readings.map(r => r.flow);
 
-      document.getElementById('chartRangeLabel').innerText = `${readings.length} hours observed`;
+      document.getElementById('chartRangeLabel').innerText = `${readings.length} HOURS OBSERVED`;
 
       if (chartInstance) {
         chartInstance.destroy();
       }
 
+      const isShort = readings.length <= 13;
       const ctx = document.getElementById('telemetryChart').getContext('2d');
+
       chartInstance = new Chart(ctx, {
         type: 'line',
         data: {
@@ -1063,31 +1562,37 @@
               label: 'Weight (kg)',
               data: weights,
               borderColor: '#f59e0b',
-              backgroundColor: 'rgba(245, 158, 11, 0.1)',
+              backgroundColor: 'rgba(245, 158, 11, 0.08)',
               yAxisID: 'yWeight',
-              borderWidth: 2,
-              tension: 0.2,
-              pointRadius: readings.length > 30 ? 0 : 2
+              borderWidth: 2.2,
+              tension: 0.25,
+              fill: true,
+              pointRadius: isShort ? 4 : 1,
+              pointHoverRadius: 6,
+              pointBackgroundColor: '#f59e0b'
             },
             {
               label: 'Temp (°C)',
               data: temps,
-              borderColor: '#ef4444',
+              borderColor: '#f43f5e',
               backgroundColor: 'transparent',
               yAxisID: 'yTemp',
-              borderWidth: 1.5,
+              borderWidth: 1.6,
               borderDash: [4, 4],
               tension: 0.2,
-              pointRadius: 0
+              pointRadius: isShort ? 3 : 0,
+              pointHoverRadius: 5,
+              pointBackgroundColor: '#f43f5e'
             },
             {
-              label: 'Net Flow',
+              label: 'Net Flow (bees/m)',
               data: flows,
-              borderColor: '#3b82f6',
-              backgroundColor: 'rgba(59, 130, 246, 0.15)',
+              borderColor: '#06b6d4',
+              backgroundColor: 'rgba(6, 182, 212, 0.25)',
               yAxisID: 'yFlow',
               type: 'bar',
-              barThickness: 4
+              barThickness: isShort ? 14 : 5,
+              borderRadius: 3
             }
           ]
         },
@@ -1101,28 +1606,38 @@
           plugins: {
             legend: {
               labels: {
-                color: '#9ca3af',
-                font: { size: 11 }
+                color: '#94a3b8',
+                font: { family: "'Plus Jakarta Sans', sans-serif", size: 11, weight: 600 },
+                boxWidth: 12
               }
+            },
+            tooltip: {
+              backgroundColor: 'rgba(13, 19, 34, 0.95)',
+              titleColor: '#fff',
+              bodyColor: '#cbd5e1',
+              borderColor: 'rgba(255, 255, 255, 0.1)',
+              borderWidth: 1,
+              padding: 10,
+              bodyFont: { family: "'JetBrains Mono', monospace", size: 11 }
             }
           },
           scales: {
             x: {
-              ticks: { color: '#6b7280', font: { size: 10 }, maxTicksLimit: 12 },
-              grid: { color: '#1f2937' }
+              ticks: { color: '#64748b', font: { family: "'JetBrains Mono', monospace", size: 10 }, maxTicksLimit: isShort ? 13 : 12 },
+              grid: { color: 'rgba(255, 255, 255, 0.04)' }
             },
             yWeight: {
               type: 'linear',
               position: 'left',
-              title: { display: true, text: 'Weight (kg)', color: '#f59e0b', font: { size: 11 } },
-              ticks: { color: '#f59e0b', font: { size: 10 } },
-              grid: { color: '#1f2937' }
+              title: { display: true, text: 'Weight (kg)', color: '#f59e0b', font: { size: 11, weight: 700 } },
+              ticks: { color: '#f59e0b', font: { family: "'JetBrains Mono', monospace", size: 10 } },
+              grid: { color: 'rgba(255, 255, 255, 0.04)' }
             },
             yTemp: {
               type: 'linear',
               position: 'right',
               title: { display: false },
-              ticks: { color: '#ef4444', font: { size: 10 } },
+              ticks: { color: '#f43f5e', font: { family: "'JetBrains Mono', monospace", size: 10 } },
               grid: { drawOnChartArea: false }
             },
             yFlow: {
@@ -1136,7 +1651,15 @@
       });
     }
 
-    // Init
+    function copyRawJson(btn) {
+      const text = document.getElementById('rawJsonResponse').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.innerText = '✓ Copied!';
+        setTimeout(() => { btn.innerText = 'Copy JSON'; }, 2000);
+      });
+    }
+
+    // Startup
     window.addEventListener('DOMContentLoaded', () => {
       checkHealth();
       loadScenario('healthy');
