@@ -46,6 +46,21 @@
       padding: 0;
     }
 
+    /* Suppress visible scrollbars on page and data matrix while retaining full scrolling */
+    html, body, .table-scroll-chamber, .raw-json-box {
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE and Edge */
+    }
+
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar,
+    .table-scroll-chamber::-webkit-scrollbar,
+    .raw-json-box::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background-color: var(--canvas);
