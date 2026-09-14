@@ -3,46 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HoneyChain ML Diagnostic Studio • Hive Health Telemetry</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐝</text></svg>">
+  <title>HoneyChain ML Diagnostic Studio • Precision Colony Intelligence</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23f59e0b%22 stroke-width=%222%22><path d=%22M12 2L2 7v10l10 5 10-5V7l-10-5z%22/><path d=%22M12 22V12%22/><path d=%22M22 7l-10 5-10-5%22/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --bg-base: #05070e;
-      --bg-chassis: rgba(255, 255, 255, 0.03);
-      --bg-core: #0a0f1d;
-      --bg-surface: #0f172b;
-      --bg-surface-elevated: #15203b;
-      --bg-input: #131c33;
+      --bg-canvas: #08080a;
+      --bg-chassis: rgba(18, 18, 22, 0.7);
+      --bg-core: #0d0d11;
+      --bg-surface: #131318;
+      --bg-surface-hover: #191921;
+      --bg-input: #0a0a0d;
       
-      --border-outer: rgba(255, 255, 255, 0.08);
-      --border-inner: rgba(255, 255, 255, 0.04);
-      --border-highlight: rgba(245, 158, 11, 0.35);
+      --border-subtle: rgba(255, 255, 255, 0.06);
+      --border-chassis: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(245, 158, 11, 0.5);
       
-      --text-primary: #f8fafc;
-      --text-secondary: #94a3b8;
-      --text-tertiary: #64748b;
+      --text-main: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --text-dim: #71717a;
+      --text-dark: #52525b;
       
-      --honey-glow: rgba(245, 158, 11, 0.25);
-      --honey-300: #fcd34d;
-      --honey-400: #fbbf24;
-      --honey-500: #f59e0b;
-      --honey-600: #d97706;
+      --amber: #f59e0b;
+      --amber-light: #fbbf24;
+      --amber-glow: rgba(245, 158, 11, 0.18);
       
       --emerald: #10b981;
-      --emerald-glow: rgba(16, 185, 129, 0.2);
-      --amber: #f59e0b;
-      --amber-glow: rgba(245, 158, 11, 0.2);
+      --emerald-glow: rgba(16, 185, 129, 0.16);
       --rose: #f43f5e;
-      --rose-glow: rgba(244, 63, 94, 0.2);
+      --rose-glow: rgba(244, 63, 94, 0.16);
       --cyan: #06b6d4;
-      --cyan-glow: rgba(6, 182, 212, 0.2);
+      --cyan-glow: rgba(6, 182, 212, 0.16);
       
-      --ease-out-quint: cubic-bezier(0.16, 1, 0.3, 1);
-      --ease-elastic: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-fluid: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     * {
@@ -53,37 +50,36 @@
 
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--bg-base);
+      background-color: var(--bg-canvas);
       background-image: 
-        radial-gradient(circle at 10% 8%, rgba(245, 158, 11, 0.09) 0%, transparent 45%),
-        radial-gradient(circle at 90% 70%, rgba(6, 182, 212, 0.06) 0%, transparent 45%),
-        radial-gradient(circle at 50% 100%, rgba(16, 185, 129, 0.04) 0%, transparent 50%);
+        radial-gradient(ellipse 90% 50% at 50% -10%, rgba(245, 158, 11, 0.07), transparent 70%),
+        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(16, 185, 129, 0.03), transparent 60%);
       background-attachment: fixed;
-      color: var(--text-primary);
+      color: var(--text-main);
       line-height: 1.5;
-      padding: 28px 24px;
+      padding: 24px 20px;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
     }
 
     .container {
-      max-width: 1520px;
+      max-width: 1540px;
       margin: 0 auto;
     }
 
-    /* Top Floating Island Header */
+    /* Floating Island Header */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 24px;
-      margin-bottom: 28px;
-      background: rgba(10, 15, 29, 0.7);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border-outer);
+      padding: 12px 22px;
+      margin-bottom: 24px;
+      background: rgba(13, 13, 17, 0.82);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-chassis);
       border-radius: 9999px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
       flex-wrap: wrap;
       gap: 16px;
     }
@@ -91,41 +87,47 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
 
-    .brand-logo-wrap {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(217, 119, 6, 0.1) 100%);
-      border: 1px solid rgba(245, 158, 11, 0.4);
+    .brand-icon-box {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.04) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
-      box-shadow: 0 0 20px var(--honey-glow);
+      color: var(--amber-light);
+      box-shadow: 0 0 20px var(--amber-glow);
     }
 
     .brand-text h1 {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.025em;
       color: #fff;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
 
-    .brand-text h1 span.highlight {
-      background: linear-gradient(135deg, #fbbf24, #f59e0b);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .brand-text h1 span.pill-meta {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--amber);
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      padding: 1px 7px;
+      border-radius: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.05em;
     }
 
     .brand-text p {
-      font-size: 12px;
-      color: var(--text-secondary);
+      font-size: 11.5px;
+      color: var(--text-dim);
       font-weight: 500;
     }
 
@@ -133,116 +135,114 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      flex-wrap: wrap;
     }
 
-    .status-badge {
+    .status-pill {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       background: var(--bg-surface);
-      padding: 6px 14px;
+      padding: 5px 14px;
       border-radius: 9999px;
-      border: 1px solid var(--border-outer);
+      border: 1px solid var(--border-subtle);
       font-size: 11.5px;
       font-weight: 600;
-      color: var(--text-secondary);
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    .status-pulse {
+    .pulse-indicator {
       position: relative;
       display: flex;
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
     }
 
-    .status-pulse .dot {
+    .pulse-indicator .dot {
       position: absolute;
       inset: 0;
       border-radius: 50%;
       background-color: var(--emerald);
     }
 
-    .status-pulse .ping {
+    .pulse-indicator .ring {
       position: absolute;
       inset: -3px;
       border-radius: 50%;
       background-color: var(--emerald);
-      opacity: 0.75;
-      animation: ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+      opacity: 0.6;
+      animation: pingRing 2s cubic-bezier(0, 0, 0.2, 1) infinite;
     }
 
-    @keyframes ping {
+    @keyframes pingRing {
       75%, 100% {
-        transform: scale(2.2);
+        transform: scale(2.3);
         opacity: 0;
       }
     }
 
-    .status-pulse.offline .dot { background-color: var(--rose); }
-    .status-pulse.offline .ping { display: none; }
+    .pulse-indicator.offline .dot { background-color: var(--rose); }
+    .pulse-indicator.offline .ring { display: none; }
 
-    .btn-gh {
+    .btn-link-gh {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
+      gap: 6px;
       background: var(--bg-surface);
-      border: 1px solid var(--border-outer);
-      color: var(--text-secondary);
-      padding: 6px 14px;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 5px 13px;
       border-radius: 9999px;
       font-size: 12px;
       font-weight: 600;
       text-decoration: none;
-      transition: all 0.2s var(--ease-out-quint);
+      transition: all 0.2s var(--ease-fluid);
     }
 
-    .btn-gh:hover {
+    .btn-link-gh:hover {
       color: #fff;
-      border-color: rgba(255, 255, 255, 0.25);
-      background: var(--bg-surface-elevated);
+      border-color: rgba(255, 255, 255, 0.2);
+      background: var(--bg-surface-hover);
       transform: translateY(-1px);
     }
 
-    /* Main 2-Column Responsive Grid */
-    .grid-main {
+    /* Asymmetric 2-Column Bento Grid */
+    .grid-workbench {
       display: grid;
-      grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
-      gap: 24px;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: 22px;
       align-items: start;
     }
 
     @media (max-width: 1120px) {
-      .grid-main {
+      .grid-workbench {
         grid-template-columns: 1fr;
       }
     }
 
-    /* Double-Bezel (Doppelrand) Card Architecture */
-    .chassis-shell {
+    /* Doppelrand Chassis Enclosure */
+    .chassis-outer {
       background: var(--bg-chassis);
-      border: 1px solid var(--border-outer);
-      border-radius: 26px;
-      padding: 6px;
-      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.08);
-      margin-bottom: 24px;
-      transition: border-color 0.25s var(--ease-out-quint), box-shadow 0.25s var(--ease-out-quint);
+      border: 1px solid var(--border-chassis);
+      border-radius: 20px;
+      padding: 5px;
+      box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      margin-bottom: 22px;
+      transition: border-color 0.25s var(--ease-fluid);
     }
 
-    .chassis-shell:hover {
-      border-color: rgba(245, 158, 11, 0.22);
-      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.5), 0 0 24px rgba(245, 158, 11, 0.06);
+    .chassis-outer:hover {
+      border-color: rgba(255, 255, 255, 0.14);
     }
 
-    .core-card {
+    .chassis-inner {
       background: var(--bg-core);
-      border: 1px solid var(--border-inner);
-      border-radius: calc(26px - 6px);
-      padding: 24px;
-      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      border-radius: calc(20px - 5px);
+      padding: 22px 24px;
     }
 
-    .card-header {
+    .panel-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -251,289 +251,316 @@
       gap: 10px;
     }
 
-    .card-title {
-      font-size: 15px;
+    .panel-title {
+      font-size: 14px;
       font-weight: 700;
       color: #fff;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.015em;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .badge-pill-micro {
-      font-size: 10.5px;
+    .pill-scope {
+      font-size: 10px;
       font-weight: 700;
-      color: var(--honey-400);
-      background: rgba(245, 158, 11, 0.12);
-      border: 1px solid rgba(245, 158, 11, 0.28);
-      padding: 3px 10px;
+      color: var(--amber-light);
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      padding: 3px 9px;
       border-radius: 9999px;
       font-family: 'JetBrains Mono', monospace;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.04em;
     }
 
-    /* 48h Presets Bento Grid */
-    .presets-grid {
+    /* Sleek Bento Presets Selector */
+    .presets-bento {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
+      gap: 8px;
+      margin-bottom: 18px;
     }
 
     @media (max-width: 768px) {
-      .presets-grid {
+      .presets-bento {
         grid-template-columns: repeat(2, 1fr);
       }
     }
 
     @media (max-width: 480px) {
-      .presets-grid {
+      .presets-bento {
         grid-template-columns: 1fr;
       }
     }
 
-    .btn-preset {
+    .preset-card {
       background: var(--bg-surface);
-      border: 1px solid var(--border-outer);
-      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
       padding: 12px 14px;
       text-align: left;
       cursor: pointer;
-      transition: all 0.22s var(--ease-out-quint);
+      transition: all 0.2s var(--ease-fluid);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       gap: 6px;
-      min-height: 84px;
+      min-height: 86px;
       position: relative;
     }
 
-    .btn-preset:hover {
-      background: var(--bg-surface-elevated);
-      border-color: rgba(245, 158, 11, 0.4);
-      transform: translateY(-2px);
+    .preset-card:hover {
+      background: var(--bg-surface-hover);
+      border-color: rgba(255, 255, 255, 0.16);
+      transform: translateY(-1px);
     }
 
-    .btn-preset.active {
-      background: linear-gradient(145deg, #18233c, #111a2f);
-      border-color: var(--honey-500);
-      box-shadow: 0 0 0 1px var(--honey-500), 0 6px 20px rgba(245, 158, 11, 0.2);
+    .preset-card.active {
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, rgba(245, 158, 11, 0.02) 100%);
+      border-color: var(--amber);
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.14), inset 0 1px 0 rgba(245, 158, 11, 0.25);
     }
 
-    .preset-top {
+    .preset-card-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 6px;
     }
 
-    .preset-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: #fff;
+    .preset-card-heading {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #fff;
     }
 
-    .preset-badge {
+    .preset-icon {
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s;
+    }
+
+    .preset-card.active .preset-icon {
+      color: var(--amber-light);
+    }
+
+    .preset-tag {
       font-size: 9.5px;
       font-weight: 700;
       padding: 2px 6px;
-      border-radius: 5px;
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--text-secondary);
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-muted);
       font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.04em;
     }
 
-    .btn-preset.active .preset-badge {
-      background: rgba(245, 158, 11, 0.25);
-      color: var(--honey-300);
+    .preset-card.active .preset-tag {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--amber-light);
     }
 
-    .preset-desc {
+    .preset-card-desc {
       font-size: 11px;
-      color: var(--text-secondary);
+      color: var(--text-dim);
       line-height: 1.35;
     }
 
-    /* Form Controls */
-    .config-row {
+    /* Configuration Inputs */
+    .config-strip {
       display: flex;
-      gap: 14px;
-      margin-bottom: 18px;
+      gap: 12px;
+      margin-bottom: 16px;
       flex-wrap: wrap;
     }
 
-    .form-group {
+    .input-wrapper {
       flex: 1;
-      min-width: 170px;
+      min-width: 160px;
     }
 
-    label {
+    label.field-label {
       display: block;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
-      color: var(--text-secondary);
-      margin-bottom: 6px;
+      color: var(--text-dim);
+      margin-bottom: 5px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    input, textarea {
+    input.field-input, textarea.field-input {
       width: 100%;
       background: var(--bg-input);
-      border: 1px solid var(--border-outer);
-      border-radius: 12px;
-      color: var(--text-primary);
-      padding: 10px 14px;
-      font-size: 13px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      color: var(--text-main);
+      padding: 9px 12px;
+      font-size: 12.5px;
       font-family: inherit;
-      transition: all 0.18s var(--ease-out-quint);
+      transition: all 0.18s var(--ease-fluid);
     }
 
-    input:focus, textarea:focus {
+    input.field-input:focus, textarea.field-input:focus {
       outline: none;
-      border-color: var(--honey-400);
-      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.22);
-      background: #192440;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 1px var(--border-focus);
+      background: #0f0f14;
     }
 
-    /* Navigation Tabs & Action Bar */
-    .tabs-bar {
+    /* Tab Switcher & Micro Controls */
+    .workbench-nav-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--border-inner);
+      border-bottom: 1px solid var(--border-subtle);
       margin-bottom: 14px;
       padding-bottom: 10px;
       flex-wrap: wrap;
       gap: 10px;
     }
 
-    .tab-pills {
+    .segmented-control {
       display: flex;
       background: var(--bg-surface);
       padding: 3px;
-      border-radius: 12px;
-      border: 1px solid var(--border-outer);
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
       gap: 2px;
     }
 
-    .tab-btn {
+    .segment-btn {
       background: transparent;
       border: none;
-      color: var(--text-secondary);
-      padding: 6px 14px;
-      border-radius: 9px;
+      color: var(--text-dim);
+      padding: 5px 12px;
+      border-radius: 7px;
       cursor: pointer;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
-      transition: all 0.18s var(--ease-out-quint);
+      transition: all 0.18s var(--ease-fluid);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .tab-btn.active {
+    .segment-btn.active {
       color: #fff;
       background: var(--bg-core);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
     }
 
-    .table-tool-btn {
+    .action-chip {
       background: var(--bg-surface);
-      color: var(--text-secondary);
-      border: 1px solid var(--border-outer);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
       font-size: 11px;
       padding: 5px 10px;
-      border-radius: 8px;
+      border-radius: 7px;
       font-weight: 600;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
       transition: all 0.15s;
     }
 
-    .table-tool-btn:hover {
-      background: var(--bg-surface-elevated);
+    .action-chip:hover {
+      background: var(--bg-surface-hover);
       color: #fff;
-      border-color: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.16);
     }
 
-    /* Table Scroll View */
-    .table-scroll {
+    /* Telemetry Table Container */
+    .table-container-scroll {
       max-height: 310px;
       overflow-y: auto;
       overflow-x: auto;
-      border: 1px solid var(--border-outer);
-      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
       margin-bottom: 16px;
       background: var(--bg-surface);
       -webkit-overflow-scrolling: touch;
     }
 
-    table {
+    table.data-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 12px;
       font-family: 'JetBrains Mono', monospace;
     }
 
-    th {
-      background: #10192e;
+    table.data-table th {
+      background: #0f0f13;
       position: sticky;
       top: 0;
-      color: var(--text-secondary);
+      color: var(--text-dim);
       font-weight: 700;
       text-transform: uppercase;
-      font-size: 10px;
-      letter-spacing: 0.06em;
-      padding: 10px 12px;
+      font-size: 9.5px;
+      letter-spacing: 0.08em;
+      padding: 9px 12px;
       text-align: left;
-      border-bottom: 1px solid var(--border-outer);
+      border-bottom: 1px solid var(--border-subtle);
       z-index: 2;
       white-space: nowrap;
     }
 
-    td {
-      padding: 6px 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    table.data-table td {
+      padding: 5px 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
       white-space: nowrap;
     }
 
-    tr:hover td {
+    table.data-table tr:hover td {
       background: rgba(255, 255, 255, 0.02);
     }
 
-    td input {
-      padding: 5px 8px;
-      font-size: 12px;
+    table.data-table td input {
+      padding: 4px 7px;
+      font-size: 11.5px;
       border-radius: 6px;
-      background: #162035;
-      border: 1px solid rgba(255,255,255,0.06);
+      background: #0a0a0e;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--text-main);
       font-family: 'JetBrains Mono', monospace;
+      transition: border-color 0.15s;
     }
 
-    td input:focus {
-      background: #1c2944;
+    table.data-table td input:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      background: #111117;
     }
 
-    .btn-delete-row {
+    .btn-row-del {
       background: transparent;
       border: none;
       color: var(--rose);
       cursor: pointer;
       padding: 3px 6px;
       border-radius: 4px;
-      font-size: 15px;
-      opacity: 0.7;
+      font-size: 13px;
+      opacity: 0.5;
       transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .btn-delete-row:hover {
+    .btn-row-del:hover {
       opacity: 1;
-      background: rgba(244, 63, 94, 0.15);
+      background: rgba(244, 63, 94, 0.12);
     }
 
-    /* Nested Island Primary Button */
-    .actions-bar {
+    /* Primary CTA Execution Button */
+    .footer-action-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -541,126 +568,127 @@
       flex-wrap: wrap;
     }
 
-    .btn-island-primary {
+    .btn-execute-inference {
       display: inline-flex;
       align-items: center;
       gap: 10px;
       padding: 7px 8px 7px 20px;
       border-radius: 9999px;
-      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-      color: #060911;
-      font-size: 13.5px;
+      background: linear-gradient(180deg, #fef3c7 0%, #f59e0b 100%);
+      color: #08080a;
+      font-size: 13px;
       font-weight: 700;
+      letter-spacing: -0.01em;
       cursor: pointer;
       border: none;
       box-shadow: 0 4px 18px rgba(245, 158, 11, 0.35);
-      transition: all 0.25s var(--ease-out-quint);
+      transition: all 0.2s var(--ease-fluid);
       user-select: none;
     }
 
-    .btn-island-primary:hover {
-      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    .btn-execute-inference:hover {
+      background: linear-gradient(180deg, #ffffff 0%, #fbbf24 100%);
+      box-shadow: 0 6px 24px rgba(245, 158, 11, 0.5);
       transform: translateY(-1px);
-      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.5);
     }
 
-    .btn-island-primary:active {
+    .btn-execute-inference:active {
       transform: scale(0.98);
     }
 
-    .btn-island-primary:disabled {
-      opacity: 0.6;
+    .btn-execute-inference:disabled {
+      opacity: 0.55;
       cursor: not-allowed;
       transform: none;
     }
 
-    .btn-icon-island {
-      width: 32px;
-      height: 32px;
+    .btn-icon-capsule {
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(8, 8, 10, 0.18);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
-      transition: transform 0.2s var(--ease-elastic);
+      transition: transform 0.25s var(--ease-spring);
     }
 
-    .btn-island-primary:hover .btn-icon-island {
-      transform: scale(1.1) rotate(5deg);
+    .btn-execute-inference:hover .btn-icon-capsule {
+      transform: scale(1.1) rotate(6deg);
     }
 
-    kbd {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      padding: 2px 6px;
+    kbd.hotkey-chip {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 2px 5px;
       border-radius: 4px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
+      font-size: 10.5px;
+      color: var(--text-dim);
     }
 
-    /* RIGHT COLUMN: 48h Diagnostics Results */
-    .hero-eval-card {
+    /* RIGHT COLUMN: Diagnostic Telemetry Analysis */
+    .hero-metric-display {
       display: grid;
-      grid-template-columns: 160px 1fr;
+      grid-template-columns: 156px 1fr;
       gap: 20px;
-      background: linear-gradient(145deg, #111a2f 0%, #0d1526 100%);
-      border: 1px solid var(--border-outer);
-      border-radius: 18px;
-      padding: 20px 22px;
-      margin-bottom: 20px;
+      background: linear-gradient(180deg, #101015 0%, #0d0d12 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 18px;
       align-items: center;
-      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
     }
 
     @media (max-width: 640px) {
-      .hero-eval-card {
+      .hero-metric-display {
         grid-template-columns: 1fr;
         text-align: center;
       }
     }
 
-    /* Precision Circular Speedometer/Gauge */
-    .gauge-wrapper {
+    /* Precision Speedometer / Radial Arc */
+    .speedo-wrap {
       position: relative;
-      width: 144px;
-      height: 144px;
+      width: 140px;
+      height: 140px;
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .gauge-svg {
+    .speedo-svg {
       transform: rotate(-90deg);
       width: 100%;
       height: 100%;
     }
 
-    .gauge-track-outer {
+    .speedo-bg-track {
       fill: none;
       stroke: rgba(255, 255, 255, 0.05);
-      stroke-width: 10;
+      stroke-width: 9;
     }
 
-    .gauge-track-ticks {
+    .speedo-ticks {
       fill: none;
-      stroke: rgba(255, 255, 255, 0.12);
+      stroke: rgba(255, 255, 255, 0.1);
       stroke-width: 2;
       stroke-dasharray: 2 10;
     }
 
-    .gauge-progress {
+    .speedo-progress {
       fill: none;
-      stroke-width: 10;
+      stroke-width: 9;
       stroke-linecap: round;
       stroke-dasharray: 377;
       stroke-dashoffset: 377;
-      transition: stroke-dashoffset 0.9s var(--ease-out-quint), stroke 0.4s ease;
-      filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.4));
+      transition: stroke-dashoffset 0.85s var(--ease-fluid), stroke 0.35s ease;
+      filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.4));
     }
 
-    .gauge-text {
+    .speedo-center-data {
       position: absolute;
       inset: 0;
       display: flex;
@@ -669,216 +697,241 @@
       justify-content: center;
     }
 
-    .gauge-value {
+    .speedo-score-number {
       font-size: 34px;
-      font-weight: 800;
-      letter-spacing: -0.03em;
+      font-weight: 700;
+      letter-spacing: -0.04em;
       color: #fff;
       font-family: 'JetBrains Mono', monospace;
+      line-height: 1;
     }
 
-    .gauge-sub {
-      font-size: 9.5px;
+    .speedo-label-sub {
+      font-size: 9px;
       text-transform: uppercase;
       font-weight: 700;
-      letter-spacing: 0.1em;
-      color: var(--text-secondary);
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+      margin-top: 4px;
     }
 
-    /* Risk Summary */
-    .risk-summary {
+    /* Risk Breakdown Info */
+    .risk-breakdown {
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    .risk-badges-row {
+    .risk-meta-row {
       display: flex;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
     }
 
-    .badge-tier {
+    .badge-tier-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 5px 12px;
+      padding: 4px 10px;
       border-radius: 9999px;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 700;
-      background: rgba(6, 182, 212, 0.14);
-      border: 1px solid var(--cyan);
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.3);
       color: #67e8f9;
       font-family: 'JetBrains Mono', monospace;
     }
 
-    .badge-risk {
+    .badge-stress-risk {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 5px 14px;
+      padding: 4px 12px;
       border-radius: 9999px;
-      font-size: 11.5px;
-      font-weight: 800;
-      letter-spacing: 0.04em;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    .risk-LOW {
+    .stress-LOW {
       background: var(--emerald-glow);
-      border: 1px solid var(--emerald);
+      border: 1px solid rgba(16, 185, 129, 0.35);
       color: #6ee7b7;
     }
 
-    .risk-MEDIUM {
+    .stress-MEDIUM {
       background: var(--amber-glow);
-      border: 1px solid var(--amber);
+      border: 1px solid rgba(245, 158, 11, 0.35);
       color: #fde68a;
     }
 
-    .risk-HIGH {
+    .stress-HIGH {
       background: var(--rose-glow);
-      border: 1px solid var(--rose);
+      border: 1px solid rgba(244, 63, 94, 0.35);
       color: #fca5a5;
     }
 
-    .progress-bar-wrap {
+    .linear-meter-box {
       display: flex;
       flex-direction: column;
       gap: 5px;
     }
 
-    .bar-labels {
+    .meter-labels {
       display: flex;
       justify-content: space-between;
-      font-size: 11px;
-      color: var(--text-secondary);
+      font-size: 10.5px;
+      color: var(--text-dim);
       font-weight: 600;
     }
 
-    .bar-track {
-      height: 6px;
+    .meter-track {
+      height: 5px;
       border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.06);
       overflow: hidden;
     }
 
-    .bar-fill {
+    .meter-bar {
       height: 100%;
       border-radius: 9999px;
-      transition: width 0.7s var(--ease-out-quint);
+      transition: width 0.7s var(--ease-fluid);
     }
 
-    /* Clinical Recommendation Alert */
-    .recommendation-banner {
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(217, 119, 6, 0.02) 100%);
-      border: 1px solid rgba(245, 158, 11, 0.3);
-      border-left: 4px solid var(--honey-500);
-      border-radius: 14px;
-      padding: 14px 16px;
-      margin-bottom: 20px;
+    /* Clinical Recommendation Banner */
+    .advisory-card {
+      background: rgba(245, 158, 11, 0.04);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
       display: flex;
       gap: 12px;
       align-items: flex-start;
+      position: relative;
+      overflow: hidden;
     }
 
-    .recommendation-banner.alert-high {
-      background: linear-gradient(135deg, rgba(244, 63, 94, 0.1) 0%, rgba(244, 63, 94, 0.02) 100%);
-      border-color: rgba(244, 63, 94, 0.35);
-      border-left-color: var(--rose);
+    .advisory-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--amber);
     }
 
-    .rec-icon {
-      font-size: 20px;
+    .advisory-card.alert-danger {
+      background: rgba(244, 63, 94, 0.06);
+      border-color: rgba(244, 63, 94, 0.25);
+    }
+
+    .advisory-card.alert-danger::before {
+      background: var(--rose);
+    }
+
+    .advisory-icon {
+      color: var(--amber);
+      margin-top: 1px;
       flex-shrink: 0;
-      line-height: 1.2;
     }
 
-    .rec-title {
-      font-size: 10.5px;
+    .alert-danger .advisory-icon {
+      color: var(--rose);
+    }
+
+    .advisory-title {
+      font-size: 9.5px;
       font-weight: 700;
-      color: var(--honey-300);
+      color: var(--amber-light);
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.08em;
+      font-family: 'JetBrains Mono', monospace;
       margin-bottom: 2px;
     }
 
-    .alert-high .rec-title {
-      color: #fda4af;
+    .alert-danger .advisory-title {
+      color: #fca5a5;
     }
 
-    .rec-body {
-      font-size: 13.5px;
-      color: #f1f5f9;
+    .advisory-content {
+      font-size: 13px;
+      color: #e4e4e7;
       font-weight: 500;
+      line-height: 1.4;
     }
 
     /* Detection Scope Tags */
-    .scope-tags-wrap {
+    .scope-chips-row {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
       margin-bottom: 18px;
     }
 
-    .scope-tag {
-      font-size: 11px;
+    .scope-chip {
+      font-size: 10.5px;
       font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 7px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      color: var(--text-secondary);
+      padding: 3px 9px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Diagnostic Drivers Cards */
-    .drivers-row {
+    /* Key Telemetry Drivers (Divide Grid) */
+    .telemetry-drivers-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
-      margin-bottom: 20px;
+      gap: 6px;
+      margin-bottom: 18px;
     }
 
     @media (max-width: 768px) {
-      .drivers-row {
+      .telemetry-drivers-grid {
         grid-template-columns: repeat(2, 1fr);
       }
     }
 
-    .driver-box {
+    .driver-cell {
       background: var(--bg-surface);
-      border: 1px solid var(--border-outer);
-      border-radius: 12px;
-      padding: 10px 8px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 9px 8px;
       text-align: center;
-      transition: transform 0.2s var(--ease-out-quint), border-color 0.2s;
+      transition: transform 0.2s var(--ease-fluid), border-color 0.2s;
     }
 
-    .driver-box:hover {
-      border-color: rgba(255, 255, 255, 0.18);
-      background: var(--bg-surface-elevated);
-      transform: translateY(-2px);
+    .driver-cell:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      background: var(--bg-surface-hover);
+      transform: translateY(-1px);
     }
 
-    .driver-label {
-      font-size: 9.5px;
+    .driver-cell-label {
+      font-size: 9px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-tertiary);
-      margin-bottom: 4px;
+      letter-spacing: 0.06em;
+      color: var(--text-dim);
+      margin-bottom: 3px;
       font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    .driver-val {
-      font-size: 14px;
+    .driver-cell-val {
+      font-size: 13.5px;
       font-weight: 700;
       color: #fff;
       font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Chart Card & Stream Filters */
-    .chart-controls-bar {
+    /* Chart Container & Stream Selectors */
+    .chart-header-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -887,113 +940,117 @@
       gap: 8px;
     }
 
-    .chart-chips {
+    .stream-toggle-chips {
       display: flex;
       gap: 6px;
     }
 
-    .chart-chip {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: var(--text-secondary);
-      font-size: 10.5px;
-      padding: 3px 8px;
+    .stream-chip {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      color: var(--text-dim);
+      font-size: 10px;
+      padding: 3px 9px;
       border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
       transition: all 0.15s;
     }
 
-    .chart-chip.active {
-      background: rgba(245, 158, 11, 0.15);
-      border-color: var(--honey-500);
-      color: var(--honey-300);
+    .stream-chip.active {
+      background: rgba(245, 158, 11, 0.12);
+      border-color: rgba(245, 158, 11, 0.4);
+      color: var(--amber-light);
     }
 
-    .chart-box {
+    .canvas-chart-box {
       position: relative;
-      height: 250px;
+      height: 240px;
       width: 100%;
     }
 
-    /* JSON Details */
-    details {
+    /* Collapsible Payload Inspection */
+    details.payload-drawer {
       background: var(--bg-surface);
-      border: 1px solid var(--border-outer);
-      border-radius: 12px;
-      padding: 12px 16px;
-      margin-top: 18px;
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-top: 16px;
     }
 
-    summary {
+    details.payload-drawer summary {
       cursor: pointer;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
-      color: var(--text-secondary);
+      color: var(--text-dim);
       display: flex;
       justify-content: space-between;
       align-items: center;
       user-select: none;
     }
 
-    summary:hover {
+    details.payload-drawer summary:hover {
       color: #fff;
     }
 
-    .json-wrapper {
+    .code-mirror-wrap {
       position: relative;
-      margin-top: 10px;
+      margin-top: 8px;
     }
 
-    pre {
-      background: #080c16;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 10px;
-      padding: 12px;
+    pre.code-block {
+      background: #09090c;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 10px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 11.5px;
+      font-size: 11px;
       overflow-x: auto;
       color: #67e8f9;
-      max-height: 240px;
+      max-height: 220px;
     }
 
-    .btn-copy-json {
+    .btn-copy-code {
       position: absolute;
-      top: 8px;
-      right: 8px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      top: 6px;
+      right: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       color: #fff;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 10.5px;
       cursor: pointer;
       font-weight: 600;
       transition: all 0.15s;
     }
 
-    .btn-copy-json:hover {
-      background: rgba(255, 255, 255, 0.2);
+    .btn-copy-code:hover {
+      background: rgba(255, 255, 255, 0.18);
     }
 
-    /* Toast Notification */
+    /* Sleek Floating Toast Notification */
     #toast {
       position: fixed;
       bottom: 24px;
       right: 24px;
-      background: #111a2e;
-      border: 1px solid var(--honey-500);
+      background: #111116;
+      border: 1px solid var(--border-chassis);
       color: #fff;
-      padding: 10px 18px;
-      border-radius: 10px;
-      font-size: 12.5px;
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 12px;
       font-weight: 600;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      transform: translateY(100px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      transform: translateY(80px);
       opacity: 0;
-      transition: all 0.3s var(--ease-out-quint);
+      transition: all 0.25s var(--ease-fluid);
       z-index: 100;
       pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 7px;
     }
 
     #toast.show {
@@ -1001,16 +1058,16 @@
       opacity: 1;
     }
 
-    .spinner {
-      width: 15px;
-      height: 15px;
+    .spinner-disc {
+      width: 14px;
+      height: 14px;
       border: 2px solid rgba(0, 0, 0, 0.2);
       border-radius: 50%;
-      border-top-color: #060911;
-      animation: spin 0.7s linear infinite;
+      border-top-color: #08080a;
+      animation: spinDisc 0.7s linear infinite;
     }
 
-    @keyframes spin {
+    @keyframes spinDisc {
       to { transform: rotate(360deg); }
     }
   </style>
@@ -1020,126 +1077,182 @@
     <!-- Top Floating Island Header -->
     <header>
       <div class="brand">
-        <div class="brand-logo-wrap">🐝</div>
+        <div class="brand-icon-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7v10l10 5 10-5V7l-10-5z"/>
+            <path d="M12 22V12"/>
+            <path d="M22 7l-10 5-10-5"/>
+            <path d="M2 17l10-5 10 5"/>
+          </svg>
+        </div>
         <div class="brand-text">
-          <h1>HoneyChain <span class="highlight">ML Studio</span></h1>
-          <p>48-Hour Full-Window Colony Diagnostics • Continuous XGBoost Inference</p>
+          <h1>
+            HoneyChain ML Diagnostic Studio
+            <span class="pill-meta">T48 ENGINE</span>
+          </h1>
+          <p>Continuous Colony Health Intelligence • Full 48-Hour Telemetry Matrix</p>
         </div>
       </div>
+
       <div class="header-actions">
-        <div class="status-badge">
-          <div id="statusDot" class="status-pulse">
-            <span class="ping"></span>
+        <div class="status-pill">
+          <div id="statusDot" class="pulse-indicator">
+            <span class="ring"></span>
             <span class="dot"></span>
           </div>
-          <span id="statusText">Checking Microservice...</span>
+          <span id="statusText">Connecting...</span>
         </div>
-        <a href="https://github.com/Honey-Chain/HoneyChain_ML" target="_blank" rel="noopener" class="btn-gh">
-          <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        <a href="https://github.com/Honey-Chain/HoneyChain_ML" target="_blank" rel="noopener" class="btn-link-gh">
+          <svg width="13" height="13" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
           <span>HoneyChain_ML</span>
         </a>
       </div>
     </header>
 
-    <!-- Main Grid -->
-    <div class="grid-main">
-      <!-- Left Column: Input Panel -->
+    <!-- Asymmetric Bento Workbench -->
+    <div class="grid-workbench">
+      <!-- Left Column: Input Telemetry Panel -->
       <div class="left-col">
-        <div class="chassis-shell">
-          <div class="core-card">
-            <div class="card-header">
-              <span class="card-title">🧪 48-Hour Diagnostic Presets</span>
-              <span class="badge-pill-micro">Tier T48 • Full Window</span>
+        <div class="chassis-outer">
+          <div class="chassis-inner">
+            <div class="panel-header">
+              <span class="panel-title">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21v-7m0-4V3m8 18v-9m0-4V3m8 18v-5m0-4V3M1 14h6m2-6h6m2 8h6"/></svg>
+                Telemetry Matrix Presets
+              </span>
+              <span class="pill-scope">Window: 48 Hours</span>
             </div>
 
-            <!-- 6 Dedicated 48-Hour Bento Presets -->
-            <div class="presets-grid">
-              <button class="btn-preset active" data-scenario="healthy" onclick="loadScenario('healthy')">
-                <div class="preset-top">
-                  <span class="preset-title">🟢 Balance</span>
-                  <span class="preset-badge">48h • Normal</span>
+            <!-- 6 Dedicated 48h Presets -->
+            <div class="presets-bento">
+              <button class="preset-card active" data-scenario="healthy" onclick="loadScenario('healthy')">
+                <div class="preset-card-top">
+                  <div class="preset-card-heading">
+                    <span class="preset-icon">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    </span>
+                    <span>Balance</span>
+                  </div>
+                  <span class="preset-tag">48H • BAL</span>
                 </div>
-                <span class="preset-desc">Two full circadian solar cycles, stable weight gain (+0.7kg) & active flight.</span>
+                <span class="preset-card-desc">Dual circadian solar cycle with progressive weight gain (+0.7kg).</span>
               </button>
 
-              <button class="btn-preset" data-scenario="swarm" onclick="loadScenario('swarm')">
-                <div class="preset-top">
-                  <span class="preset-title">🔴 Swarm Event</span>
-                  <span class="preset-badge">48h • Acute</span>
+              <button class="preset-card" data-scenario="swarm" onclick="loadScenario('swarm')">
+                <div class="preset-card-top">
+                  <div class="preset-card-heading">
+                    <span class="preset-icon">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14m-7-7l7 7 7-7"/></svg>
+                    </span>
+                    <span>Swarm</span>
+                  </div>
+                  <span class="preset-tag">48H • SWM</span>
                 </div>
-                <span class="preset-desc">Mid-window swarm departure at hour 26 (-2.4kg drop & -320 bee flight spike).</span>
+                <span class="preset-card-desc">Acute swarm event at hour 26 (-2.4kg drop & -320 flight loss).</span>
               </button>
 
-              <button class="btn-preset" data-scenario="starvation" onclick="loadScenario('starvation')">
-                <div class="preset-top">
-                  <span class="preset-title">🟠 Depletion</span>
-                  <span class="preset-badge">48h • Chronic</span>
+              <button class="preset-card" data-scenario="starvation" onclick="loadScenario('starvation')">
+                <div class="preset-card-top">
+                  <div class="preset-card-heading">
+                    <span class="preset-icon">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M19 17l-6-6-4 4-4-5"/></svg>
+                    </span>
+                    <span>Depletion</span>
+                  </div>
+                  <span class="preset-tag">48H • DEP</span>
                 </div>
-                <span class="preset-desc">Continuous multi-day starvation decline (-3.6kg) with suppressed foraging.</span>
+                <span class="preset-card-desc">Continuous multi-day starvation decline (-3.6kg) without foraging.</span>
               </button>
 
-              <button class="btn-preset" data-scenario="robbing" onclick="loadScenario('robbing')">
-                <div class="preset-top">
-                  <span class="preset-title">🟡 Robbing Attack</span>
-                  <span class="preset-badge">48h • Robbing</span>
+              <button class="preset-card" data-scenario="robbing" onclick="loadScenario('robbing')">
+                <div class="preset-card-top">
+                  <div class="preset-card-heading">
+                    <span class="preset-icon">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </span>
+                    <span>Robbing</span>
+                  </div>
+                  <span class="preset-tag">48H • ROB</span>
                 </div>
-                <span class="preset-desc">Afternoon invading bee frenzies with rapid store depletion & agitated hive heat.</span>
+                <span class="preset-card-desc">Afternoon raiding frenzies with store depletion & agitated hive heat.</span>
               </button>
 
-              <button class="btn-preset" data-scenario="nectar_surge" onclick="loadScenario('nectar_surge')">
-                <div class="preset-top">
-                  <span class="preset-title">🍯 Honey Surge</span>
-                  <span class="preset-badge">48h • Nectar</span>
+              <button class="preset-card" data-scenario="nectar_surge" onclick="loadScenario('nectar_surge')">
+                <div class="preset-card-top">
+                  <div class="preset-card-heading">
+                    <span class="preset-icon">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    </span>
+                    <span>Honey Surge</span>
+                  </div>
+                  <span class="preset-tag">48H • SUR</span>
                 </div>
-                <span class="preset-desc">Intense bloom honeyflow: strong inflow (+85/m) & +1.9kg nectar accumulation.</span>
+                <span class="preset-card-desc">Intense bloom honeyflow: massive incoming bee flow & +1.9kg gain.</span>
               </button>
 
-              <button class="btn-preset" data-scenario="real_wurzburg" onclick="loadScenario('real_wurzburg')">
-                <div class="preset-top">
-                  <span class="preset-title">📁 Würzburg File</span>
-                  <span class="preset-badge">48h • Real IoT</span>
+              <button class="preset-card" data-scenario="real_wurzburg" onclick="loadScenario('real_wurzburg')">
+                <div class="preset-card-top">
+                  <div class="preset-card-heading">
+                    <span class="preset-icon">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </span>
+                    <span>Würzburg File</span>
+                  </div>
+                  <span class="preset-tag">48H • IOT</span>
                 </div>
-                <span class="preset-desc">Authentic 48h German apiary sensor telemetry recorded during a natural swarm.</span>
+                <span class="preset-card-desc">Authentic 48h German apiary sensor telemetry recorded in real field.</span>
               </button>
             </div>
 
-            <!-- Config inputs -->
-            <div class="config-row">
-              <div class="form-group" style="flex: 1;">
-                <label for="hiveIdInput">Hive Identifier</label>
-                <input type="text" id="hiveIdInput" value="HIVE-KV-201" placeholder="e.g. HIVE-KV-201">
+            <!-- Configuration Parameters -->
+            <div class="config-strip">
+              <div class="input-wrapper" style="flex: 1;">
+                <label class="field-label" for="hiveIdInput">Hive Node ID</label>
+                <input type="text" id="hiveIdInput" class="field-input" value="HIVE-KV-201" placeholder="e.g. HIVE-KV-201">
               </div>
-              <div class="form-group" style="flex: 1.4;">
-                <label for="apiKeyInput">API Secret Key (X-ML-API-Key)</label>
-                <input type="password" id="apiKeyInput" placeholder="Optional (configured in Render)">
+              <div class="input-wrapper" style="flex: 1.3;">
+                <label class="field-label" for="apiKeyInput">Authorization Secret (X-ML-API-Key)</label>
+                <input type="password" id="apiKeyInput" class="field-input" placeholder="Optional (configured in Render)">
               </div>
             </div>
 
             <!-- Tabs Bar & Secondary Tools -->
-            <div class="tabs-bar">
-              <div class="tab-pills">
-                <button id="tabTableBtn" class="tab-btn active" onclick="switchTab('table')">📊 Telemetry Table</button>
-                <button id="tabJsonBtn" class="tab-btn" onclick="switchTab('json')">💻 Raw JSON Editor</button>
+            <div class="workbench-nav-bar">
+              <div class="segmented-control">
+                <button id="tabTableBtn" class="segment-btn active" onclick="switchTab('table')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                  Telemetry Matrix
+                </button>
+                <button id="tabJsonBtn" class="segment-btn" onclick="switchTab('json')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                  Raw JSON
+                </button>
               </div>
               <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-                <span id="rowCountBadge" style="font-size: 11px; font-weight: 700; color: var(--text-tertiary); font-family: 'JetBrains Mono', monospace; margin-right: 4px;">49 READINGS</span>
-                <button class="table-tool-btn" onclick="filterDay(1)" title="Scroll to Day 1">Day 1</button>
-                <button class="table-tool-btn" onclick="filterDay(2)" title="Scroll to Day 2">Day 2</button>
-                <button class="table-tool-btn" onclick="injectNoise()" title="Simulate Realistic IoT Sensor Variance">⚡ Jitter</button>
-                <button class="table-tool-btn" onclick="exportCsv()" title="Download CSV">CSV</button>
-                <button class="table-tool-btn" onclick="addRow()">+ Hour</button>
-                <button class="table-tool-btn" onclick="clearRows()">Clear</button>
+                <span id="rowCountBadge" style="font-size: 10px; font-weight: 700; color: var(--text-dark); font-family: 'JetBrains Mono', monospace; margin-right: 4px;">49 READINGS</span>
+                <button class="action-chip" onclick="filterDay(1)" title="Scroll to Day 1 (0-24h)">Day 1</button>
+                <button class="action-chip" onclick="filterDay(2)" title="Scroll to Day 2 (25-48h)">Day 2</button>
+                <button class="action-chip" onclick="injectNoise()" title="Simulate Realistic IoT Sensor Jitter">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v7L20 10h-6V3L4 14z"/></svg>
+                  Jitter
+                </button>
+                <button class="action-chip" onclick="exportCsv()" title="Export CSV for analysis">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  CSV
+                </button>
+                <button class="action-chip" onclick="addRow()">+ Hour</button>
+                <button class="action-chip" onclick="clearRows()">Clear</button>
               </div>
             </div>
 
             <!-- Table View -->
             <div id="tableView">
-              <div class="table-scroll" id="tableScrollContainer">
-                <table id="readingsTable">
+              <div class="table-container-scroll" id="tableScrollContainer">
+                <table class="data-table" id="readingsTable">
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Timestamp (Local)</th>
+                      <th>Timestamp (ISO)</th>
                       <th>Temp (°C)</th>
                       <th>Humidity (%)</th>
                       <th>Weight (kg)</th>
@@ -1155,21 +1268,24 @@
             <!-- JSON View -->
             <div id="jsonView" style="display: none;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span style="font-size: 11px; color: var(--text-secondary);">Edit or paste 48h JSON readings directly:</span>
-                <button class="table-tool-btn" onclick="formatJsonEditor()">Format JSON</button>
+                <span style="font-size: 11px; color: var(--text-muted);">Directly edit or paste 48h reading matrix:</span>
+                <button class="action-chip" onclick="formatJsonEditor()">Format JSON</button>
               </div>
-              <textarea id="jsonEditor" rows="12" style="font-family: 'JetBrains Mono', monospace; font-size: 12px;"></textarea>
+              <textarea id="jsonEditor" rows="12" class="field-input" style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px;"></textarea>
             </div>
 
-            <!-- Run Action Button (Button-in-Button Nested Island) -->
-            <div class="actions-bar" style="margin-top: 16px;">
-              <div style="font-size: 12px; color: var(--text-tertiary);">
-                Press <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to run
+            <!-- Bottom CTA Execution Bar -->
+            <div class="footer-action-bar" style="margin-top: 16px;">
+              <div style="font-size: 11.5px; color: var(--text-dark); display: flex; align-items: center; gap: 6px;">
+                <span>Trigger shortcut:</span>
+                <kbd class="hotkey-chip">Ctrl + Enter</kbd>
               </div>
-              <button id="btnRun" class="btn-island-primary" onclick="runInference()">
-                <span id="btnRunText">Run 48h ML Diagnostic</span>
-                <span class="btn-icon-island" id="btnRunIconWrapper">
-                  <span id="btnRunIcon">⚡</span>
+              <button id="btnRun" class="btn-execute-inference" onclick="runInference()">
+                <span id="btnRunText">Run 48h Diagnostic</span>
+                <span class="btn-icon-capsule" id="btnRunIconWrapper">
+                  <span id="btnRunIcon">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  </span>
                 </span>
               </button>
             </div>
@@ -1177,119 +1293,124 @@
         </div>
       </div>
 
-      <!-- Right Column: Inference Analytics Panel -->
+      <!-- Right Column: Diagnostic Intelligence Panel -->
       <div class="right-col">
-        <div class="chassis-shell">
-          <div class="core-card">
-            <div class="card-header">
-              <span class="card-title">🔬 48-Hour Health Diagnostic</span>
-              <span id="inferenceTierBadge" class="badge-tier">Tier: T48 (48h Window)</span>
+        <div class="chassis-outer">
+          <div class="chassis-inner">
+            <div class="panel-header">
+              <span class="panel-title">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                Colony Vitality Assessment
+              </span>
+              <span id="inferenceTierBadge" class="badge-tier-pill">Tier: T48 (48h Window)</span>
             </div>
 
-            <!-- Hero Metric Card: Precision SVG Gauge + Risk Info -->
-            <div class="hero-eval-card">
-              <div class="gauge-wrapper">
-                <svg class="gauge-svg" viewBox="0 0 144 144">
-                  <circle class="gauge-track-outer" cx="72" cy="72" r="60"></circle>
-                  <circle class="gauge-track-ticks" cx="72" cy="72" r="50"></circle>
-                  <circle id="gaugeProgress" class="gauge-progress" cx="72" cy="72" r="60" stroke="var(--emerald)"></circle>
+            <!-- Precision Health Arc & Stress Metrics -->
+            <div class="hero-metric-display">
+              <div class="speedo-wrap">
+                <svg class="speedo-svg" viewBox="0 0 140 140">
+                  <circle class="speedo-bg-track" cx="70" cy="70" r="58"></circle>
+                  <circle class="speedo-ticks" cx="70" cy="70" r="48"></circle>
+                  <circle id="gaugeProgress" class="speedo-progress" cx="70" cy="70" r="58" stroke="var(--emerald)"></circle>
                 </svg>
-                <div class="gauge-text">
-                  <span id="metricHealthScore" class="gauge-value">85.0</span>
-                  <span class="gauge-sub">Health Index</span>
+                <div class="speedo-center-data">
+                  <span id="metricHealthScore" class="speedo-score-number">85.0</span>
+                  <span class="speedo-label-sub">Health Index</span>
                 </div>
               </div>
 
-              <div class="risk-summary">
-                <div class="risk-badges-row">
-                  <span id="metricStressRisk" class="badge-risk risk-LOW">LOW STRESS</span>
-                  <span id="metricStressProb" style="font-size: 12px; font-weight: 700; color: var(--text-primary); font-family: 'JetBrains Mono', monospace;">Prob: 0.0%</span>
+              <div class="risk-breakdown">
+                <div class="risk-meta-row">
+                  <span id="metricStressRisk" class="badge-stress-risk stress-LOW">LOW STRESS</span>
+                  <span id="metricStressProb" style="font-size: 11.5px; font-weight: 700; color: var(--text-main); font-family: 'JetBrains Mono', monospace;">Prob: 0.0%</span>
                 </div>
 
-                <!-- Abnormality Risk Meter -->
-                <div class="progress-bar-wrap">
-                  <div class="bar-labels">
-                    <span>Seasonal Anomaly Deviation</span>
+                <!-- Linear Abnormality Deviation Bar -->
+                <div class="linear-meter-box">
+                  <div class="meter-labels">
+                    <span>Baseline Anomaly Deviation</span>
                     <span id="metricAbnormalityLabel" style="font-family: 'JetBrains Mono', monospace; color: #fff;">30.1%</span>
                   </div>
-                  <div class="bar-track">
-                    <div id="abnormalityBar" class="bar-fill" style="width: 30.1%; background: linear-gradient(90deg, #10b981, #f59e0b);"></div>
+                  <div class="meter-track">
+                    <div id="abnormalityBar" class="meter-bar" style="width: 30.1%; background: linear-gradient(90deg, #10b981, #f59e0b);"></div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Recommendation Alert -->
-            <div id="recBanner" class="recommendation-banner">
-              <div class="rec-icon">🩺</div>
+            <!-- Clinical Advisory Card -->
+            <div id="recBanner" class="advisory-card">
+              <div class="advisory-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
               <div>
-                <div class="rec-title">Colony Health Advisory</div>
-                <div id="recText" class="rec-body">Colony within normal range. No action needed.</div>
+                <div class="advisory-title">Clinical Diagnostic Advisory</div>
+                <div id="recText" class="advisory-content">Colony metrics stable. Circadian thermoregulation and foraging in equilibrium.</div>
               </div>
             </div>
 
             <!-- Detection Scope Tags -->
-            <div class="scope-tags-wrap" id="scopeTags">
-              <span class="scope-tag">✓ colony activity anomaly</span>
-              <span class="scope-tag">✓ fast weight drop (robbing / swarm)</span>
-              <span class="scope-tag">✓ sustained weight decline (starvation)</span>
+            <div class="scope-chips-row" id="scopeTags">
+              <span class="scope-chip">colony activity anomaly</span>
+              <span class="scope-chip">fast weight drop (robbing / swarm)</span>
+              <span class="scope-chip">sustained weight decline (starvation)</span>
             </div>
 
-            <!-- Diagnostic Drivers Breakdown -->
+            <!-- Telemetry Key Drivers -->
             <div>
-              <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-tertiary); margin-bottom: 8px;">
-                Primary Telemetry Drivers (48h Window)
+              <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); margin-bottom: 7px; font-family: 'JetBrains Mono', monospace;">
+                Diagnostic Telemetry Drivers (48h Cumulative)
               </div>
-              <div class="drivers-row">
-                <div class="driver-box">
-                  <div class="driver-label">Activity Dev</div>
-                  <div id="drvActivity" class="driver-val">-0.42</div>
+              <div class="telemetry-drivers-grid">
+                <div class="driver-cell">
+                  <div class="driver-cell-label">Activity Dev</div>
+                  <div id="drvActivity" class="driver-cell-val">-0.42</div>
                 </div>
-                <div class="driver-box">
-                  <div class="driver-label">Temp Dev</div>
-                  <div id="drvTemp" class="driver-val">+0.15°C</div>
+                <div class="driver-cell">
+                  <div class="driver-cell-label">Temp Drift</div>
+                  <div id="drvTemp" class="driver-cell-val">+0.15°C</div>
                 </div>
-                <div class="driver-box">
-                  <div class="driver-label">48h Weight Trend</div>
-                  <div id="drvTrend" class="driver-val">+0.72kg</div>
+                <div class="driver-cell">
+                  <div class="driver-cell-label">Weight Delta</div>
+                  <div id="drvTrend" class="driver-cell-val">+0.72kg</div>
                 </div>
-                <div class="driver-box">
-                  <div class="driver-label">Weight Drop</div>
-                  <div id="drvDrop" class="driver-val">0.00kg</div>
+                <div class="driver-cell">
+                  <div class="driver-cell-label">Acute Drop</div>
+                  <div id="drvDrop" class="driver-cell-val">0.00kg</div>
                 </div>
-                <div class="driver-box">
-                  <div class="driver-label">Net Flow</div>
-                  <div id="drvFlow" class="driver-val">+50/m</div>
+                <div class="driver-cell">
+                  <div class="driver-cell-label">Net Flight</div>
+                  <div id="drvFlow" class="driver-cell-val">+50/m</div>
                 </div>
               </div>
             </div>
 
-            <!-- Telemetry Time-Series Chart Studio -->
+            <!-- Telemetry Multi-Stream Canvas -->
             <div>
-              <div class="chart-controls-bar">
-                <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-tertiary);">
-                  48-Hour Telemetry Dynamics
+              <div class="chart-header-row">
+                <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); font-family: 'JetBrains Mono', monospace;">
+                  48-Hour Multi-Stream Dynamics
                 </span>
-                <div class="chart-chips">
-                  <button class="chart-chip active" id="chipWeight" onclick="toggleStream(0, this)">Weight (kg)</button>
-                  <button class="chart-chip active" id="chipTemp" onclick="toggleStream(1, this)">Temp (°C)</button>
-                  <button class="chart-chip active" id="chipFlow" onclick="toggleStream(2, this)">Net Flow</button>
+                <div class="stream-toggle-chips">
+                  <button class="stream-chip active" id="chipWeight" onclick="toggleStream(0, this)">Weight (kg)</button>
+                  <button class="stream-chip active" id="chipTemp" onclick="toggleStream(1, this)">Temp (°C)</button>
+                  <button class="stream-chip active" id="chipFlow" onclick="toggleStream(2, this)">Net Flight</button>
                 </div>
               </div>
-              <div class="chart-box">
+              <div class="canvas-chart-box">
                 <canvas id="telemetryChart"></canvas>
               </div>
             </div>
 
-            <!-- Collapsible Raw JSON Response -->
-            <details>
+            <!-- Inspect Payload Drawer -->
+            <details class="payload-drawer">
               <summary>
-                <span>View Raw Model Inference Payload (JSON)</span>
-                <span style="font-size: 10px; font-family: monospace;">click to expand</span>
+                <span>Inspect Microservice Response Payload (JSON)</span>
+                <span style="font-size: 9.5px; font-family: 'JetBrains Mono', monospace;">view raw</span>
               </summary>
-              <div class="json-wrapper">
-                <button class="btn-copy-json" onclick="copyRawJson(this)">Copy JSON</button>
-                <pre id="rawJsonResponse">{}</pre>
+              <div class="code-mirror-wrap">
+                <button class="btn-copy-code" onclick="copyRawJson(this)">Copy JSON</button>
+                <pre id="rawJsonResponse" class="code-block">{}</pre>
               </div>
             </details>
           </div>
@@ -1298,17 +1419,20 @@
     </div>
   </div>
 
-  <div id="toast">✓ Copied to clipboard!</div>
+  <div id="toast">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toastMsg">Action completed</span>
+  </div>
 
   <script>
-    // State variables
+    // App State
     let currentReadings = [];
     let currentTab = 'table';
     let chartInstance = null;
     let selectedScenario = 'healthy';
     let previousScore = 85.0;
 
-    // Local Storage for API Key
+    // Storage for API Key
     const savedKey = localStorage.getItem('honeychain_ml_key');
     if (savedKey) {
       document.getElementById('apiKeyInput').value = savedKey;
@@ -1317,7 +1441,7 @@
       localStorage.setItem('honeychain_ml_key', e.target.value.trim());
     });
 
-    // Keyboard shortcut (Ctrl + Enter or Cmd + Enter)
+    // Hotkey: Ctrl + Enter / Cmd + Enter
     document.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         e.preventDefault();
@@ -1327,12 +1451,12 @@
 
     function showToast(msg) {
       const toast = document.getElementById('toast');
-      toast.innerText = msg;
+      document.getElementById('toastMsg').innerText = msg;
       toast.classList.add('show');
       setTimeout(() => { toast.classList.remove('show'); }, 2200);
     }
 
-    // Health check with ping measurement
+    // Ping check with microservice
     async function checkHealth() {
       const startTime = performance.now();
       try {
@@ -1340,18 +1464,18 @@
         const latency = Math.round(performance.now() - startTime);
         if (res.ok) {
           const data = await res.json();
-          document.getElementById('statusDot').className = 'status-pulse';
-          document.getElementById('statusText').innerText = `Online • ${latency}ms • ${data.tiers ? data.tiers.length : 6} Tiers Ready`;
+          document.getElementById('statusDot').className = 'pulse-indicator';
+          document.getElementById('statusText').innerText = `Online • ${latency}ms • 48h Engine`;
         } else {
-          throw new Error('Service returned non-200');
+          throw new Error('Non-200 response');
         }
       } catch (err) {
-        document.getElementById('statusDot').className = 'status-pulse offline';
+        document.getElementById('statusDot').className = 'pulse-indicator offline';
         document.getElementById('statusText').innerText = 'Microservice Offline';
       }
     }
 
-    // 48-Hour Telemetry Generator
+    // 48-Hour Reading Matrix Generator
     function getScenarioData(type) {
       const readings = [];
 
@@ -1362,13 +1486,13 @@
         let temp, hum, weight, flow;
 
         if (type === 'healthy') {
-          // 48h Optimal Balance: circadian cycle, stable weight gain
+          // 48h Circadian rhythm with stable gain
           flow = isDay ? 50 : 0;
           temp = 34.8 + (h >= 11 && h <= 15 ? 0.4 : -0.2);
           weight = 35.0 + (i * 0.015);
           hum = 58.0;
         } else if (type === 'swarm') {
-          // 48h Swarm: Normal Day 1, sharp swarm loss at hour 26 (Day 2, 14:00)
+          // 48h Swarm: Sudden departure drop at hour 26
           if (i < 26) {
             weight = 36.5;
             flow = isDay ? 40 : 0;
@@ -1384,20 +1508,20 @@
           }
           hum = 55.0;
         } else if (type === 'starvation') {
-          // 48h Chronic Depletion: continuous downward drain
+          // 48h Starvation: continuous store drainage
           flow = isDay ? -5 : -2;
           temp = 34.0 - (i * 0.03);
           weight = 35.0 - (i * 0.075);
           hum = 60.0;
         } else if (type === 'robbing') {
-          // 48h Robbing: Afternoon raiding frenzy on both days
+          // 48h Robbing: Raiding frenzy in afternoons
           const isRobbingHour = isDay && (h >= 12 && h <= 16);
           flow = isRobbingHour ? -150 : (isDay ? 15 : 0);
           temp = isRobbingHour ? 35.5 : 34.7;
           weight = 36.0 - (i * 0.05);
           hum = 52.0;
         } else if (type === 'nectar_surge') {
-          // 48h Heavy Nectar Flow: active foraging surge and honey storage
+          // 48h Heavy Nectar Accumulation
           flow = isDay ? 85 : 0;
           temp = 34.9 + (h >= 11 && h <= 15 ? 0.3 : -0.1);
           weight = 35.0 + (i * 0.04);
@@ -1416,10 +1540,10 @@
       return readings;
     }
 
-    // Load Scenario handler
+    // Load Scenario
     async function loadScenario(type) {
       selectedScenario = type;
-      document.querySelectorAll('.btn-preset').forEach(b => {
+      document.querySelectorAll('.preset-card').forEach(b => {
         if (b.getAttribute('data-scenario') === type) {
           b.classList.add('active');
         } else {
@@ -1428,19 +1552,19 @@
       });
 
       if (type === 'real_wurzburg') {
-        const btn = document.querySelector('[data-scenario="real_wurzburg"] .preset-desc');
-        const origText = btn ? btn.innerText : '';
-        if (btn) btn.innerText = 'Fetching 48h IoT file...';
+        const descEl = document.querySelector('[data-scenario="real_wurzburg"] .preset-card-desc');
+        const origDesc = descEl ? descEl.innerText : '';
+        if (descEl) descEl.innerText = 'Streaming IoT file...';
         try {
           const res = await fetch('/api/sample-input');
           const data = await res.json();
           currentReadings = data.readings || [];
           document.getElementById('hiveIdInput').value = data.hiveId || 'WURZBURG';
         } catch (err) {
-          alert('Could not load sample_input.json: ' + err.message);
+          alert('Could not fetch sample_input.json: ' + err.message);
           currentReadings = getScenarioData('swarm');
         } finally {
-          if (btn) btn.innerText = origText;
+          if (descEl) descEl.innerText = origDesc;
         }
       } else {
         currentReadings = getScenarioData(type);
@@ -1452,7 +1576,7 @@
       runInference();
     }
 
-    // Render Table
+    // Render Matrix Table
     function renderTable() {
       const tbody = document.getElementById('readingsBody');
       tbody.innerHTML = '';
@@ -1460,13 +1584,15 @@
         const tr = document.createElement('tr');
         tr.id = `row-${idx}`;
         tr.innerHTML = `
-          <td style="color: var(--text-tertiary); font-weight: 600;">${idx + 1}</td>
+          <td style="color: var(--text-dark); font-weight: 600;">${idx + 1}</td>
           <td><input type="text" value="${r.timestamp}" onchange="updateRow(${idx}, 'timestamp', this.value)" style="width: 155px;"></td>
           <td><input type="number" step="0.1" value="${r.temperature}" onchange="updateRow(${idx}, 'temperature', parseFloat(this.value))" style="width: 75px;"></td>
           <td><input type="number" step="0.1" value="${r.humidity}" onchange="updateRow(${idx}, 'humidity', parseFloat(this.value))" style="width: 70px;"></td>
           <td><input type="number" step="0.01" value="${r.weight}" onchange="updateRow(${idx}, 'weight', parseFloat(this.value))" style="width: 80px;"></td>
           <td><input type="number" step="1" value="${r.flow}" onchange="updateRow(${idx}, 'flow', parseFloat(this.value))" style="width: 70px;"></td>
-          <td><button class="btn-delete-row" title="Delete Row" onclick="deleteRow(${idx})">×</button></td>
+          <td><button class="btn-row-del" title="Delete Row" onclick="deleteRow(${idx})">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button></td>
         `;
         tbody.appendChild(tr);
       });
@@ -1518,18 +1644,18 @@
       updateJsonFromReadings();
     }
 
-    // Quick Day Filter / Scroll
+    // Scroll to Day
     function filterDay(dayNum) {
       const targetIndex = dayNum === 1 ? 0 : Math.min(24, currentReadings.length - 1);
       const row = document.getElementById(`row-${targetIndex}`);
       if (row) {
         row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        row.style.backgroundColor = 'rgba(245, 158, 11, 0.2)';
+        row.style.backgroundColor = 'rgba(245, 158, 11, 0.15)';
         setTimeout(() => { row.style.backgroundColor = ''; }, 1200);
       }
     }
 
-    // Realistic IoT Sensor Noise Injection
+    // Realistic IoT Sensor Variance
     function injectNoise() {
       currentReadings.forEach(r => {
         r.temperature = Number((r.temperature + (Math.random() * 0.2 - 0.1)).toFixed(2));
@@ -1540,7 +1666,7 @@
       });
       renderTable();
       updateJsonFromReadings();
-      showToast('⚡ Injected realistic sensor noise');
+      showToast('Simulated sensor noise injected');
       runInference();
     }
 
@@ -1557,24 +1683,24 @@
       a.download = `honeychain_48h_${selectedScenario}.csv`;
       a.click();
       URL.revokeObjectURL(url);
-      showToast('✓ Exported 48h CSV');
+      showToast('Exported 48h CSV dataset');
     }
 
-    // Tabs Switcher
+    // Switch between matrix table and JSON
     function switchTab(tab) {
       currentTab = tab;
       if (tab === 'table') {
         document.getElementById('tableView').style.display = 'block';
         document.getElementById('jsonView').style.display = 'none';
-        document.getElementById('tabTableBtn').className = 'tab-btn active';
-        document.getElementById('tabJsonBtn').className = 'tab-btn';
+        document.getElementById('tabTableBtn').className = 'segment-btn active';
+        document.getElementById('tabJsonBtn').className = 'segment-btn';
         updateReadingsFromJson();
         renderTable();
       } else {
         document.getElementById('tableView').style.display = 'none';
         document.getElementById('jsonView').style.display = 'block';
-        document.getElementById('tabTableBtn').className = 'tab-btn';
-        document.getElementById('tabJsonBtn').className = 'tab-btn active';
+        document.getElementById('tabTableBtn').className = 'segment-btn';
+        document.getElementById('tabJsonBtn').className = 'segment-btn active';
         updateJsonFromReadings();
       }
     }
@@ -1597,7 +1723,7 @@
           document.getElementById('hiveIdInput').value = parsed.hiveId;
         }
       } catch (e) {
-        // preserve current
+        // preserve
       }
     }
 
@@ -1605,13 +1731,13 @@
       try {
         const parsed = JSON.parse(document.getElementById('jsonEditor').value);
         document.getElementById('jsonEditor').value = JSON.stringify(parsed, null, 2);
-        showToast('✓ JSON Formatted');
+        showToast('JSON Formatted cleanly');
       } catch (e) {
-        alert('Invalid JSON syntax: ' + e.message);
+        alert('Invalid JSON: ' + e.message);
       }
     }
 
-    // Run ML Prediction
+    // Execute Inference
     async function runInference() {
       const btn = document.getElementById('btnRun');
       const btnText = document.getElementById('btnRunText');
@@ -1630,7 +1756,7 @@
       };
 
       btn.disabled = true;
-      btnIcon.innerHTML = '<div class="spinner"></div>';
+      btnIcon.innerHTML = '<div class="spinner-disc"></div>';
       btnText.innerText = 'Evaluating 48h Telemetry...';
 
       const headers = { 'Content-Type': 'application/json' };
@@ -1649,22 +1775,22 @@
         document.getElementById('rawJsonResponse').innerText = JSON.stringify(data, null, 2);
 
         if (!res.ok) {
-          alert(`Inference Request Failed (${res.status}): ${data.message || data.error}`);
+          alert(`Inference failed (${res.status}): ${data.message || data.error}`);
           return;
         }
 
         renderResults(data);
       } catch (err) {
-        alert('Failed to connect to ML Microservice: ' + err.message);
+        alert('Connection error: ' + err.message);
       } finally {
         btn.disabled = false;
-        btnIcon.innerText = '⚡';
-        btnText.innerText = 'Run 48h ML Diagnostic';
+        btnIcon.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
+        btnText.innerText = 'Run 48h Diagnostic';
       }
     }
 
-    // Number Counter Animation
-    function animateScore(start, end, duration = 800) {
+    // Number Roll Animation
+    function animateScore(start, end, duration = 750) {
       const el = document.getElementById('metricHealthScore');
       if (isNaN(end)) {
         el.innerText = '--';
@@ -1693,7 +1819,7 @@
       const hours = data.hoursAvailable ? ` (${data.hoursAvailable}h Window)` : ' (48h Window)';
       document.getElementById('inferenceTierBadge').innerText = `Tier: ${tier}${hours}`;
 
-      // 2. Health Score Circular Gauge with animation
+      // 2. Health Score Gauge
       const score = (data.healthScore !== null && data.healthScore !== undefined) ? Number(data.healthScore) : NaN;
       if (!isNaN(score)) {
         animateScore(previousScore, score);
@@ -1709,13 +1835,13 @@
         gauge.style.strokeDashoffset = offset;
         if (score >= 75) {
           gauge.style.stroke = 'var(--emerald)';
-          gauge.style.filter = 'drop-shadow(0 0 10px rgba(16, 185, 129, 0.45))';
+          gauge.style.filter = 'drop-shadow(0 0 8px rgba(16, 185, 129, 0.45))';
         } else if (score >= 50) {
           gauge.style.stroke = 'var(--amber)';
-          gauge.style.filter = 'drop-shadow(0 0 10px rgba(245, 158, 11, 0.45))';
+          gauge.style.filter = 'drop-shadow(0 0 8px rgba(245, 158, 11, 0.45))';
         } else {
           gauge.style.stroke = 'var(--rose)';
-          gauge.style.filter = 'drop-shadow(0 0 10px rgba(244, 63, 94, 0.45))';
+          gauge.style.filter = 'drop-shadow(0 0 8px rgba(244, 63, 94, 0.45))';
         }
       } else {
         gauge.style.strokeDashoffset = circumference;
@@ -1725,7 +1851,7 @@
       const risk = data.stressRisk || 'UNKNOWN';
       const riskEl = document.getElementById('metricStressRisk');
       riskEl.innerText = `${risk} STRESS`;
-      riskEl.className = `badge-risk risk-${risk}`;
+      riskEl.className = `badge-stress-risk stress-${risk}`;
 
       let probText = 'Prob: --';
       if (data.stressProbability !== null && data.stressProbability !== undefined) {
@@ -1733,22 +1859,22 @@
       }
       document.getElementById('metricStressProb').innerText = probText;
 
-      // 4. Abnormality Risk Bar
+      // 4. Abnormality Meter
       const abn = (data.abnormalityRisk !== null && data.abnormalityRisk !== undefined) ? Number(data.abnormalityRisk).toFixed(1) : 0;
       document.getElementById('metricAbnormalityLabel').innerText = `${abn}%`;
       document.getElementById('abnormalityBar').style.width = `${Math.min(100, Math.max(0, abn))}%`;
 
-      // 5. Clinical Recommendation Alert
+      // 5. Clinical Recommendation Banner
       const rec = data.recommendation || 'No recommendation provided.';
       document.getElementById('recText').innerText = rec;
       const recBanner = document.getElementById('recBanner');
       if (risk === 'HIGH') {
-        recBanner.className = 'recommendation-banner alert-high';
+        recBanner.className = 'advisory-card alert-danger';
       } else {
-        recBanner.className = 'recommendation-banner';
+        recBanner.className = 'advisory-card';
       }
 
-      // 6. Detection Scope Tags
+      // 6. Detection Scope
       const scopeContainer = document.getElementById('scopeTags');
       scopeContainer.innerHTML = '';
       const scopes = data.detectionScope && Array.isArray(data.detectionScope) ? data.detectionScope : [
@@ -1758,12 +1884,12 @@
       ];
       scopes.forEach(scope => {
         const tag = document.createElement('span');
-        tag.className = 'scope-tag';
-        tag.innerText = `✓ ${scope}`;
+        tag.className = 'scope-chip';
+        tag.innerText = scope;
         scopeContainer.appendChild(tag);
       });
 
-      // 7. Drivers Breakdown
+      // 7. Telemetry Drivers
       const d = data.drivers || {};
       document.getElementById('drvActivity').innerText = d.activityDeviation !== undefined ? Number(d.activityDeviation).toFixed(2) : '--';
       document.getElementById('drvTemp').innerText = d.temperatureDeviation !== undefined ? `${d.temperatureDeviation > 0 ? '+' : ''}${Number(d.temperatureDeviation).toFixed(2)}°C` : '--';
@@ -1771,11 +1897,11 @@
       document.getElementById('drvDrop').innerText = d.weightDrop !== undefined ? `${Number(d.weightDrop).toFixed(2)}kg` : '--';
       document.getElementById('drvFlow').innerText = d.netFlow !== undefined ? `${d.netFlow > 0 ? '+' : ''}${Number(d.netFlow).toFixed(0)}/m` : '--';
 
-      // 8. Interactive Chart.js Timeline
+      // 8. Dynamic Chart.js Timeline
       renderChart(currentReadings);
     }
 
-    // Chart.js Visualization for 48 Hours
+    // Chart.js Multi-Stream Visualization
     function renderChart(readings) {
       if (!readings || readings.length === 0) return;
 
@@ -1795,10 +1921,9 @@
 
       const ctx = document.getElementById('telemetryChart').getContext('2d');
 
-      // Create rich honey amber gradient for weight area
       const gradientWeight = ctx.createLinearGradient(0, 0, 0, 240);
-      gradientWeight.addColorStop(0, 'rgba(245, 158, 11, 0.22)');
-      gradientWeight.addColorStop(1, 'rgba(245, 158, 11, 0.00)');
+      gradientWeight.addColorStop(0, 'rgba(245, 158, 11, 0.2)');
+      gradientWeight.addColorStop(1, 'rgba(245, 158, 11, 0.0)');
 
       chartInstance = new Chart(ctx, {
         type: 'line',
@@ -1811,11 +1936,11 @@
               borderColor: '#f59e0b',
               backgroundColor: gradientWeight,
               yAxisID: 'yWeight',
-              borderWidth: 2.2,
-              tension: 0.25,
+              borderWidth: 2,
+              tension: 0.3,
               fill: true,
               pointRadius: readings.length > 50 ? 0 : 2,
-              pointHoverRadius: 6,
+              pointHoverRadius: 5,
               pointBackgroundColor: '#f59e0b'
             },
             {
@@ -1824,11 +1949,11 @@
               borderColor: '#f43f5e',
               backgroundColor: 'transparent',
               yAxisID: 'yTemp',
-              borderWidth: 1.6,
-              borderDash: [4, 4],
+              borderWidth: 1.5,
+              borderDash: [3, 3],
               tension: 0.2,
               pointRadius: 0,
-              pointHoverRadius: 5,
+              pointHoverRadius: 4,
               pointBackgroundColor: '#f43f5e'
             },
             {
@@ -1839,7 +1964,7 @@
               yAxisID: 'yFlow',
               type: 'bar',
               barThickness: readings.length > 50 ? 2 : 4,
-              borderRadius: 3
+              borderRadius: 2
             }
           ]
         },
@@ -1852,37 +1977,37 @@
           },
           plugins: {
             legend: {
-              display: false // We use our own interactive stream chips
+              display: false
             },
             tooltip: {
-              backgroundColor: 'rgba(10, 15, 29, 0.94)',
+              backgroundColor: 'rgba(13, 13, 17, 0.94)',
               titleColor: '#fff',
-              bodyColor: '#cbd5e1',
-              borderColor: 'rgba(245, 158, 11, 0.25)',
+              bodyColor: '#a1a1aa',
+              borderColor: 'rgba(255, 255, 255, 0.1)',
               borderWidth: 1,
-              padding: 12,
-              cornerRadius: 10,
-              bodyFont: { family: "'JetBrains Mono', monospace", size: 11 },
-              titleFont: { family: "'Plus Jakarta Sans', sans-serif", size: 12, weight: 700 }
+              padding: 10,
+              cornerRadius: 8,
+              bodyFont: { family: "'JetBrains Mono', monospace", size: 10.5 },
+              titleFont: { family: "'Plus Jakarta Sans', sans-serif", size: 11.5, weight: 700 }
             }
           },
           scales: {
             x: {
-              ticks: { color: '#64748b', font: { family: "'JetBrains Mono', monospace", size: 10 }, maxTicksLimit: 14 },
-              grid: { color: 'rgba(255, 255, 255, 0.04)' }
+              ticks: { color: '#52525b', font: { family: "'JetBrains Mono', monospace", size: 9.5 }, maxTicksLimit: 12 },
+              grid: { color: 'rgba(255, 255, 255, 0.03)' }
             },
             yWeight: {
               type: 'linear',
               position: 'left',
-              title: { display: true, text: 'Weight (kg)', color: '#f59e0b', font: { size: 11, weight: 700 } },
-              ticks: { color: '#f59e0b', font: { family: "'JetBrains Mono', monospace", size: 10 } },
-              grid: { color: 'rgba(255, 255, 255, 0.04)' }
+              title: { display: true, text: 'Weight (kg)', color: '#f59e0b', font: { size: 10, weight: 700 } },
+              ticks: { color: '#f59e0b', font: { family: "'JetBrains Mono', monospace", size: 9.5 } },
+              grid: { color: 'rgba(255, 255, 255, 0.03)' }
             },
             yTemp: {
               type: 'linear',
               position: 'right',
               title: { display: false },
-              ticks: { color: '#f43f5e', font: { family: "'JetBrains Mono', monospace", size: 10 } },
+              ticks: { color: '#f43f5e', font: { family: "'JetBrains Mono', monospace", size: 9.5 } },
               grid: { drawOnChartArea: false }
             },
             yFlow: {
@@ -1907,13 +2032,13 @@
     function copyRawJson(btn) {
       const text = document.getElementById('rawJsonResponse').innerText;
       navigator.clipboard.writeText(text).then(() => {
-        showToast('✓ Copied 48h JSON payload');
-        btn.innerText = '✓ Copied!';
-        setTimeout(() => { btn.innerText = 'Copy JSON'; }, 2000);
+        showToast('Copied JSON payload');
+        btn.innerText = 'Copied!';
+        setTimeout(() => { btn.innerText = 'Copy JSON'; }, 1800);
       });
     }
 
-    // Startup
+    // Init
     window.addEventListener('DOMContentLoaded', () => {
       checkHealth();
       loadScenario('healthy');
