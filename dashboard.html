@@ -7,20 +7,24 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐝</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --bg-base: #060911;
-      --bg-surface: #0d1322;
-      --bg-card: #121a2d;
-      --bg-card-hover: #16223b;
-      --bg-input: #1a253e;
-      --border: rgba(255, 255, 255, 0.08);
-      --border-focus: #f59e0b;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --text-dim: #64748b;
+      --bg-base: #05070e;
+      --bg-chassis: rgba(255, 255, 255, 0.03);
+      --bg-core: #0a0f1d;
+      --bg-surface: #0f172b;
+      --bg-surface-elevated: #15203b;
+      --bg-input: #131c33;
+      
+      --border-outer: rgba(255, 255, 255, 0.08);
+      --border-inner: rgba(255, 255, 255, 0.04);
+      --border-highlight: rgba(245, 158, 11, 0.35);
+      
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-tertiary: #64748b;
       
       --honey-glow: rgba(245, 158, 11, 0.25);
       --honey-300: #fcd34d;
@@ -36,7 +40,9 @@
       --rose-glow: rgba(244, 63, 94, 0.2);
       --cyan: #06b6d4;
       --cyan-glow: rgba(6, 182, 212, 0.2);
-      --purple: #a855f7;
+      
+      --ease-out-quint: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-elastic: cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     * {
@@ -49,29 +55,35 @@
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background-color: var(--bg-base);
       background-image: 
-        radial-gradient(circle at 15% 10%, rgba(245, 158, 11, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 85% 60%, rgba(6, 182, 212, 0.05) 0%, transparent 40%);
+        radial-gradient(circle at 10% 8%, rgba(245, 158, 11, 0.09) 0%, transparent 45%),
+        radial-gradient(circle at 90% 70%, rgba(6, 182, 212, 0.06) 0%, transparent 45%),
+        radial-gradient(circle at 50% 100%, rgba(16, 185, 129, 0.04) 0%, transparent 50%);
       background-attachment: fixed;
-      color: var(--text-main);
+      color: var(--text-primary);
       line-height: 1.5;
-      padding: 24px;
+      padding: 28px 24px;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
     }
 
     .container {
-      max-width: 1480px;
+      max-width: 1520px;
       margin: 0 auto;
     }
 
-    /* Header */
+    /* Top Floating Island Header */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 20px;
-      margin-bottom: 24px;
-      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      margin-bottom: 28px;
+      background: rgba(10, 15, 29, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-outer);
+      border-radius: 9999px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.08);
       flex-wrap: wrap;
       gap: 16px;
     }
@@ -83,37 +95,37 @@
     }
 
     .brand-logo-wrap {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(217, 119, 6, 0.05) 100%);
-      border: 1px solid rgba(245, 158, 11, 0.35);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(217, 119, 6, 0.1) 100%);
+      border: 1px solid rgba(245, 158, 11, 0.4);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 25px;
+      font-size: 22px;
       box-shadow: 0 0 20px var(--honey-glow);
     }
 
-    .brand h1 {
-      font-size: 21px;
+    .brand-text h1 {
+      font-size: 18px;
       font-weight: 800;
       letter-spacing: -0.02em;
       color: #fff;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
-    .brand h1 span.highlight {
+    .brand-text h1 span.highlight {
       background: linear-gradient(135deg, #fbbf24, #f59e0b);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .brand p {
-      font-size: 13px;
-      color: var(--text-muted);
+    .brand-text p {
+      font-size: 12px;
+      color: var(--text-secondary);
       font-weight: 500;
     }
 
@@ -128,19 +140,20 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: var(--bg-card);
-      padding: 7px 14px;
+      background: var(--bg-surface);
+      padding: 6px 14px;
       border-radius: 9999px;
-      border: 1px solid var(--border);
-      font-size: 12px;
-      font-weight: 500;
+      border: 1px solid var(--border-outer);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
     }
 
     .status-pulse {
       position: relative;
       display: flex;
-      width: 9px;
-      height: 9px;
+      width: 8px;
+      height: 8px;
     }
 
     .status-pulse .dot {
@@ -161,7 +174,7 @@
 
     @keyframes ping {
       75%, 100% {
-        transform: scale(2);
+        transform: scale(2.2);
         opacity: 0;
       }
     }
@@ -172,53 +185,68 @@
     .btn-gh {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      padding: 7px 14px;
+      gap: 7px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-outer);
+      color: var(--text-secondary);
+      padding: 6px 14px;
       border-radius: 9999px;
       font-size: 12px;
-      font-weight: 500;
+      font-weight: 600;
       text-decoration: none;
-      transition: all 0.15s;
+      transition: all 0.2s var(--ease-out-quint);
     }
 
     .btn-gh:hover {
       color: #fff;
-      border-color: rgba(255, 255, 255, 0.2);
-      background: var(--bg-card-hover);
+      border-color: rgba(255, 255, 255, 0.25);
+      background: var(--bg-surface-elevated);
+      transform: translateY(-1px);
     }
 
-    /* Main Grid */
-    .grid {
+    /* Main 2-Column Responsive Grid */
+    .grid-main {
       display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
       gap: 24px;
       align-items: start;
     }
 
-    @media (max-width: 1080px) {
-      .grid {
+    @media (max-width: 1120px) {
+      .grid-main {
         grid-template-columns: 1fr;
       }
     }
 
-    /* Card Styling */
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 22px;
+    /* Double-Bezel (Doppelrand) Card Architecture */
+    .chassis-shell {
+      background: var(--bg-chassis);
+      border: 1px solid var(--border-outer);
+      border-radius: 26px;
+      padding: 6px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.08);
       margin-bottom: 24px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      transition: border-color 0.25s var(--ease-out-quint), box-shadow 0.25s var(--ease-out-quint);
+    }
+
+    .chassis-shell:hover {
+      border-color: rgba(245, 158, 11, 0.22);
+      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.5), 0 0 24px rgba(245, 158, 11, 0.06);
+    }
+
+    .core-card {
+      background: var(--bg-core);
+      border: 1px solid var(--border-inner);
+      border-radius: calc(26px - 6px);
+      padding: 24px;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.06);
     }
 
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
       flex-wrap: wrap;
       gap: 10px;
     }
@@ -233,18 +261,19 @@
       gap: 8px;
     }
 
-    .mode-tag {
-      font-size: 11px;
+    .badge-pill-micro {
+      font-size: 10.5px;
       font-weight: 700;
       color: var(--honey-400);
       background: rgba(245, 158, 11, 0.12);
-      border: 1px solid rgba(245, 158, 11, 0.25);
+      border: 1px solid rgba(245, 158, 11, 0.28);
       padding: 3px 10px;
       border-radius: 9999px;
       font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.02em;
     }
 
-    /* 48h Presets Grid */
+    /* 48h Presets Bento Grid */
     .presets-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -266,29 +295,30 @@
 
     .btn-preset {
       background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      border: 1px solid var(--border-outer);
+      border-radius: 14px;
       padding: 12px 14px;
       text-align: left;
       cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.22s var(--ease-out-quint);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       gap: 6px;
-      min-height: 82px;
+      min-height: 84px;
+      position: relative;
     }
 
     .btn-preset:hover {
-      background: var(--bg-card-hover);
+      background: var(--bg-surface-elevated);
       border-color: rgba(245, 158, 11, 0.4);
       transform: translateY(-2px);
     }
 
     .btn-preset.active {
-      background: linear-gradient(145deg, #18233c, #131c30);
+      background: linear-gradient(145deg, #18233c, #111a2f);
       border-color: var(--honey-500);
-      box-shadow: 0 0 0 1px var(--honey-500), 0 4px 16px rgba(245, 158, 11, 0.18);
+      box-shadow: 0 0 0 1px var(--honey-500), 0 6px 20px rgba(245, 158, 11, 0.2);
     }
 
     .preset-top {
@@ -308,12 +338,12 @@
     }
 
     .preset-badge {
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 700;
       padding: 2px 6px;
-      border-radius: 6px;
+      border-radius: 5px;
       background: rgba(255, 255, 255, 0.08);
-      color: var(--text-muted);
+      color: var(--text-secondary);
       font-family: 'JetBrains Mono', monospace;
     }
 
@@ -324,11 +354,11 @@
 
     .preset-desc {
       font-size: 11px;
-      color: var(--text-muted);
-      line-height: 1.3;
+      color: var(--text-secondary);
+      line-height: 1.35;
     }
 
-    /* Form Config Row */
+    /* Form Controls */
     .config-row {
       display: flex;
       gap: 14px;
@@ -345,7 +375,7 @@
       display: block;
       font-size: 11px;
       font-weight: 700;
-      color: var(--text-muted);
+      color: var(--text-secondary);
       margin-bottom: 6px;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -354,28 +384,28 @@
     input, textarea {
       width: 100%;
       background: var(--bg-input);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      color: var(--text-main);
+      border: 1px solid var(--border-outer);
+      border-radius: 12px;
+      color: var(--text-primary);
       padding: 10px 14px;
       font-size: 13px;
       font-family: inherit;
-      transition: all 0.15s;
+      transition: all 0.18s var(--ease-out-quint);
     }
 
     input:focus, textarea:focus {
       outline: none;
       border-color: var(--honey-400);
-      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
-      background: #1e2b48;
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.22);
+      background: #192440;
     }
 
-    /* Tabs Bar */
+    /* Navigation Tabs & Action Bar */
     .tabs-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border-inner);
       margin-bottom: 14px;
       padding-bottom: 10px;
       flex-wrap: wrap;
@@ -386,36 +416,54 @@
       display: flex;
       background: var(--bg-surface);
       padding: 3px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
+      border-radius: 12px;
+      border: 1px solid var(--border-outer);
       gap: 2px;
     }
 
     .tab-btn {
       background: transparent;
       border: none;
-      color: var(--text-muted);
+      color: var(--text-secondary);
       padding: 6px 14px;
-      border-radius: 8px;
+      border-radius: 9px;
       cursor: pointer;
       font-size: 12px;
       font-weight: 600;
-      transition: all 0.15s;
+      transition: all 0.18s var(--ease-out-quint);
     }
 
     .tab-btn.active {
       color: #fff;
-      background: var(--bg-card);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      background: var(--bg-core);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     }
 
-    /* Table Styling with Horizontal/Vertical Scroll */
+    .table-tool-btn {
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-outer);
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .table-tool-btn:hover {
+      background: var(--bg-surface-elevated);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Table Scroll View */
     .table-scroll {
-      max-height: 320px;
+      max-height: 310px;
       overflow-y: auto;
       overflow-x: auto;
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      border: 1px solid var(--border-outer);
+      border-radius: 14px;
       margin-bottom: 16px;
       background: var(--bg-surface);
       -webkit-overflow-scrolling: touch;
@@ -429,17 +477,17 @@
     }
 
     th {
-      background: #111a2f;
+      background: #10192e;
       position: sticky;
       top: 0;
-      color: var(--text-muted);
-      font-weight: 600;
+      color: var(--text-secondary);
+      font-weight: 700;
       text-transform: uppercase;
       font-size: 10px;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       padding: 10px 12px;
       text-align: left;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border-outer);
       z-index: 2;
       white-space: nowrap;
     }
@@ -458,13 +506,13 @@
       padding: 5px 8px;
       font-size: 12px;
       border-radius: 6px;
-      background: #172138;
+      background: #162035;
       border: 1px solid rgba(255,255,255,0.06);
       font-family: 'JetBrains Mono', monospace;
     }
 
     td input:focus {
-      background: #1c2844;
+      background: #1c2944;
     }
 
     .btn-delete-row {
@@ -472,11 +520,11 @@
       border: none;
       color: var(--rose);
       cursor: pointer;
-      padding: 4px 8px;
+      padding: 3px 6px;
       border-radius: 4px;
       font-size: 15px;
       opacity: 0.7;
-      transition: opacity 0.15s;
+      transition: all 0.15s;
     }
 
     .btn-delete-row:hover {
@@ -484,7 +532,7 @@
       background: rgba(244, 63, 94, 0.15);
     }
 
-    /* Actions Bar */
+    /* Nested Island Primary Button */
     .actions-bar {
       display: flex;
       justify-content: space-between;
@@ -493,51 +541,53 @@
       flex-wrap: wrap;
     }
 
-    .btn {
+    .btn-island-primary {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 11px 22px;
-      border-radius: 12px;
-      font-size: 13px;
+      gap: 10px;
+      padding: 7px 8px 7px 20px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #060911;
+      font-size: 13.5px;
       font-weight: 700;
       cursor: pointer;
       border: none;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 18px rgba(245, 158, 11, 0.35);
+      transition: all 0.25s var(--ease-out-quint);
+      user-select: none;
     }
 
-    .btn-primary {
-      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-      color: #060911;
-      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
-    }
-
-    .btn-primary:hover {
+    .btn-island-primary:hover {
       background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
       transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.5);
     }
 
-    .btn-primary:disabled {
+    .btn-island-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-island-primary:disabled {
       opacity: 0.6;
       cursor: not-allowed;
       transform: none;
     }
 
-    .btn-secondary {
-      background: var(--bg-surface);
-      color: var(--text-main);
-      border: 1px solid var(--border);
-      font-size: 12px;
-      padding: 7px 12px;
-      border-radius: 8px;
-      font-weight: 600;
+    .btn-icon-island {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: transform 0.2s var(--ease-elastic);
     }
 
-    .btn-secondary:hover {
-      background: var(--bg-card-hover);
-      border-color: rgba(255,255,255,0.2);
+    .btn-island-primary:hover .btn-icon-island {
+      transform: scale(1.1) rotate(5deg);
     }
 
     kbd {
@@ -550,30 +600,31 @@
     }
 
     /* RIGHT COLUMN: 48h Diagnostics Results */
-    .hero-metric-card {
+    .hero-eval-card {
       display: grid;
       grid-template-columns: 160px 1fr;
       gap: 20px;
-      background: linear-gradient(145deg, #131c33 0%, #0e1629 100%);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 18px 22px;
+      background: linear-gradient(145deg, #111a2f 0%, #0d1526 100%);
+      border: 1px solid var(--border-outer);
+      border-radius: 18px;
+      padding: 20px 22px;
       margin-bottom: 20px;
       align-items: center;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
     }
 
     @media (max-width: 640px) {
-      .hero-metric-card {
+      .hero-eval-card {
         grid-template-columns: 1fr;
         text-align: center;
       }
     }
 
-    /* Circular SVG Health Gauge */
+    /* Precision Circular Speedometer/Gauge */
     .gauge-wrapper {
       position: relative;
-      width: 140px;
-      height: 140px;
+      width: 144px;
+      height: 144px;
       margin: 0 auto;
       display: flex;
       align-items: center;
@@ -586,10 +637,17 @@
       height: 100%;
     }
 
-    .gauge-bg {
+    .gauge-track-outer {
       fill: none;
-      stroke: rgba(255, 255, 255, 0.06);
+      stroke: rgba(255, 255, 255, 0.05);
       stroke-width: 10;
+    }
+
+    .gauge-track-ticks {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.12);
+      stroke-width: 2;
+      stroke-dasharray: 2 10;
     }
 
     .gauge-progress {
@@ -598,7 +656,8 @@
       stroke-linecap: round;
       stroke-dasharray: 377;
       stroke-dashoffset: 377;
-      transition: stroke-dashoffset 0.9s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.4s ease;
+      transition: stroke-dashoffset 0.9s var(--ease-out-quint), stroke 0.4s ease;
+      filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.4));
     }
 
     .gauge-text {
@@ -611,18 +670,19 @@
     }
 
     .gauge-value {
-      font-size: 32px;
+      font-size: 34px;
       font-weight: 800;
       letter-spacing: -0.03em;
       color: #fff;
+      font-family: 'JetBrains Mono', monospace;
     }
 
     .gauge-sub {
-      font-size: 10px;
+      font-size: 9.5px;
       text-transform: uppercase;
       font-weight: 700;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
     }
 
     /* Risk Summary */
@@ -645,9 +705,9 @@
       gap: 6px;
       padding: 5px 12px;
       border-radius: 9999px;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
-      background: rgba(6, 182, 212, 0.15);
+      background: rgba(6, 182, 212, 0.14);
       border: 1px solid var(--cyan);
       color: #67e8f9;
       font-family: 'JetBrains Mono', monospace;
@@ -659,9 +719,9 @@
       gap: 6px;
       padding: 5px 14px;
       border-radius: 9999px;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 800;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
     }
 
@@ -686,14 +746,14 @@
     .progress-bar-wrap {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 5px;
     }
 
     .bar-labels {
       display: flex;
       justify-content: space-between;
       font-size: 11px;
-      color: var(--text-muted);
+      color: var(--text-secondary);
       font-weight: 600;
     }
 
@@ -707,7 +767,7 @@
     .bar-fill {
       height: 100%;
       border-radius: 9999px;
-      transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: width 0.7s var(--ease-out-quint);
     }
 
     /* Clinical Recommendation Alert */
@@ -715,7 +775,7 @@
       background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(217, 119, 6, 0.02) 100%);
       border: 1px solid rgba(245, 158, 11, 0.3);
       border-left: 4px solid var(--honey-500);
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 14px 16px;
       margin-bottom: 20px;
       display: flex;
@@ -736,11 +796,11 @@
     }
 
     .rec-title {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       color: var(--honey-300);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       margin-bottom: 2px;
     }
 
@@ -765,14 +825,14 @@
     .scope-tag {
       font-size: 11px;
       font-weight: 600;
-      padding: 3px 9px;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: var(--text-muted);
+      padding: 3px 10px;
+      border-radius: 7px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      color: var(--text-secondary);
     }
 
-    /* Diagnostic Drivers */
+    /* Diagnostic Drivers Cards */
     .drivers-row {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -788,23 +848,24 @@
 
     .driver-box {
       background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px;
+      border: 1px solid var(--border-outer);
+      border-radius: 12px;
+      padding: 10px 8px;
       text-align: center;
-      transition: transform 0.15s;
+      transition: transform 0.2s var(--ease-out-quint), border-color 0.2s;
     }
 
     .driver-box:hover {
-      border-color: rgba(255, 255, 255, 0.15);
-      background: var(--bg-card-hover);
+      border-color: rgba(255, 255, 255, 0.18);
+      background: var(--bg-surface-elevated);
+      transform: translateY(-2px);
     }
 
     .driver-label {
-      font-size: 10px;
+      font-size: 9.5px;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--text-dim);
+      letter-spacing: 0.05em;
+      color: var(--text-tertiary);
       margin-bottom: 4px;
       font-weight: 700;
     }
@@ -816,28 +877,59 @@
       font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Chart Card */
+    /* Chart Card & Stream Filters */
+    .chart-controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chart-chips {
+      display: flex;
+      gap: 6px;
+    }
+
+    .chart-chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-secondary);
+      font-size: 10.5px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.15s;
+    }
+
+    .chart-chip.active {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: var(--honey-500);
+      color: var(--honey-300);
+    }
+
     .chart-box {
       position: relative;
       height: 250px;
       width: 100%;
-      margin-top: 10px;
     }
 
     /* JSON Details */
     details {
       background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      border: 1px solid var(--border-outer);
+      border-radius: 12px;
       padding: 12px 16px;
       margin-top: 18px;
     }
 
     summary {
       cursor: pointer;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 600;
-      color: var(--text-muted);
+      color: var(--text-secondary);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -854,9 +946,9 @@
     }
 
     pre {
-      background: #090e1a;
+      background: #080c16;
       border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 12px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 11.5px;
@@ -884,6 +976,31 @@
       background: rgba(255, 255, 255, 0.2);
     }
 
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #111a2e;
+      border: 1px solid var(--honey-500);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s var(--ease-out-quint);
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    #toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
     .spinner {
       width: 15px;
       height: 15px;
@@ -900,13 +1017,13 @@
 </head>
 <body>
   <div class="container">
-    <!-- Top Header -->
+    <!-- Top Floating Island Header -->
     <header>
       <div class="brand">
         <div class="brand-logo-wrap">🐝</div>
-        <div>
+        <div class="brand-text">
           <h1>HoneyChain <span class="highlight">ML Studio</span></h1>
-          <p>48-Hour Full-Window Colony Health Diagnostics & Continuous Inference Engine</p>
+          <p>48-Hour Full-Window Colony Diagnostics • Continuous XGBoost Inference</p>
         </div>
       </div>
       <div class="header-actions">
@@ -917,252 +1034,271 @@
           </div>
           <span id="statusText">Checking Microservice...</span>
         </div>
-        <a href="https://github.com/Dhritish-Mukherjee/HoneyChain_ML" target="_blank" rel="noopener" class="btn-gh">
+        <a href="https://github.com/Honey-Chain/HoneyChain_ML" target="_blank" rel="noopener" class="btn-gh">
           <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-          <span>GitHub</span>
+          <span>HoneyChain_ML</span>
         </a>
       </div>
     </header>
 
     <!-- Main Grid -->
-    <div class="grid">
+    <div class="grid-main">
       <!-- Left Column: Input Panel -->
       <div class="left-col">
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">🧪 48-Hour Diagnostic Scenarios</span>
-            <span class="mode-tag">48h Window • Tier T48</span>
-          </div>
+        <div class="chassis-shell">
+          <div class="core-card">
+            <div class="card-header">
+              <span class="card-title">🧪 48-Hour Diagnostic Presets</span>
+              <span class="badge-pill-micro">Tier T48 • Full Window</span>
+            </div>
 
-          <!-- 6 Dedicated 48-Hour Presets -->
-          <div class="presets-grid">
-            <button class="btn-preset active" data-scenario="healthy" onclick="loadScenario('healthy')">
-              <div class="preset-top">
-                <span class="preset-title">🟢 Balance</span>
-                <span class="preset-badge">48h • Normal</span>
+            <!-- 6 Dedicated 48-Hour Bento Presets -->
+            <div class="presets-grid">
+              <button class="btn-preset active" data-scenario="healthy" onclick="loadScenario('healthy')">
+                <div class="preset-top">
+                  <span class="preset-title">🟢 Balance</span>
+                  <span class="preset-badge">48h • Normal</span>
+                </div>
+                <span class="preset-desc">Two full circadian solar cycles, stable weight gain (+0.7kg) & active flight.</span>
+              </button>
+
+              <button class="btn-preset" data-scenario="swarm" onclick="loadScenario('swarm')">
+                <div class="preset-top">
+                  <span class="preset-title">🔴 Swarm Event</span>
+                  <span class="preset-badge">48h • Acute</span>
+                </div>
+                <span class="preset-desc">Mid-window swarm departure at hour 26 (-2.4kg drop & -320 bee flight spike).</span>
+              </button>
+
+              <button class="btn-preset" data-scenario="starvation" onclick="loadScenario('starvation')">
+                <div class="preset-top">
+                  <span class="preset-title">🟠 Depletion</span>
+                  <span class="preset-badge">48h • Chronic</span>
+                </div>
+                <span class="preset-desc">Continuous multi-day starvation decline (-3.6kg) with suppressed foraging.</span>
+              </button>
+
+              <button class="btn-preset" data-scenario="robbing" onclick="loadScenario('robbing')">
+                <div class="preset-top">
+                  <span class="preset-title">🟡 Robbing Attack</span>
+                  <span class="preset-badge">48h • Robbing</span>
+                </div>
+                <span class="preset-desc">Afternoon invading bee frenzies with rapid store depletion & agitated hive heat.</span>
+              </button>
+
+              <button class="btn-preset" data-scenario="nectar_surge" onclick="loadScenario('nectar_surge')">
+                <div class="preset-top">
+                  <span class="preset-title">🍯 Honey Surge</span>
+                  <span class="preset-badge">48h • Nectar</span>
+                </div>
+                <span class="preset-desc">Intense bloom honeyflow: strong inflow (+85/m) & +1.9kg nectar accumulation.</span>
+              </button>
+
+              <button class="btn-preset" data-scenario="real_wurzburg" onclick="loadScenario('real_wurzburg')">
+                <div class="preset-top">
+                  <span class="preset-title">📁 Würzburg File</span>
+                  <span class="preset-badge">48h • Real IoT</span>
+                </div>
+                <span class="preset-desc">Authentic 48h German apiary sensor telemetry recorded during a natural swarm.</span>
+              </button>
+            </div>
+
+            <!-- Config inputs -->
+            <div class="config-row">
+              <div class="form-group" style="flex: 1;">
+                <label for="hiveIdInput">Hive Identifier</label>
+                <input type="text" id="hiveIdInput" value="HIVE-KV-201" placeholder="e.g. HIVE-KV-201">
               </div>
-              <span class="preset-desc">Two full circadian solar cycles, stable weight gain (+0.7kg) & active flight.</span>
-            </button>
-
-            <button class="btn-preset" data-scenario="swarm" onclick="loadScenario('swarm')">
-              <div class="preset-top">
-                <span class="preset-title">🔴 Swarm Event</span>
-                <span class="preset-badge">48h • Acute</span>
+              <div class="form-group" style="flex: 1.4;">
+                <label for="apiKeyInput">API Secret Key (X-ML-API-Key)</label>
+                <input type="password" id="apiKeyInput" placeholder="Optional (configured in Render)">
               </div>
-              <span class="preset-desc">Mid-window swarm departure at hour 26 (-2.4kg drop & -320 bee flight spike).</span>
-            </button>
+            </div>
 
-            <button class="btn-preset" data-scenario="starvation" onclick="loadScenario('starvation')">
-              <div class="preset-top">
-                <span class="preset-title">🟠 Depletion</span>
-                <span class="preset-badge">48h • Chronic</span>
+            <!-- Tabs Bar & Secondary Tools -->
+            <div class="tabs-bar">
+              <div class="tab-pills">
+                <button id="tabTableBtn" class="tab-btn active" onclick="switchTab('table')">📊 Telemetry Table</button>
+                <button id="tabJsonBtn" class="tab-btn" onclick="switchTab('json')">💻 Raw JSON Editor</button>
               </div>
-              <span class="preset-desc">Continuous multi-day starvation decline (-3.6kg) with suppressed foraging.</span>
-            </button>
-
-            <button class="btn-preset" data-scenario="robbing" onclick="loadScenario('robbing')">
-              <div class="preset-top">
-                <span class="preset-title">🟡 Robbing Attack</span>
-                <span class="preset-badge">48h • Robbing</span>
+              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                <span id="rowCountBadge" style="font-size: 11px; font-weight: 700; color: var(--text-tertiary); font-family: 'JetBrains Mono', monospace; margin-right: 4px;">49 READINGS</span>
+                <button class="table-tool-btn" onclick="filterDay(1)" title="Scroll to Day 1">Day 1</button>
+                <button class="table-tool-btn" onclick="filterDay(2)" title="Scroll to Day 2">Day 2</button>
+                <button class="table-tool-btn" onclick="injectNoise()" title="Simulate Realistic IoT Sensor Variance">⚡ Jitter</button>
+                <button class="table-tool-btn" onclick="exportCsv()" title="Download CSV">CSV</button>
+                <button class="table-tool-btn" onclick="addRow()">+ Hour</button>
+                <button class="table-tool-btn" onclick="clearRows()">Clear</button>
               </div>
-              <span class="preset-desc">Afternoon invading bee frenzies with rapid store depletion & agitated hive heat.</span>
-            </button>
+            </div>
 
-            <button class="btn-preset" data-scenario="nectar_surge" onclick="loadScenario('nectar_surge')">
-              <div class="preset-top">
-                <span class="preset-title">🍯 Honey Surge</span>
-                <span class="preset-badge">48h • Nectar</span>
+            <!-- Table View -->
+            <div id="tableView">
+              <div class="table-scroll" id="tableScrollContainer">
+                <table id="readingsTable">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Timestamp (Local)</th>
+                      <th>Temp (°C)</th>
+                      <th>Humidity (%)</th>
+                      <th>Weight (kg)</th>
+                      <th>Net Flow</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="readingsBody"></tbody>
+                </table>
               </div>
-              <span class="preset-desc">Intense bloom honeyflow: strong inflow (+85/m) & +1.9kg nectar accumulation.</span>
-            </button>
+            </div>
 
-            <button class="btn-preset" data-scenario="real_wurzburg" onclick="loadScenario('real_wurzburg')">
-              <div class="preset-top">
-                <span class="preset-title">📁 Würzburg File</span>
-                <span class="preset-badge">48h • Real IoT</span>
+            <!-- JSON View -->
+            <div id="jsonView" style="display: none;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 11px; color: var(--text-secondary);">Edit or paste 48h JSON readings directly:</span>
+                <button class="table-tool-btn" onclick="formatJsonEditor()">Format JSON</button>
               </div>
-              <span class="preset-desc">Authentic 48h German apiary sensor telemetry recorded during a natural swarm.</span>
-            </button>
-          </div>
+              <textarea id="jsonEditor" rows="12" style="font-family: 'JetBrains Mono', monospace; font-size: 12px;"></textarea>
+            </div>
 
-          <!-- Config inputs -->
-          <div class="config-row">
-            <div class="form-group" style="flex: 1;">
-              <label for="hiveIdInput">Hive Identifier</label>
-              <input type="text" id="hiveIdInput" value="HIVE-KV-201" placeholder="e.g. HIVE-KV-201">
+            <!-- Run Action Button (Button-in-Button Nested Island) -->
+            <div class="actions-bar" style="margin-top: 16px;">
+              <div style="font-size: 12px; color: var(--text-tertiary);">
+                Press <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to run
+              </div>
+              <button id="btnRun" class="btn-island-primary" onclick="runInference()">
+                <span id="btnRunText">Run 48h ML Diagnostic</span>
+                <span class="btn-icon-island" id="btnRunIconWrapper">
+                  <span id="btnRunIcon">⚡</span>
+                </span>
+              </button>
             </div>
-            <div class="form-group" style="flex: 1.4;">
-              <label for="apiKeyInput">API Secret Key (X-ML-API-Key)</label>
-              <input type="password" id="apiKeyInput" placeholder="Optional (configured in Render)">
-            </div>
-          </div>
-
-          <!-- Tabs Bar -->
-          <div class="tabs-bar">
-            <div class="tab-pills">
-              <button id="tabTableBtn" class="tab-btn active" onclick="switchTab('table')">📊 Telemetry Table</button>
-              <button id="tabJsonBtn" class="tab-btn" onclick="switchTab('json')">💻 Raw JSON Editor</button>
-            </div>
-            <div style="display: flex; gap: 8px; align-items: center;">
-              <span id="rowCountBadge" style="font-size: 11px; font-weight: 700; color: var(--text-dim); font-family: 'JetBrains Mono', monospace;">49 READINGS</span>
-              <button class="btn-secondary" onclick="addRow()">+ Add Hour</button>
-              <button class="btn-secondary" onclick="clearRows()">Clear</button>
-            </div>
-          </div>
-
-          <!-- Table View -->
-          <div id="tableView">
-            <div class="table-scroll">
-              <table id="readingsTable">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Timestamp (Local)</th>
-                    <th>Temp (°C)</th>
-                    <th>Humidity (%)</th>
-                    <th>Weight (kg)</th>
-                    <th>Net Flow</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody id="readingsBody"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- JSON View -->
-          <div id="jsonView" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <span style="font-size: 11px; color: var(--text-muted);">Edit or paste 48h JSON readings directly:</span>
-              <button class="btn-secondary" onclick="formatJsonEditor()">Format JSON</button>
-            </div>
-            <textarea id="jsonEditor" rows="12" style="font-family: 'JetBrains Mono', monospace; font-size: 12px;"></textarea>
-          </div>
-
-          <!-- Run Action Button -->
-          <div class="actions-bar" style="margin-top: 14px;">
-            <div style="font-size: 12px; color: var(--text-dim);">
-              Press <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to run
-            </div>
-            <button id="btnRun" class="btn btn-primary" onclick="runInference()">
-              <span id="btnRunIcon">⚡</span>
-              <span id="btnRunText">Run 48h ML Diagnostic</span>
-            </button>
           </div>
         </div>
       </div>
 
       <!-- Right Column: Inference Analytics Panel -->
       <div class="right-col">
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">🔬 48-Hour Health Evaluation</span>
-            <span id="inferenceTierBadge" class="badge-tier">Tier: T48 (48h Window)</span>
-          </div>
+        <div class="chassis-shell">
+          <div class="core-card">
+            <div class="card-header">
+              <span class="card-title">🔬 48-Hour Health Diagnostic</span>
+              <span id="inferenceTierBadge" class="badge-tier">Tier: T48 (48h Window)</span>
+            </div>
 
-          <!-- Hero Metric Card: Circular Gauge + Risk Info -->
-          <div class="hero-metric-card">
-            <div class="gauge-wrapper">
-              <svg class="gauge-svg" viewBox="0 0 140 140">
-                <circle class="gauge-bg" cx="70" cy="70" r="60"></circle>
-                <circle id="gaugeProgress" class="gauge-progress" cx="70" cy="70" r="60" stroke="var(--emerald)"></circle>
-              </svg>
-              <div class="gauge-text">
-                <span id="metricHealthScore" class="gauge-value">85.0</span>
-                <span class="gauge-sub">Health Score</span>
+            <!-- Hero Metric Card: Precision SVG Gauge + Risk Info -->
+            <div class="hero-eval-card">
+              <div class="gauge-wrapper">
+                <svg class="gauge-svg" viewBox="0 0 144 144">
+                  <circle class="gauge-track-outer" cx="72" cy="72" r="60"></circle>
+                  <circle class="gauge-track-ticks" cx="72" cy="72" r="50"></circle>
+                  <circle id="gaugeProgress" class="gauge-progress" cx="72" cy="72" r="60" stroke="var(--emerald)"></circle>
+                </svg>
+                <div class="gauge-text">
+                  <span id="metricHealthScore" class="gauge-value">85.0</span>
+                  <span class="gauge-sub">Health Index</span>
+                </div>
+              </div>
+
+              <div class="risk-summary">
+                <div class="risk-badges-row">
+                  <span id="metricStressRisk" class="badge-risk risk-LOW">LOW STRESS</span>
+                  <span id="metricStressProb" style="font-size: 12px; font-weight: 700; color: var(--text-primary); font-family: 'JetBrains Mono', monospace;">Prob: 0.0%</span>
+                </div>
+
+                <!-- Abnormality Risk Meter -->
+                <div class="progress-bar-wrap">
+                  <div class="bar-labels">
+                    <span>Seasonal Anomaly Deviation</span>
+                    <span id="metricAbnormalityLabel" style="font-family: 'JetBrains Mono', monospace; color: #fff;">30.1%</span>
+                  </div>
+                  <div class="bar-track">
+                    <div id="abnormalityBar" class="bar-fill" style="width: 30.1%; background: linear-gradient(90deg, #10b981, #f59e0b);"></div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div class="risk-summary">
-              <div class="risk-badges-row">
-                <span id="metricStressRisk" class="badge-risk risk-LOW">LOW STRESS</span>
-                <span id="metricStressProb" style="font-size: 12px; font-weight: 700; color: var(--text-main); font-family: 'JetBrains Mono', monospace;">Prob: 0.0%</span>
-              </div>
-
-              <!-- Abnormality Risk Meter -->
-              <div class="progress-bar-wrap">
-                <div class="bar-labels">
-                  <span>Seasonal Anomaly Risk</span>
-                  <span id="metricAbnormalityLabel" style="font-family: 'JetBrains Mono', monospace; color: #fff;">30.1%</span>
-                </div>
-                <div class="bar-track">
-                  <div id="abnormalityBar" class="bar-fill" style="width: 30.1%; background: linear-gradient(90deg, #10b981, #f59e0b);"></div>
-                </div>
+            <!-- Recommendation Alert -->
+            <div id="recBanner" class="recommendation-banner">
+              <div class="rec-icon">🩺</div>
+              <div>
+                <div class="rec-title">Colony Health Advisory</div>
+                <div id="recText" class="rec-body">Colony within normal range. No action needed.</div>
               </div>
             </div>
-          </div>
 
-          <!-- Recommendation Alert -->
-          <div id="recBanner" class="recommendation-banner">
-            <div class="rec-icon">🩺</div>
+            <!-- Detection Scope Tags -->
+            <div class="scope-tags-wrap" id="scopeTags">
+              <span class="scope-tag">✓ colony activity anomaly</span>
+              <span class="scope-tag">✓ fast weight drop (robbing / swarm)</span>
+              <span class="scope-tag">✓ sustained weight decline (starvation)</span>
+            </div>
+
+            <!-- Diagnostic Drivers Breakdown -->
             <div>
-              <div class="rec-title">Colony Health Advisory</div>
-              <div id="recText" class="rec-body">Colony within normal range. No action needed.</div>
+              <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-tertiary); margin-bottom: 8px;">
+                Primary Telemetry Drivers (48h Window)
+              </div>
+              <div class="drivers-row">
+                <div class="driver-box">
+                  <div class="driver-label">Activity Dev</div>
+                  <div id="drvActivity" class="driver-val">-0.42</div>
+                </div>
+                <div class="driver-box">
+                  <div class="driver-label">Temp Dev</div>
+                  <div id="drvTemp" class="driver-val">+0.15°C</div>
+                </div>
+                <div class="driver-box">
+                  <div class="driver-label">48h Weight Trend</div>
+                  <div id="drvTrend" class="driver-val">+0.72kg</div>
+                </div>
+                <div class="driver-box">
+                  <div class="driver-label">Weight Drop</div>
+                  <div id="drvDrop" class="driver-val">0.00kg</div>
+                </div>
+                <div class="driver-box">
+                  <div class="driver-label">Net Flow</div>
+                  <div id="drvFlow" class="driver-val">+50/m</div>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <!-- Detection Scope Tags -->
-          <div class="scope-tags-wrap" id="scopeTags">
-            <span class="scope-tag">✓ colony activity anomaly</span>
-            <span class="scope-tag">✓ fast weight drop (robbing / swarm)</span>
-            <span class="scope-tag">✓ sustained weight decline (starvation)</span>
-          </div>
+            <!-- Telemetry Time-Series Chart Studio -->
+            <div>
+              <div class="chart-controls-bar">
+                <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-tertiary);">
+                  48-Hour Telemetry Dynamics
+                </span>
+                <div class="chart-chips">
+                  <button class="chart-chip active" id="chipWeight" onclick="toggleStream(0, this)">Weight (kg)</button>
+                  <button class="chart-chip active" id="chipTemp" onclick="toggleStream(1, this)">Temp (°C)</button>
+                  <button class="chart-chip active" id="chipFlow" onclick="toggleStream(2, this)">Net Flow</button>
+                </div>
+              </div>
+              <div class="chart-box">
+                <canvas id="telemetryChart"></canvas>
+              </div>
+            </div>
 
-          <!-- Drivers Breakdown -->
-          <div>
-            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); margin-bottom: 8px;">
-              Primary Telemetry Drivers (48h Window)
-            </div>
-            <div class="drivers-row">
-              <div class="driver-box">
-                <div class="driver-label">Activity Dev</div>
-                <div id="drvActivity" class="driver-val">-0.42</div>
+            <!-- Collapsible Raw JSON Response -->
+            <details>
+              <summary>
+                <span>View Raw Model Inference Payload (JSON)</span>
+                <span style="font-size: 10px; font-family: monospace;">click to expand</span>
+              </summary>
+              <div class="json-wrapper">
+                <button class="btn-copy-json" onclick="copyRawJson(this)">Copy JSON</button>
+                <pre id="rawJsonResponse">{}</pre>
               </div>
-              <div class="driver-box">
-                <div class="driver-label">Temp Dev</div>
-                <div id="drvTemp" class="driver-val">+0.15°C</div>
-              </div>
-              <div class="driver-box">
-                <div class="driver-label">48h Weight Trend</div>
-                <div id="drvTrend" class="driver-val">+0.72kg</div>
-              </div>
-              <div class="driver-box">
-                <div class="driver-label">Weight Drop</div>
-                <div id="drvDrop" class="driver-val">0.00kg</div>
-              </div>
-              <div class="driver-box">
-                <div class="driver-label">Net Flow</div>
-                <div id="drvFlow" class="driver-val">+50/m</div>
-              </div>
-            </div>
+            </details>
           </div>
-
-          <!-- Telemetry Time-Series Chart -->
-          <div>
-            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); display: flex; justify-content: space-between;">
-              <span>48-Hour Telemetry Dynamics</span>
-              <span id="chartRangeLabel" style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">49 READINGS • 48 HOURS</span>
-            </div>
-            <div class="chart-box">
-              <canvas id="telemetryChart"></canvas>
-            </div>
-          </div>
-
-          <!-- Collapsible Raw JSON Response -->
-          <details>
-            <summary>
-              <span>View Raw Model Inference Payload (JSON)</span>
-              <span style="font-size: 10px; font-family: monospace;">click to expand</span>
-            </summary>
-            <div class="json-wrapper">
-              <button class="btn-copy-json" onclick="copyRawJson(this)">Copy JSON</button>
-              <pre id="rawJsonResponse">{}</pre>
-            </div>
-          </details>
         </div>
       </div>
     </div>
   </div>
+
+  <div id="toast">✓ Copied to clipboard!</div>
 
   <script>
     // State variables
@@ -1170,6 +1306,7 @@
     let currentTab = 'table';
     let chartInstance = null;
     let selectedScenario = 'healthy';
+    let previousScore = 85.0;
 
     // Local Storage for API Key
     const savedKey = localStorage.getItem('honeychain_ml_key');
@@ -1187,6 +1324,13 @@
         runInference();
       }
     });
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => { toast.classList.remove('show'); }, 2200);
+    }
 
     // Health check with ping measurement
     async function checkHealth() {
@@ -1221,7 +1365,7 @@
           // 48h Optimal Balance: circadian cycle, stable weight gain
           flow = isDay ? 50 : 0;
           temp = 34.8 + (h >= 11 && h <= 15 ? 0.4 : -0.2);
-          weight = 35.0 + (i * 0.015); // +0.72kg total nectar gain
+          weight = 35.0 + (i * 0.015);
           hum = 58.0;
         } else if (type === 'swarm') {
           // 48h Swarm: Normal Day 1, sharp swarm loss at hour 26 (Day 2, 14:00)
@@ -1240,23 +1384,23 @@
           }
           hum = 55.0;
         } else if (type === 'starvation') {
-          // 48h Chronic Depletion: relentless continuous downward drain
+          // 48h Chronic Depletion: continuous downward drain
           flow = isDay ? -5 : -2;
           temp = 34.0 - (i * 0.03);
-          weight = 35.0 - (i * 0.075); // -3.67kg over 48h
+          weight = 35.0 - (i * 0.075);
           hum = 60.0;
         } else if (type === 'robbing') {
           // 48h Robbing: Afternoon raiding frenzy on both days
           const isRobbingHour = isDay && (h >= 12 && h <= 16);
           flow = isRobbingHour ? -150 : (isDay ? 15 : 0);
           temp = isRobbingHour ? 35.5 : 34.7;
-          weight = 36.0 - (i * 0.05); // -2.4kg theft
+          weight = 36.0 - (i * 0.05);
           hum = 52.0;
         } else if (type === 'nectar_surge') {
           // 48h Heavy Nectar Flow: active foraging surge and honey storage
           flow = isDay ? 85 : 0;
           temp = 34.9 + (h >= 11 && h <= 15 ? 0.3 : -0.1);
-          weight = 35.0 + (i * 0.04); // +1.92kg nectar surge
+          weight = 35.0 + (i * 0.04);
           hum = 56.0;
         }
 
@@ -1314,8 +1458,9 @@
       tbody.innerHTML = '';
       currentReadings.forEach((r, idx) => {
         const tr = document.createElement('tr');
+        tr.id = `row-${idx}`;
         tr.innerHTML = `
-          <td style="color: var(--text-dim); font-weight: 600;">${idx + 1}</td>
+          <td style="color: var(--text-tertiary); font-weight: 600;">${idx + 1}</td>
           <td><input type="text" value="${r.timestamp}" onchange="updateRow(${idx}, 'timestamp', this.value)" style="width: 155px;"></td>
           <td><input type="number" step="0.1" value="${r.temperature}" onchange="updateRow(${idx}, 'temperature', parseFloat(this.value))" style="width: 75px;"></td>
           <td><input type="number" step="0.1" value="${r.humidity}" onchange="updateRow(${idx}, 'humidity', parseFloat(this.value))" style="width: 70px;"></td>
@@ -1373,6 +1518,48 @@
       updateJsonFromReadings();
     }
 
+    // Quick Day Filter / Scroll
+    function filterDay(dayNum) {
+      const targetIndex = dayNum === 1 ? 0 : Math.min(24, currentReadings.length - 1);
+      const row = document.getElementById(`row-${targetIndex}`);
+      if (row) {
+        row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        row.style.backgroundColor = 'rgba(245, 158, 11, 0.2)';
+        setTimeout(() => { row.style.backgroundColor = ''; }, 1200);
+      }
+    }
+
+    // Realistic IoT Sensor Noise Injection
+    function injectNoise() {
+      currentReadings.forEach(r => {
+        r.temperature = Number((r.temperature + (Math.random() * 0.2 - 0.1)).toFixed(2));
+        r.weight = Number((r.weight + (Math.random() * 0.02 - 0.01)).toFixed(3));
+        if (r.flow !== 0) {
+          r.flow = Math.round(r.flow + (Math.random() * 6 - 3));
+        }
+      });
+      renderTable();
+      updateJsonFromReadings();
+      showToast('⚡ Injected realistic sensor noise');
+      runInference();
+    }
+
+    // Export CSV
+    function exportCsv() {
+      let csv = 'timestamp,temperature,humidity,weight,flow\n';
+      currentReadings.forEach(r => {
+        csv += `${r.timestamp},${r.temperature},${r.humidity},${r.weight},${r.flow}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `honeychain_48h_${selectedScenario}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('✓ Exported 48h CSV');
+    }
+
     // Tabs Switcher
     function switchTab(tab) {
       currentTab = tab;
@@ -1418,6 +1605,7 @@
       try {
         const parsed = JSON.parse(document.getElementById('jsonEditor').value);
         document.getElementById('jsonEditor').value = JSON.stringify(parsed, null, 2);
+        showToast('✓ JSON Formatted');
       } catch (e) {
         alert('Invalid JSON syntax: ' + e.message);
       }
@@ -1475,6 +1663,29 @@
       }
     }
 
+    // Number Counter Animation
+    function animateScore(start, end, duration = 800) {
+      const el = document.getElementById('metricHealthScore');
+      if (isNaN(end)) {
+        el.innerText = '--';
+        return;
+      }
+      const startTime = performance.now();
+      function update(time) {
+        const elapsed = time - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        const current = start + (end - start) * ease;
+        el.innerText = current.toFixed(1);
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        } else {
+          el.innerText = end.toFixed(1);
+        }
+      }
+      requestAnimationFrame(update);
+    }
+
     // Render Diagnostic Evaluation
     function renderResults(data) {
       // 1. Tier Badge
@@ -1482,28 +1693,35 @@
       const hours = data.hoursAvailable ? ` (${data.hoursAvailable}h Window)` : ' (48h Window)';
       document.getElementById('inferenceTierBadge').innerText = `Tier: ${tier}${hours}`;
 
-      // 2. Health Score Circular Gauge
-      const score = (data.healthScore !== null && data.healthScore !== undefined) ? Number(data.healthScore).toFixed(1) : '--';
-      document.getElementById('metricHealthScore').innerText = score;
+      // 2. Health Score Circular Gauge with animation
+      const score = (data.healthScore !== null && data.healthScore !== undefined) ? Number(data.healthScore) : NaN;
+      if (!isNaN(score)) {
+        animateScore(previousScore, score);
+        previousScore = score;
+      } else {
+        document.getElementById('metricHealthScore').innerText = '--';
+      }
 
       const gauge = document.getElementById('gaugeProgress');
       const circumference = 377; // 2 * PI * 60
-      if (score !== '--') {
-        const numScore = Number(score);
-        const offset = circumference - (numScore / 100) * circumference;
+      if (!isNaN(score)) {
+        const offset = circumference - (score / 100) * circumference;
         gauge.style.strokeDashoffset = offset;
-        if (numScore >= 75) {
+        if (score >= 75) {
           gauge.style.stroke = 'var(--emerald)';
-        } else if (numScore >= 50) {
+          gauge.style.filter = 'drop-shadow(0 0 10px rgba(16, 185, 129, 0.45))';
+        } else if (score >= 50) {
           gauge.style.stroke = 'var(--amber)';
+          gauge.style.filter = 'drop-shadow(0 0 10px rgba(245, 158, 11, 0.45))';
         } else {
           gauge.style.stroke = 'var(--rose)';
+          gauge.style.filter = 'drop-shadow(0 0 10px rgba(244, 63, 94, 0.45))';
         }
       } else {
         gauge.style.strokeDashoffset = circumference;
       }
 
-      // 3. Stress Risk & Probability (48h activates full XGBoost classifier)
+      // 3. Stress Risk & Probability
       const risk = data.stressRisk || 'UNKNOWN';
       const riskEl = document.getElementById('metricStressRisk');
       riskEl.innerText = `${risk} STRESS`;
@@ -1520,7 +1738,7 @@
       document.getElementById('metricAbnormalityLabel').innerText = `${abn}%`;
       document.getElementById('abnormalityBar').style.width = `${Math.min(100, Math.max(0, abn))}%`;
 
-      // 5. Clinical Recommendation
+      // 5. Clinical Recommendation Alert
       const rec = data.recommendation || 'No recommendation provided.';
       document.getElementById('recText').innerText = rec;
       const recBanner = document.getElementById('recBanner');
@@ -1565,20 +1783,22 @@
         const parts = r.timestamp.split(' ');
         const timePart = parts.length > 1 ? parts[1].substring(0, 5) : r.timestamp;
         const dayPart = parts.length > 0 ? parts[0].split('-')[2] : '';
-        // Show day marker every 12 hours or at key intervals
         return (idx % 6 === 0 || idx === readings.length - 1) ? `D${dayPart} ${timePart}` : timePart;
       });
       const weights = readings.map(r => r.weight);
       const temps = readings.map(r => r.temperature);
       const flows = readings.map(r => r.flow);
 
-      document.getElementById('chartRangeLabel').innerText = `${readings.length} READINGS • 48 HOURS`;
-
       if (chartInstance) {
         chartInstance.destroy();
       }
 
       const ctx = document.getElementById('telemetryChart').getContext('2d');
+
+      // Create rich honey amber gradient for weight area
+      const gradientWeight = ctx.createLinearGradient(0, 0, 0, 240);
+      gradientWeight.addColorStop(0, 'rgba(245, 158, 11, 0.22)');
+      gradientWeight.addColorStop(1, 'rgba(245, 158, 11, 0.00)');
 
       chartInstance = new Chart(ctx, {
         type: 'line',
@@ -1589,7 +1809,7 @@
               label: 'Weight (kg)',
               data: weights,
               borderColor: '#f59e0b',
-              backgroundColor: 'rgba(245, 158, 11, 0.08)',
+              backgroundColor: gradientWeight,
               yAxisID: 'yWeight',
               borderWidth: 2.2,
               tension: 0.25,
@@ -1619,7 +1839,7 @@
               yAxisID: 'yFlow',
               type: 'bar',
               barThickness: readings.length > 50 ? 2 : 4,
-              borderRadius: 2
+              borderRadius: 3
             }
           ]
         },
@@ -1632,20 +1852,18 @@
           },
           plugins: {
             legend: {
-              labels: {
-                color: '#94a3b8',
-                font: { family: "'Plus Jakarta Sans', sans-serif", size: 11, weight: 600 },
-                boxWidth: 12
-              }
+              display: false // We use our own interactive stream chips
             },
             tooltip: {
-              backgroundColor: 'rgba(13, 19, 34, 0.95)',
+              backgroundColor: 'rgba(10, 15, 29, 0.94)',
               titleColor: '#fff',
               bodyColor: '#cbd5e1',
-              borderColor: 'rgba(255, 255, 255, 0.1)',
+              borderColor: 'rgba(245, 158, 11, 0.25)',
               borderWidth: 1,
-              padding: 10,
-              bodyFont: { family: "'JetBrains Mono', monospace", size: 11 }
+              padding: 12,
+              cornerRadius: 10,
+              bodyFont: { family: "'JetBrains Mono', monospace", size: 11 },
+              titleFont: { family: "'Plus Jakarta Sans', sans-serif", size: 12, weight: 700 }
             }
           },
           scales: {
@@ -1678,9 +1896,18 @@
       });
     }
 
+    function toggleStream(datasetIndex, btn) {
+      if (!chartInstance) return;
+      const meta = chartInstance.getDatasetMeta(datasetIndex);
+      meta.hidden = meta.hidden === null ? !chartInstance.data.datasets[datasetIndex].hidden : null;
+      btn.classList.toggle('active');
+      chartInstance.update();
+    }
+
     function copyRawJson(btn) {
       const text = document.getElementById('rawJsonResponse').innerText;
       navigator.clipboard.writeText(text).then(() => {
+        showToast('✓ Copied 48h JSON payload');
         btn.innerText = '✓ Copied!';
         setTimeout(() => { btn.innerText = 'Copy JSON'; }, 2000);
       });
