@@ -11,16 +11,16 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --canvas: #09090c;
-      --card-bg: #111116;
-      --surface-elevated: #181820;
-      --surface-hover: #20202c;
-      --input-bg: #0c0c10;
+      --canvas: #08080b;
+      --card-bg: #101015;
+      --surface-elevated: #16161e;
+      --surface-hover: #1f1f2a;
+      --input-bg: #0b0b0e;
       
       --gold-300: #f5dfb8;
       --gold-400: #e5b869;
       --gold-500: #d4a359;
-      --gold-glow: rgba(212, 163, 89, 0.16);
+      --gold-glow: rgba(212, 163, 89, 0.18);
       
       --border-hairline: rgba(255, 255, 255, 0.07);
       --border-subtle: rgba(255, 255, 255, 0.035);
@@ -50,7 +50,7 @@
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background-color: var(--canvas);
       background-image: 
-        radial-gradient(ellipse 75% 35% at 50% -10%, rgba(212, 163, 89, 0.07), transparent 70%),
+        radial-gradient(ellipse 80% 40% at 50% -12%, rgba(212, 163, 89, 0.09), transparent 70%),
         radial-gradient(ellipse 50% 30% at 100% 100%, rgba(16, 185, 129, 0.02), transparent 50%);
       background-attachment: fixed;
       color: var(--text-main);
@@ -58,19 +58,33 @@
       padding: 24px 20px 48px;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
     .container {
       max-width: 1380px;
       margin: 0 auto;
+      position: relative;
+      z-index: 2;
     }
 
-    /* Subtle Film Noise */
+    /* Ambient Living Canvas (Pollen / Dust Motes) */
+    #ambientCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.55;
+    }
+
+    /* Subtle Film Grain Noise */
     .bg-noise {
       position: fixed;
       inset: 0;
       pointer-events: none;
-      opacity: 0.02;
+      opacity: 0.022;
       z-index: 999;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
     }
@@ -82,9 +96,9 @@
       align-items: center;
       padding: 10px 20px;
       margin-bottom: 24px;
-      background: rgba(17, 17, 22, 0.8);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: rgba(16, 16, 21, 0.82);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border: 1px solid var(--border-hairline);
       border-radius: 9999px;
       box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -102,7 +116,7 @@
       width: 34px;
       height: 34px;
       border-radius: 9px;
-      background: linear-gradient(135deg, rgba(212, 163, 89, 0.18) 0%, rgba(212, 163, 89, 0.02) 100%);
+      background: linear-gradient(135deg, rgba(212, 163, 89, 0.2) 0%, rgba(212, 163, 89, 0.03) 100%);
       border: 1px solid var(--border-gold);
       display: flex;
       align-items: center;
@@ -131,10 +145,10 @@
       letter-spacing: normal;
     }
 
-    /* Top-Level Mode Navigation */
+    /* Segmented View Mode Navigation */
     .nav-modes {
       display: flex;
-      background: rgba(10, 10, 13, 0.7);
+      background: rgba(10, 10, 14, 0.75);
       padding: 3px;
       border-radius: 9999px;
       border: 1px solid var(--border-hairline);
@@ -219,6 +233,34 @@
     .pulse-orb.offline .dot { background-color: var(--crimson); }
     .pulse-orb.offline .ring { display: none; }
 
+    /* Audio Haptic Synthesizer Toggle */
+    .btn-audio-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-hairline);
+      color: var(--text-secondary);
+      padding: 4px 11px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-audio-toggle:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+      background: var(--surface-elevated);
+    }
+
+    .btn-audio-toggle.active {
+      color: var(--gold-300);
+      border-color: var(--border-gold);
+      background: rgba(212, 163, 89, 0.1);
+    }
+
     .btn-gh-link {
       display: inline-flex;
       align-items: center;
@@ -240,7 +282,7 @@
       background: var(--surface-elevated);
     }
 
-    /* Streamlined Archival Scenario Track (Minimalist Horizontal Bar) */
+    /* Minimalist 1-Row Scenario Track */
     .scenario-track-wrapper {
       margin-bottom: 22px;
     }
@@ -287,7 +329,7 @@
     }
 
     .scenario-pill {
-      background: rgba(17, 17, 22, 0.6);
+      background: rgba(16, 16, 21, 0.6);
       border: 1px solid var(--border-hairline);
       border-radius: 10px;
       padding: 10px 12px;
@@ -306,7 +348,7 @@
     }
 
     .scenario-pill.active {
-      background: linear-gradient(180deg, rgba(212, 163, 89, 0.1) 0%, rgba(17, 17, 22, 0.8) 100%);
+      background: linear-gradient(180deg, rgba(212, 163, 89, 0.1) 0%, rgba(16, 16, 21, 0.8) 100%);
       border-color: var(--gold-500);
       box-shadow: 0 0 16px rgba(212, 163, 89, 0.1), inset 0 1px 0 rgba(212, 163, 89, 0.25);
     }
@@ -346,7 +388,7 @@
     .chassis-box {
       background: var(--card-bg);
       border: 1px solid var(--border-hairline);
-      border-radius: 18px;
+      border-radius: 20px;
       padding: 24px 28px;
       box-shadow: 0 20px 48px -15px rgba(0, 0, 0, 0.7);
       margin-bottom: 22px;
@@ -382,7 +424,7 @@
       }
     }
 
-    /* Swiss Horological Vitality Dial */
+    /* Swiss Horological Vitality Dial with Radar Sweep */
     .dial-unit {
       position: relative;
       width: 170px;
@@ -422,6 +464,25 @@
       filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.4));
     }
 
+    .dial-radar-sweep {
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      border-right: 2px solid rgba(212, 163, 89, 0.6);
+      opacity: 0;
+      pointer-events: none;
+      animation: radarScan 2.4s linear infinite;
+    }
+
+    .dial-radar-sweep.active {
+      opacity: 0.85;
+    }
+
+    @keyframes radarScan {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
     .dial-readout {
       position: absolute;
       inset: 0;
@@ -450,7 +511,7 @@
       font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Center Narrative Column */
+    /* Narrative Column */
     .narrative-column {
       display: flex;
       flex-direction: column;
@@ -597,7 +658,7 @@
       transition: width 0.7s var(--ease-fluid);
     }
 
-    /* Right Drivers Column */
+    /* Drivers Column */
     .drivers-column {
       display: flex;
       flex-direction: column;
@@ -630,14 +691,14 @@
       font-family: 'JetBrains Mono', monospace;
     }
 
-    /* 48-Hour Telemetry Dynamics Chart */
+    /* 48-Hour Chart & Time-Lapse Header */
     .chart-section-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 10px;
     }
 
     .chart-heading {
@@ -650,6 +711,41 @@
       display: flex;
       align-items: center;
       gap: 6px;
+    }
+
+    .chart-actions-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Interactive 48h Time-Lapse Playback Button */
+    .btn-timelapse-play {
+      background: rgba(212, 163, 89, 0.12);
+      border: 1px solid var(--border-gold);
+      color: var(--gold-300);
+      font-size: 10.5px;
+      padding: 4px 11px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s var(--ease-fluid);
+    }
+
+    .btn-timelapse-play:hover {
+      background: rgba(212, 163, 89, 0.22);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .btn-timelapse-play.playing {
+      background: var(--gold-500);
+      color: #09090c;
     }
 
     .chart-stream-toggles {
@@ -673,6 +769,39 @@
     .chip-btn.active {
       background: rgba(212, 163, 89, 0.12);
       border-color: var(--border-gold);
+      color: var(--gold-300);
+    }
+
+    /* Dynamic Circadian Solar Track Ribbon */
+    .circadian-solar-ribbon {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(14, 14, 18, 0.5);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 4px 10px;
+      margin-bottom: 10px;
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+    }
+
+    .solar-cycle-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .solar-cycle-item.active {
+      color: var(--gold-300);
+      font-weight: 700;
+    }
+
+    /* Live Scrubbing HUD Bar */
+    #scrubberHud {
+      font-size: 10.5px;
+      font-family: 'JetBrains Mono', monospace;
       color: var(--gold-300);
     }
 
@@ -734,6 +863,8 @@
       box-shadow: 0 4px 18px rgba(212, 163, 89, 0.35);
       transition: all 0.2s var(--ease-fluid);
       user-select: none;
+      position: relative;
+      overflow: hidden;
     }
 
     .btn-action-primary:hover {
@@ -777,7 +908,7 @@
       color: var(--text-muted);
     }
 
-    /* VIEW 2: Data Matrix View */
+    /* VIEW 2: Data Matrix Chamber */
     .matrix-view-container {
       display: none;
     }
@@ -1000,7 +1131,10 @@
   </style>
 </head>
 <body>
+  <!-- Ambient Living Canvas & Grain Texture -->
+  <canvas id="ambientCanvas"></canvas>
   <div class="bg-noise"></div>
+
   <div class="container">
     <!-- Top Floating Header -->
     <header>
@@ -1036,6 +1170,12 @@
       </nav>
 
       <div class="header-aside">
+        <!-- Audio Haptic Toggle -->
+        <button id="btnAudioToggle" class="btn-audio-toggle" onclick="toggleAudioHaptics()" title="Toggle Web Audio Haptic Feedback">
+          <svg id="audioIcon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+          <span id="audioLabel">Muted</span>
+        </button>
+
         <div class="system-badge">
           <div id="statusDot" class="pulse-orb">
             <span class="ring"></span>
@@ -1111,13 +1251,14 @@
     <div id="viewOverview" class="chassis-box">
       <!-- Top Diagnostic Command Deck -->
       <div class="overview-hero-grid">
-        <!-- 1. Swiss Dial -->
+        <!-- 1. Swiss Dial with Radar Sweep Effect -->
         <div class="dial-unit">
           <svg class="dial-vector" viewBox="0 0 170 170">
             <circle class="dial-track-circle" cx="85" cy="85" r="72"></circle>
             <circle class="dial-ticks-circle" cx="85" cy="85" r="60"></circle>
             <circle id="gaugeProgress" class="dial-progress-arc" cx="85" cy="85" r="72" stroke="var(--emerald)"></circle>
           </svg>
+          <div id="dialRadarSweep" class="dial-radar-sweep"></div>
           <div class="dial-readout">
             <span id="metricHealthScore" class="dial-number">85.0</span>
             <span class="dial-caption">Vitality Index</span>
@@ -1176,25 +1317,53 @@
         </div>
       </div>
 
-      <!-- 48-Hour Multi-Stream Telemetry Canvas -->
+      <!-- 48-Hour Multi-Stream Telemetry Canvas with Interactive Time-Lapse -->
       <div>
         <div class="chart-section-bar">
           <span class="chart-heading">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             48-Hour Continuous Multi-Stream Dynamics
           </span>
-          <div class="chart-stream-toggles">
-            <button class="chip-btn active" id="chipWeight" onclick="toggleStream(0, this)">Weight (kg)</button>
-            <button class="chip-btn active" id="chipTemp" onclick="toggleStream(1, this)">Temp (°C)</button>
-            <button class="chip-btn active" id="chipFlow" onclick="toggleStream(2, this)">Net Flight</button>
+
+          <div class="chart-actions-right">
+            <!-- Interactive Time-Lapse Replay Button -->
+            <button id="btnTimelapse" class="btn-timelapse-play" onclick="toggleTimelapse()">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>Play 48h Scrub</span>
+            </button>
+
+            <!-- Stream Selection Chips -->
+            <div class="chart-stream-toggles">
+              <button class="chip-btn active" id="chipWeight" onclick="toggleStream(0, this)">Weight (kg)</button>
+              <button class="chip-btn active" id="chipTemp" onclick="toggleStream(1, this)">Temp (°C)</button>
+              <button class="chip-btn active" id="chipFlow" onclick="toggleStream(2, this)">Net Flight</button>
+            </div>
           </div>
         </div>
+
+        <!-- Circadian Solar Cycle Ribbon -->
+        <div class="circadian-solar-ribbon">
+          <div class="solar-cycle-item active">
+            <span>☀️ Day 1 (07:00–19:00)</span>
+          </div>
+          <div class="solar-cycle-item">
+            <span>🌙 Night 1 (19:00–07:00)</span>
+          </div>
+          <div class="solar-cycle-item">
+            <span>☀️ Day 2 (07:00–19:00)</span>
+          </div>
+          <div class="solar-cycle-item">
+            <span>🌙 Night 2 (19:00–12:00)</span>
+          </div>
+          <div id="scrubberHud">Scrub to inspect telemetry timeline</div>
+        </div>
+
         <div class="chart-canvas-area">
           <canvas id="telemetryChart"></canvas>
         </div>
       </div>
 
-      <!-- Scope tags hidden in DOM for accessibility & test contracts -->
+      <!-- Scope tags for contract preservation -->
       <div id="scopeTags" style="display: none;"></div>
 
       <!-- Action Strip -->
@@ -1217,7 +1386,7 @@
       </div>
     </div>
 
-    <!-- VIEW 2: Data Matrix Chamber (Dedicated Workspace) -->
+    <!-- VIEW 2: Data Matrix Chamber -->
     <div id="viewMatrix" class="chassis-box matrix-view-container">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
         <div>
@@ -1340,12 +1509,18 @@
   </div>
 
   <script>
-    // State management
+    // App State
     let currentReadings = [];
     let currentViewMode = 'overview';
     let chartInstance = null;
     let selectedScenario = 'healthy';
     let previousScore = 85.0;
+
+    // Immersive Living State
+    let isTimelapsePlaying = false;
+    let timelapseInterval = null;
+    let audioContext = null;
+    let audioEnabled = false;
 
     const scenarioDescriptions = {
       healthy: 'Dual circadian equilibrium (+0.7kg normal forage)',
@@ -1356,8 +1531,153 @@
       real_wurzburg: 'Authentic 48h Bavarian apiary IoT sensor stream'
     };
 
-    // View switcher (Overview vs Matrix vs JSON)
+    // 1. Living Particle Dust Engine (HTML5 Canvas Background)
+    const canvas = document.getElementById('ambientCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+    let mouse = { x: -1000, y: -1000 };
+
+    function initParticles() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      particles = [];
+      const count = Math.min(42, Math.floor(width / 32));
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          radius: Math.random() * 1.6 + 0.6,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.3 - 0.1,
+          alpha: Math.random() * 0.45 + 0.15,
+          color: Math.random() > 0.3 ? '212, 163, 89' : '245, 158, 11'
+        });
+      }
+    }
+
+    function renderAmbientParticles() {
+      if (document.hidden) {
+        requestAnimationFrame(renderAmbientParticles);
+        return;
+      }
+      ctx.clearRect(0, 0, width, height);
+      
+      const speedMult = (selectedScenario === 'swarm') ? 2.0 : (selectedScenario === 'nectar_surge') ? 1.4 : 1.0;
+
+      for (let p of particles) {
+        p.x += p.vx * speedMult;
+        p.y += p.vy * speedMult;
+
+        // Subtle mouse interaction
+        const dx = mouse.x - p.x;
+        const dy = mouse.y - p.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          p.x -= (dx / dist) * 0.8;
+          p.y -= (dy / dist) * 0.8;
+        }
+
+        // Screen wrap
+        if (p.x < 0) p.x = width;
+        if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        if (p.y > height) p.y = 0;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
+        ctx.shadowColor = `rgba(${p.color}, 0.5)`;
+        ctx.shadowBlur = 6;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+      requestAnimationFrame(renderAmbientParticles);
+    }
+
+    window.addEventListener('resize', initParticles);
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    // 2. Native Web Audio Haptic Synthesizer
+    function getAudioContext() {
+      if (!audioContext) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+          audioContext = new AudioCtx();
+        }
+      }
+      if (audioContext && audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+      return audioContext;
+    }
+
+    function toggleAudioHaptics() {
+      audioEnabled = !audioEnabled;
+      const btn = document.getElementById('btnAudioToggle');
+      const label = document.getElementById('audioLabel');
+      const icon = document.getElementById('audioIcon');
+      
+      if (audioEnabled) {
+        getAudioContext();
+        btn.classList.add('active');
+        label.innerText = 'Audio ON';
+        icon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>';
+        playHapticTick(580, 0.03, 0.08);
+        showToast('🔊 Living Audio Haptics enabled');
+      } else {
+        btn.classList.remove('active');
+        label.innerText = 'Muted';
+        icon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
+        showToast('🔇 Audio muted');
+      }
+    }
+
+    function playHapticTick(freq = 480, duration = 0.03, gain = 0.05) {
+      if (!audioEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gainNode.gain.setValueAtTime(gain, ctx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+        osc.connect(gainNode);
+        gainNode.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playSuccessChime() {
+      if (!audioEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const chord = [554.37, 830.61]; // C#5, G#5 harmonious fifth
+        chord.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gainNode = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.06);
+          gainNode.gain.setValueAtTime(0.04, ctx.currentTime + idx * 0.06);
+          gainNode.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + idx * 0.06 + 0.45);
+          osc.connect(gainNode);
+          gainNode.connect(ctx.destination);
+          osc.start(ctx.currentTime + idx * 0.06);
+          osc.stop(ctx.currentTime + idx * 0.06 + 0.45);
+        });
+      } catch (e) {}
+    }
+
+    // 3. View mode switcher
     function switchViewMode(mode) {
+      playHapticTick(520, 0.02, 0.05);
       currentViewMode = mode;
       document.getElementById('viewOverview').style.display = (mode === 'overview') ? 'block' : 'none';
       document.getElementById('viewMatrix').style.display = (mode === 'matrix') ? 'block' : 'none';
@@ -1486,6 +1806,7 @@
 
     // Load Scenario
     async function loadScenario(type) {
+      playHapticTick(620, 0.03, 0.06);
       selectedScenario = type;
       document.querySelectorAll('.scenario-pill').forEach(b => {
         if (b.getAttribute('data-scenario') === type) {
@@ -1602,6 +1923,7 @@
 
     // Realistic IoT Sensor Variance Simulator
     function injectNoise() {
+      playHapticTick(750, 0.04, 0.07);
       currentReadings.forEach(r => {
         r.temperature = Number((r.temperature + (Math.random() * 0.2 - 0.1)).toFixed(2));
         r.weight = Number((r.weight + (Math.random() * 0.02 - 0.01)).toFixed(3));
@@ -1617,6 +1939,7 @@
 
     // Export CSV
     function exportCsv() {
+      playHapticTick(600, 0.03, 0.05);
       let csv = 'timestamp,temperature,humidity,weight,flow\n';
       currentReadings.forEach(r => {
         csv += `${r.timestamp},${r.temperature},${r.humidity},${r.weight},${r.flow}\n`;
@@ -1664,11 +1987,65 @@
       }
     }
 
-    // Inference Execution
+    // 4. Time-Lapse 48-Hour Scrubbing Playback Engine
+    function toggleTimelapse() {
+      if (isTimelapsePlaying) {
+        stopTimelapse();
+      } else {
+        startTimelapse();
+      }
+    }
+
+    function startTimelapse() {
+      if (!currentReadings || currentReadings.length === 0) return;
+      isTimelapsePlaying = true;
+      const btn = document.getElementById('btnTimelapse');
+      btn.classList.add('playing');
+      btn.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg><span>Pause</span>';
+      
+      const fullReadings = [...currentReadings];
+      let stepIndex = 1;
+      const totalSteps = fullReadings.length;
+
+      clearInterval(timelapseInterval);
+      timelapseInterval = setInterval(() => {
+        if (stepIndex > totalSteps) {
+          stopTimelapse();
+          renderChart(fullReadings);
+          return;
+        }
+
+        const slice = fullReadings.slice(0, stepIndex);
+        renderChart(slice);
+        playHapticTick(300 + stepIndex * 8, 0.015, 0.02);
+
+        // Update HUD display
+        const cur = fullReadings[stepIndex - 1];
+        if (cur) {
+          const delta = (cur.weight - fullReadings[0].weight).toFixed(2);
+          document.getElementById('scrubberHud').innerText = 
+            `Hr ${stepIndex - 1}: ${cur.timestamp.split(' ')[1].substring(0, 5)} • W: ${cur.weight}kg (${delta > 0 ? '+' : ''}${delta}kg) • T: ${cur.temperature}°C • Flow: ${cur.flow}/m`;
+        }
+
+        stepIndex++;
+      }, 50); // 49 frames over ~2.4 seconds
+    }
+
+    function stopTimelapse() {
+      isTimelapsePlaying = false;
+      clearInterval(timelapseInterval);
+      const btn = document.getElementById('btnTimelapse');
+      btn.classList.remove('playing');
+      btn.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>Play 48h Scrub</span>';
+    }
+
+    // 5. Inference Execution
     async function runInference() {
+      playHapticTick(440, 0.04, 0.08);
       const btn = document.getElementById('btnRun');
       const btnText = document.getElementById('btnRunText');
       const btnIcon = document.getElementById('btnRunIcon');
+      const radar = document.getElementById('dialRadarSweep');
 
       if (currentViewMode === 'json') {
         updateReadingsFromJson();
@@ -1685,6 +2062,7 @@
       btn.disabled = true;
       btnIcon.innerHTML = '<div class="spinner-disc"></div>';
       btnText.innerText = 'Evaluating 48h...';
+      radar.classList.add('active');
 
       const headers = { 'Content-Type': 'application/json' };
       if (apiKey) {
@@ -1707,12 +2085,14 @@
         }
 
         renderResults(data);
+        playSuccessChime();
       } catch (err) {
         alert('Connection error: ' + err.message);
       } finally {
         btn.disabled = false;
         btnIcon.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
         btnText.innerText = 'Run 48h Diagnostic';
+        setTimeout(() => { radar.classList.remove('active'); }, 600);
       }
     }
 
@@ -1845,15 +2225,15 @@
         chartInstance.destroy();
       }
 
-      const canvas = document.getElementById('telemetryChart');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
+      const canvasEl = document.getElementById('telemetryChart');
+      if (!canvasEl) return;
+      const ctxChart = canvasEl.getContext('2d');
 
-      const gradientWeight = ctx.createLinearGradient(0, 0, 0, 250);
+      const gradientWeight = ctxChart.createLinearGradient(0, 0, 0, 250);
       gradientWeight.addColorStop(0, 'rgba(212, 163, 89, 0.22)');
       gradientWeight.addColorStop(1, 'rgba(212, 163, 89, 0.00)');
 
-      chartInstance = new Chart(ctx, {
+      chartInstance = new Chart(ctxChart, {
         type: 'line',
         data: {
           labels: labels,
@@ -1903,12 +2283,23 @@
             mode: 'index',
             intersect: false
           },
+          onHover: (e, activeElements) => {
+            if (activeElements && activeElements.length > 0) {
+              const idx = activeElements[0].index;
+              const r = readings[idx];
+              if (r) {
+                const delta = (r.weight - readings[0].weight).toFixed(2);
+                document.getElementById('scrubberHud').innerText = 
+                  `Hr ${idx}: ${r.timestamp.split(' ')[1].substring(0, 5)} • Weight: ${r.weight}kg (${delta > 0 ? '+' : ''}${delta}kg) • Temp: ${r.temperature}°C • Flight: ${r.flow}/m`;
+              }
+            }
+          },
           plugins: {
             legend: {
               display: false
             },
             tooltip: {
-              backgroundColor: 'rgba(17, 17, 22, 0.96)',
+              backgroundColor: 'rgba(16, 16, 21, 0.96)',
               titleColor: '#fff',
               bodyColor: '#9ea0a8',
               borderColor: 'rgba(212, 163, 89, 0.25)',
@@ -1950,6 +2341,7 @@
     }
 
     function toggleStream(datasetIndex, btn) {
+      playHapticTick(500, 0.02, 0.04);
       if (!chartInstance) return;
       const meta = chartInstance.getDatasetMeta(datasetIndex);
       meta.hidden = meta.hidden === null ? !chartInstance.data.datasets[datasetIndex].hidden : null;
@@ -1958,6 +2350,7 @@
     }
 
     function copyRawJson(btn) {
+      playHapticTick(650, 0.03, 0.05);
       const text = document.getElementById('rawJsonResponse').innerText;
       navigator.clipboard.writeText(text).then(() => {
         showToast('Copied JSON payload');
@@ -1971,6 +2364,8 @@
 
     // Startup
     window.addEventListener('DOMContentLoaded', () => {
+      initParticles();
+      renderAmbientParticles();
       checkHealth();
       loadScenario('healthy');
     });
