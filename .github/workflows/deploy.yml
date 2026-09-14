@@ -1,0 +1,22 @@
+name: Deploy ML Microservice to AIC VPS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy ML Service via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: 162.19.81.122
+          port: 20130
+          username: root
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            /opt/services/honeychain-ml/deploy.sh
