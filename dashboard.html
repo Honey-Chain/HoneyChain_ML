@@ -11,36 +11,33 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --canvas: #09090b;
-      --chassis: #101014;
-      --card-core: #141419;
-      --surface-elevated: #1a1a22;
-      --surface-hover: #22222d;
-      --input-bg: #0c0c0f;
+      --canvas: #09090c;
+      --card-bg: #111116;
+      --surface-elevated: #181820;
+      --surface-hover: #20202c;
+      --input-bg: #0c0c10;
       
-      --gold-300: #f3d8a2;
+      --gold-300: #f5dfb8;
       --gold-400: #e5b869;
       --gold-500: #d4a359;
-      --gold-600: #b07e36;
-      --gold-glow: rgba(212, 163, 89, 0.18);
+      --gold-glow: rgba(212, 163, 89, 0.16);
       
       --border-hairline: rgba(255, 255, 255, 0.07);
-      --border-subtle: rgba(255, 255, 255, 0.04);
-      --border-gold: rgba(212, 163, 89, 0.3);
+      --border-subtle: rgba(255, 255, 255, 0.035);
+      --border-gold: rgba(212, 163, 89, 0.35);
       
-      --text-hero: #fafafa;
-      --text-primary: #ededed;
-      --text-secondary: #9999a1;
-      --text-muted: #666672;
+      --text-main: #f4f4f6;
+      --text-secondary: #9ea0a8;
+      --text-muted: #676974;
       
       --emerald: #10b981;
-      --emerald-glow: rgba(16, 185, 129, 0.18);
+      --emerald-glow: rgba(16, 185, 129, 0.16);
       --crimson: #f43f5e;
-      --crimson-glow: rgba(244, 63, 94, 0.18);
+      --crimson-glow: rgba(244, 63, 94, 0.16);
       --cyan: #06b6d4;
       
-      --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
-      --ease-haptic: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-fluid: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     * {
@@ -53,75 +50,71 @@
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background-color: var(--canvas);
       background-image: 
-        radial-gradient(ellipse 80% 40% at 50% -15%, rgba(212, 163, 89, 0.08), transparent 70%),
-        radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.02), transparent 50%),
-        radial-gradient(circle at 0% 100%, rgba(6, 182, 212, 0.02), transparent 50%);
+        radial-gradient(ellipse 75% 35% at 50% -10%, rgba(212, 163, 89, 0.07), transparent 70%),
+        radial-gradient(ellipse 50% 30% at 100% 100%, rgba(16, 185, 129, 0.02), transparent 50%);
       background-attachment: fixed;
-      color: var(--text-primary);
+      color: var(--text-main);
       line-height: 1.5;
-      padding: 24px;
+      padding: 24px 20px 48px;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
     }
 
     .container {
-      max-width: 1480px;
+      max-width: 1380px;
       margin: 0 auto;
     }
 
-    /* Noise Texture Overlay */
+    /* Subtle Film Noise */
     .bg-noise {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      inset: 0;
       pointer-events: none;
-      opacity: 0.025;
+      opacity: 0.02;
       z-index: 999;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
     }
 
-    /* Top Floating Island Header */
+    /* Floating Island Header */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 24px;
-      margin-bottom: 28px;
-      background: rgba(16, 16, 20, 0.75);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      padding: 10px 20px;
+      margin-bottom: 24px;
+      background: rgba(17, 17, 22, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--border-hairline);
       border-radius: 9999px;
-      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.06);
       flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .brand-meta {
-      display: flex;
-      align-items: center;
       gap: 14px;
     }
 
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
     .brand-sigil {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       border-radius: 9px;
-      background: linear-gradient(145deg, rgba(212, 163, 89, 0.2) 0%, rgba(212, 163, 89, 0.03) 100%);
+      background: linear-gradient(135deg, rgba(212, 163, 89, 0.18) 0%, rgba(212, 163, 89, 0.02) 100%);
       border: 1px solid var(--border-gold);
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--gold-400);
-      box-shadow: 0 0 20px var(--gold-glow);
+      box-shadow: 0 0 16px var(--gold-glow);
     }
 
     .brand-title {
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 700;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: #fff;
       display: flex;
@@ -138,151 +131,283 @@
       letter-spacing: normal;
     }
 
-    .brand-sub {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-family: 'JetBrains Mono', monospace;
-      letter-spacing: 0.02em;
+    /* Top-Level Mode Navigation */
+    .nav-modes {
+      display: flex;
+      background: rgba(10, 10, 13, 0.7);
+      padding: 3px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-hairline);
+      gap: 2px;
     }
 
-    .header-pills {
+    .mode-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      padding: 5px 14px;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-size: 11.5px;
+      font-weight: 600;
+      transition: all 0.2s var(--ease-fluid);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mode-btn.active {
+      color: #fff;
+      background: var(--surface-elevated);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .mode-btn:hover:not(.active) {
+      color: #fff;
+    }
+
+    .header-aside {
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .system-status-pill {
+    .system-badge {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      background: var(--card-core);
-      padding: 5px 14px;
+      gap: 7px;
+      background: var(--card-bg);
+      padding: 4px 12px;
       border-radius: 9999px;
       border: 1px solid var(--border-hairline);
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 600;
       color: var(--text-secondary);
       font-family: 'JetBrains Mono', monospace;
     }
 
-    .status-orb {
+    .pulse-orb {
       position: relative;
       display: flex;
-      width: 7px;
-      height: 7px;
+      width: 6px;
+      height: 6px;
     }
 
-    .status-orb .dot {
+    .pulse-orb .dot {
       position: absolute;
       inset: 0;
       border-radius: 50%;
       background-color: var(--emerald);
     }
 
-    .status-orb .glow {
+    .pulse-orb .ring {
       position: absolute;
       inset: -3px;
       border-radius: 50%;
       background-color: var(--emerald);
       opacity: 0.5;
-      animation: orbPulse 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+      animation: orbRing 2s cubic-bezier(0, 0, 0.2, 1) infinite;
     }
 
-    @keyframes orbPulse {
+    @keyframes orbRing {
       75%, 100% {
         transform: scale(2.4);
         opacity: 0;
       }
     }
 
-    .status-orb.offline .dot { background-color: var(--crimson); }
-    .status-orb.offline .glow { display: none; }
+    .pulse-orb.offline .dot { background-color: var(--crimson); }
+    .pulse-orb.offline .ring { display: none; }
 
-    .btn-github-pill {
+    .btn-gh-link {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: var(--card-core);
+      background: var(--card-bg);
       border: 1px solid var(--border-hairline);
       color: var(--text-secondary);
-      padding: 5px 13px;
+      padding: 4px 12px;
       border-radius: 9999px;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 600;
       text-decoration: none;
-      transition: all 0.2s var(--ease-editorial);
+      transition: all 0.2s;
     }
 
-    .btn-github-pill:hover {
+    .btn-gh-link:hover {
       color: #fff;
-      border-color: rgba(255, 255, 255, 0.22);
+      border-color: rgba(255, 255, 255, 0.2);
       background: var(--surface-elevated);
-      transform: translateY(-1px);
     }
 
-    /* Doppelrand Chassis Enclosure */
-    .chassis {
-      background: var(--chassis);
-      border: 1px solid var(--border-hairline);
-      border-radius: 24px;
-      padding: 6px;
-      box-shadow: 0 24px 60px -15px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-      margin-bottom: 24px;
-      transition: border-color 0.3s var(--ease-editorial);
+    /* Streamlined Archival Scenario Track (Minimalist Horizontal Bar) */
+    .scenario-track-wrapper {
+      margin-bottom: 22px;
     }
 
-    .chassis:hover {
-      border-color: rgba(255, 255, 255, 0.12);
-    }
-
-    .chassis-inner {
-      background: var(--card-core);
-      border: 1px solid var(--border-subtle);
-      border-radius: calc(24px - 6px);
-      padding: 28px 30px;
-    }
-
-    /* SECTION 1: Master Diagnostic Intelligence Showcase */
-    .hero-diagnostic-grid {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 32px;
+    .scenario-track-header {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
+      margin-bottom: 8px;
+      padding: 0 4px;
+    }
+
+    .scenario-track-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .scenario-track-current-desc {
+      font-size: 11px;
+      color: var(--gold-400);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .scenario-strip {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
     }
 
     @media (max-width: 900px) {
-      .hero-diagnostic-grid {
-        grid-template-columns: 1fr;
+      .scenario-strip {
+        grid-template-columns: repeat(3, 1fr);
       }
     }
 
-    /* Bespoke Horological Vitality Dial */
-    .chronograph-dial {
+    @media (max-width: 550px) {
+      .scenario-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .scenario-pill {
+      background: rgba(17, 17, 22, 0.6);
+      border: 1px solid var(--border-hairline);
+      border-radius: 10px;
+      padding: 10px 12px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s var(--ease-fluid);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .scenario-pill:hover {
+      background: var(--surface-elevated);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .scenario-pill.active {
+      background: linear-gradient(180deg, rgba(212, 163, 89, 0.1) 0%, rgba(17, 17, 22, 0.8) 100%);
+      border-color: var(--gold-500);
+      box-shadow: 0 0 16px rgba(212, 163, 89, 0.1), inset 0 1px 0 rgba(212, 163, 89, 0.25);
+    }
+
+    .scenario-pill-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .scenario-pill-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .scenario-pill-tag {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .scenario-pill.active .scenario-pill-tag {
+      color: var(--gold-400);
+    }
+
+    .scenario-pill-sub {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Universal Card Chassis */
+    .chassis-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border-hairline);
+      border-radius: 18px;
+      padding: 24px 28px;
+      box-shadow: 0 20px 48px -15px rgba(0, 0, 0, 0.7);
+      margin-bottom: 22px;
+    }
+
+    /* VIEW 1: Overview & Telemetry Mode */
+    .overview-hero-grid {
+      display: grid;
+      grid-template-columns: 200px 1fr 280px;
+      gap: 28px;
+      align-items: center;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 22px;
+    }
+
+    @media (max-width: 1000px) {
+      .overview-hero-grid {
+        grid-template-columns: 180px 1fr;
+      }
+      .overview-hero-grid > .drivers-column {
+        grid-column: span 2;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .overview-hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .overview-hero-grid > .drivers-column {
+        grid-column: span 1;
+      }
+    }
+
+    /* Swiss Horological Vitality Dial */
+    .dial-unit {
       position: relative;
-      width: 220px;
-      height: 220px;
+      width: 170px;
+      height: 170px;
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .dial-svg {
+    .dial-vector {
       transform: rotate(-90deg);
       width: 100%;
       height: 100%;
     }
 
-    .dial-track {
+    .dial-track-circle {
       fill: none;
       stroke: rgba(255, 255, 255, 0.05);
       stroke-width: 8;
     }
 
-    .dial-ticks {
+    .dial-ticks-circle {
       fill: none;
-      stroke: rgba(255, 255, 255, 0.12);
+      stroke: rgba(255, 255, 255, 0.1);
       stroke-width: 1.5;
       stroke-dasharray: 2 10.5;
     }
@@ -291,24 +416,23 @@
       fill: none;
       stroke-width: 8;
       stroke-linecap: round;
-      stroke-dasharray: 565; /* 2 * PI * 90 */
-      stroke-dashoffset: 565;
-      transition: stroke-dashoffset 0.9s var(--ease-editorial), stroke 0.4s ease;
-      filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.45));
+      stroke-dasharray: 452; /* 2 * PI * 72 */
+      stroke-dashoffset: 452;
+      transition: stroke-dashoffset 0.85s var(--ease-fluid), stroke 0.35s ease;
+      filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.4));
     }
 
-    .dial-center-content {
+    .dial-readout {
       position: absolute;
       inset: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      text-align: center;
     }
 
-    .dial-score {
-      font-size: 46px;
+    .dial-number {
+      font-size: 38px;
       font-weight: 700;
       letter-spacing: -0.04em;
       color: #fff;
@@ -316,40 +440,32 @@
       line-height: 1;
     }
 
-    .dial-sub {
-      font-size: 9.5px;
+    .dial-caption {
+      font-size: 9px;
       text-transform: uppercase;
       font-weight: 700;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.16em;
       color: var(--text-muted);
-      margin-top: 6px;
+      margin-top: 5px;
       font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Right Side Diagnostic Insight Statement & Drivers */
-    .diagnostic-narrative {
+    /* Center Narrative Column */
+    .narrative-column {
       display: flex;
       flex-direction: column;
-      gap: 16px;
-    }
-
-    .narrative-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
     }
 
     .narrative-headline {
       font-family: 'Instrument Serif', Georgia, serif;
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 400;
-      letter-spacing: -0.01em;
       color: #fff;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .narrative-headline em {
@@ -357,32 +473,29 @@
       color: var(--gold-400);
     }
 
-    .badge-tier-luxury {
+    .tier-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 4px 12px;
+      padding: 3px 9px;
       border-radius: 9999px;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       background: rgba(212, 163, 89, 0.08);
       border: 1px solid var(--border-gold);
       color: var(--gold-300);
       font-family: 'JetBrains Mono', monospace;
-      letter-spacing: 0.04em;
     }
 
-    /* Clinical Advisory Card */
-    .advisory-box {
-      background: linear-gradient(180deg, rgba(20, 20, 26, 0.8) 0%, rgba(16, 16, 21, 0.8) 100%);
+    .advisory-card-clean {
+      background: rgba(14, 14, 18, 0.6);
       border: 1px solid var(--border-hairline);
-      border-radius: 14px;
-      padding: 16px 20px;
+      border-radius: 12px;
+      padding: 14px 16px;
       position: relative;
       overflow: hidden;
     }
 
-    .advisory-box::before {
+    .advisory-card-clean::before {
       content: '';
       position: absolute;
       left: 0;
@@ -392,47 +505,46 @@
       background: var(--gold-500);
     }
 
-    .advisory-box.danger-mode {
-      background: linear-gradient(180deg, rgba(35, 16, 22, 0.5) 0%, rgba(20, 16, 21, 0.8) 100%);
+    .advisory-card-clean.alert-danger {
+      background: rgba(35, 16, 22, 0.4);
       border-color: rgba(244, 63, 94, 0.3);
     }
 
-    .advisory-box.danger-mode::before {
+    .advisory-card-clean.alert-danger::before {
       background: var(--crimson);
     }
 
-    .advisory-meta-row {
+    .advisory-meta {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 6px;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px;
     }
 
-    .advisory-eyebrow {
-      font-size: 10px;
+    .advisory-title {
+      font-size: 9.5px;
       font-weight: 700;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--gold-400);
       font-family: 'JetBrains Mono', monospace;
     }
 
-    .danger-mode .advisory-eyebrow {
+    .alert-danger .advisory-title {
       color: #fda4af;
     }
 
-    .badge-stress-capsule {
+    .stress-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 3px 10px;
+      padding: 2px 8px;
       border-radius: 9999px;
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 700;
       font-family: 'JetBrains Mono', monospace;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
     }
 
@@ -455,66 +567,22 @@
     }
 
     .advisory-text {
-      font-size: 13.5px;
-      color: var(--text-primary);
+      font-size: 13px;
+      color: var(--text-main);
       font-weight: 400;
       line-height: 1.45;
     }
 
-    /* Etched Telemetry Driver Ribbon (5 Pillars) */
-    .drivers-ribbon {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      background: rgba(14, 14, 18, 0.6);
-      border: 1px solid var(--border-hairline);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    @media (max-width: 768px) {
-      .drivers-ribbon {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    .driver-ribbon-item {
-      padding: 12px 14px;
-      border-right: 1px solid var(--border-hairline);
-      text-align: center;
-    }
-
-    .driver-ribbon-item:last-child {
-      border-right: none;
-    }
-
-    .driver-ribbon-label {
-      font-size: 9px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .driver-ribbon-val {
-      font-size: 15px;
-      font-weight: 700;
-      color: #fff;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* Anomaly Bar */
-    .anomaly-strip {
+    .anomaly-row {
       display: flex;
       align-items: center;
-      gap: 12px;
-      font-size: 11px;
+      gap: 10px;
+      font-size: 10.5px;
       color: var(--text-muted);
       font-family: 'JetBrains Mono', monospace;
     }
 
-    .anomaly-track {
+    .anomaly-bar-track {
       flex: 1;
       height: 4px;
       border-radius: 9999px;
@@ -522,29 +590,58 @@
       overflow: hidden;
     }
 
-    .anomaly-fill {
+    .anomaly-bar-fill {
       height: 100%;
       border-radius: 9999px;
       background: linear-gradient(90deg, #10b981, #d4a359);
-      transition: width 0.8s var(--ease-editorial);
+      transition: width 0.7s var(--ease-fluid);
     }
 
-    /* SECTION 2: Cinematic 48h Telemetry Canvas */
-    .chart-box-outer {
-      margin-top: 10px;
+    /* Right Drivers Column */
+    .drivers-column {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
-    .chart-controls {
+    .driver-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: rgba(14, 14, 18, 0.5);
+      border: 1px solid var(--border-hairline);
+      border-radius: 8px;
+    }
+
+    .driver-line-name {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .driver-line-val {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* 48-Hour Telemetry Dynamics Chart */
+    .chart-section-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 12px;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
     }
 
-    .chart-section-title {
-      font-size: 11px;
+    .chart-heading {
+      font-size: 10.5px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.12em;
@@ -552,20 +649,20 @@
       font-family: 'JetBrains Mono', monospace;
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 6px;
     }
 
-    .stream-pills {
+    .chart-stream-toggles {
       display: flex;
       gap: 6px;
     }
 
-    .stream-pill-btn {
+    .chip-btn {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--border-hairline);
       color: var(--text-muted);
-      font-size: 10.5px;
-      padding: 4px 10px;
+      font-size: 10px;
+      padding: 3px 9px;
       border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
@@ -573,135 +670,131 @@
       transition: all 0.15s;
     }
 
-    .stream-pill-btn.active {
+    .chip-btn.active {
       background: rgba(212, 163, 89, 0.12);
       border-color: var(--border-gold);
       color: var(--gold-300);
     }
 
-    .canvas-container {
+    .chart-canvas-area {
       position: relative;
-      height: 240px;
+      height: 250px;
       width: 100%;
     }
 
-    /* SECTION 3: Workbench Split Grid (Archival Presets & Telemetry Matrix) */
-    .workbench-split {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
-      gap: 24px;
-      align-items: start;
-    }
-
-    @media (max-width: 1080px) {
-      .workbench-split {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Presets Bento */
-    .presets-subgrid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    @media (max-width: 600px) {
-      .presets-subgrid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .preset-card-luxury {
-      background: rgba(20, 20, 26, 0.6);
-      border: 1px solid var(--border-hairline);
-      border-radius: 12px;
-      padding: 13px 15px;
-      text-align: left;
-      cursor: pointer;
-      transition: all 0.22s var(--ease-editorial);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 8px;
-      min-height: 94px;
-      position: relative;
-    }
-
-    .preset-card-luxury:hover {
-      background: var(--surface-elevated);
-      border-color: rgba(255, 255, 255, 0.18);
-      transform: translateY(-1px);
-    }
-
-    .preset-card-luxury.active {
-      background: linear-gradient(180deg, rgba(212, 163, 89, 0.1) 0%, rgba(20, 20, 26, 0.8) 100%);
-      border-color: var(--gold-500);
-      box-shadow: 0 0 20px rgba(212, 163, 89, 0.12), inset 0 1px 0 rgba(212, 163, 89, 0.3);
-    }
-
-    .preset-header {
+    /* Action Trigger Strip */
+    .overview-action-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 6px;
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-subtle);
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
-    .preset-name {
+    .overview-action-aside {
       display: flex;
       align-items: center;
-      gap: 7px;
-      font-size: 13px;
+      gap: 12px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .link-matrix-jump {
+      color: var(--gold-400);
+      text-decoration: none;
       font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.15s;
+    }
+
+    .link-matrix-jump:hover {
       color: #fff;
     }
 
-    .preset-sigil {
-      color: var(--text-muted);
-      transition: color 0.2s;
-    }
-
-    .preset-card-luxury.active .preset-sigil {
-      color: var(--gold-400);
-    }
-
-    .preset-code {
-      font-size: 9.5px;
+    /* Primary CTA Execution Button */
+    .btn-action-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px 8px 22px;
+      border-radius: 9999px;
+      background: linear-gradient(180deg, #f7dfaf 0%, #d4a359 100%);
+      color: #09090c;
+      font-size: 12.5px;
       font-weight: 700;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 4px 18px rgba(212, 163, 89, 0.35);
+      transition: all 0.2s var(--ease-fluid);
+      user-select: none;
+    }
+
+    .btn-action-primary:hover {
+      background: linear-gradient(180deg, #fff2d1 0%, #e5b869 100%);
+      box-shadow: 0 6px 24px rgba(212, 163, 89, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-action-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-action-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-action-sigil {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(9, 9, 12, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.25s var(--ease-spring);
+    }
+
+    .btn-action-primary:hover .btn-action-sigil {
+      transform: scale(1.1) rotate(6deg);
+    }
+
+    kbd.hotkey-tag {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       padding: 2px 6px;
       border-radius: 4px;
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text-muted);
       font-family: 'JetBrains Mono', monospace;
-      letter-spacing: 0.04em;
+      font-size: 10px;
+      color: var(--text-muted);
     }
 
-    .preset-card-luxury.active .preset-code {
-      background: rgba(212, 163, 89, 0.2);
-      color: var(--gold-300);
+    /* VIEW 2: Data Matrix View */
+    .matrix-view-container {
+      display: none;
     }
 
-    .preset-summary {
-      font-size: 11px;
-      color: var(--text-secondary);
-      line-height: 1.35;
-    }
-
-    /* Configuration strip */
-    .config-pair {
+    .matrix-config-bar {
       display: flex;
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: 14px;
+      margin-bottom: 18px;
       flex-wrap: wrap;
     }
 
-    .config-field {
+    .matrix-field-group {
       flex: 1;
-      min-width: 140px;
+      min-width: 150px;
     }
 
-    .config-field label {
+    .matrix-field-group label {
       display: block;
       font-size: 9.5px;
       font-weight: 700;
@@ -712,73 +805,39 @@
       font-family: 'JetBrains Mono', monospace;
     }
 
-    .config-field input, .raw-json-textarea {
+    .field-input {
       width: 100%;
       background: var(--input-bg);
       border: 1px solid var(--border-hairline);
-      border-radius: 9px;
-      color: var(--text-primary);
+      border-radius: 8px;
+      color: var(--text-main);
       padding: 8px 12px;
       font-size: 12px;
       font-family: 'JetBrains Mono', monospace;
-      transition: all 0.18s var(--ease-editorial);
+      transition: border-color 0.15s;
     }
 
-    .config-field input:focus, .raw-json-textarea:focus {
+    .field-input:focus {
       outline: none;
       border-color: var(--border-gold);
-      box-shadow: 0 0 0 1px var(--border-gold);
-      background: #111116;
+      background: #101015;
     }
 
-    /* Matrix Controls & Table */
-    .table-toolbar {
+    .matrix-toolbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--border-hairline);
-      margin-bottom: 14px;
-      padding-bottom: 10px;
+      margin-bottom: 12px;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
     }
 
-    .tab-pills-luxury {
-      display: flex;
-      background: var(--card-core);
-      padding: 3px;
-      border-radius: 9px;
-      border: 1px solid var(--border-hairline);
-      gap: 2px;
-    }
-
-    .tab-btn-luxury {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      padding: 5px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 11.5px;
-      font-weight: 600;
-      transition: all 0.18s;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .tab-btn-luxury.active {
-      color: #fff;
-      background: var(--surface-elevated);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-    }
-
-    .tool-chip {
+    .tool-btn {
       background: rgba(255, 255, 255, 0.03);
       color: var(--text-secondary);
       border: 1px solid var(--border-hairline);
       font-size: 11px;
-      padding: 4px 10px;
+      padding: 5px 11px;
       border-radius: 6px;
       font-weight: 600;
       cursor: pointer;
@@ -788,20 +847,19 @@
       transition: all 0.15s;
     }
 
-    .tool-chip:hover {
+    .tool-btn:hover {
       background: var(--surface-elevated);
       color: #fff;
       border-color: rgba(255, 255, 255, 0.2);
     }
 
-    .scroll-table-wrapper {
-      max-height: 290px;
+    .table-scroll-chamber {
+      max-height: 380px;
       overflow-y: auto;
       overflow-x: auto;
       border: 1px solid var(--border-hairline);
       border-radius: 10px;
-      margin-bottom: 16px;
-      background: var(--card-core);
+      background: var(--canvas);
       -webkit-overflow-scrolling: touch;
     }
 
@@ -821,7 +879,7 @@
       text-transform: uppercase;
       font-size: 9px;
       letter-spacing: 0.1em;
-      padding: 8px 10px;
+      padding: 8px 12px;
       text-align: left;
       border-bottom: 1px solid var(--border-hairline);
       z-index: 2;
@@ -829,7 +887,7 @@
     }
 
     table.matrix-table td {
-      padding: 4px 6px;
+      padding: 4px 8px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.025);
       white-space: nowrap;
     }
@@ -839,18 +897,18 @@
     }
 
     table.matrix-table td input {
-      padding: 4px 6px;
-      font-size: 11px;
+      padding: 4px 8px;
+      font-size: 11.5px;
       border-radius: 5px;
       background: transparent;
       border: 1px solid transparent;
-      color: var(--text-primary);
+      color: var(--text-main);
       font-family: 'JetBrains Mono', monospace;
       transition: border-color 0.15s;
     }
 
     table.matrix-table td input:hover {
-      border-color: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.1);
       background: var(--input-bg);
     }
 
@@ -860,150 +918,43 @@
       background: #101015;
     }
 
-    .btn-del-mini {
+    .btn-row-remove {
       background: transparent;
       border: none;
       color: var(--crimson);
       cursor: pointer;
-      padding: 3px 5px;
+      padding: 3px 6px;
       border-radius: 4px;
       font-size: 12px;
       opacity: 0.45;
       transition: all 0.15s;
     }
 
-    .btn-del-mini:hover {
+    .btn-row-remove:hover {
       opacity: 1;
       background: rgba(244, 63, 94, 0.15);
     }
 
-    /* Primary Action Trigger */
-    .workbench-actions-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
+    /* VIEW 3: Raw JSON View */
+    .json-view-container {
+      display: none;
     }
 
-    .btn-satin-gold {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 10px 8px 22px;
-      border-radius: 9999px;
-      background: linear-gradient(180deg, #f7dfaf 0%, #d4a359 100%);
-      color: #0b0b0e;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      cursor: pointer;
-      border: none;
-      box-shadow: 0 4px 20px rgba(212, 163, 89, 0.35);
-      transition: all 0.2s var(--ease-editorial);
-      user-select: none;
-    }
-
-    .btn-satin-gold:hover {
-      background: linear-gradient(180deg, #fff2d1 0%, #e5b869 100%);
-      box-shadow: 0 6px 28px rgba(212, 163, 89, 0.5);
-      transform: translateY(-1px);
-    }
-
-    .btn-satin-gold:active {
-      transform: scale(0.98);
-    }
-
-    .btn-satin-gold:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .btn-sigil-island {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: rgba(11, 11, 14, 0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.25s var(--ease-haptic);
-    }
-
-    .btn-satin-gold:hover .btn-sigil-island {
-      transform: scale(1.1) rotate(6deg);
-    }
-
-    kbd.hotkey-badge {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      color: var(--text-muted);
-    }
-
-    /* Drawer for Raw JSON */
-    details.code-drawer {
-      background: var(--card-core);
+    .raw-json-box {
+      width: 100%;
+      background: var(--input-bg);
       border: 1px solid var(--border-hairline);
       border-radius: 10px;
-      padding: 10px 14px;
-      margin-top: 14px;
-    }
-
-    details.code-drawer summary {
-      cursor: pointer;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-muted);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      user-select: none;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    details.code-drawer summary:hover {
-      color: #fff;
-    }
-
-    .code-mirror-box {
-      position: relative;
-      margin-top: 8px;
-    }
-
-    pre.code-terminal {
-      background: #0a0a0d;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
-      padding: 10px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      overflow-x: auto;
       color: #67e8f9;
-      max-height: 200px;
+      padding: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.5;
     }
 
-    .btn-copy-terminal {
-      position: absolute;
-      top: 6px;
-      right: 6px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: #fff;
-      padding: 3px 8px;
-      border-radius: 4px;
-      font-size: 10px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.15s;
-    }
-
-    .btn-copy-terminal:hover {
-      background: rgba(255, 255, 255, 0.18);
+    .raw-json-box:focus {
+      outline: none;
+      border-color: var(--border-gold);
     }
 
     /* Floating Toast Notification */
@@ -1011,7 +962,7 @@
       position: fixed;
       bottom: 24px;
       right: 24px;
-      background: #15151a;
+      background: #15151b;
       border: 1px solid var(--border-gold);
       color: #fff;
       padding: 9px 16px;
@@ -1021,7 +972,7 @@
       box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
       transform: translateY(80px);
       opacity: 0;
-      transition: all 0.25s var(--ease-editorial);
+      transition: all 0.25s var(--ease-fluid);
       z-index: 1000;
       pointer-events: none;
       display: flex;
@@ -1037,9 +988,9 @@
     .spinner-disc {
       width: 13px;
       height: 13px;
-      border: 2px solid rgba(11, 11, 14, 0.25);
+      border: 2px solid rgba(9, 9, 12, 0.25);
       border-radius: 50%;
-      border-top-color: #0b0b0e;
+      border-top-color: #09090c;
       animation: spinDisc 0.7s linear infinite;
     }
 
@@ -1053,335 +1004,332 @@
   <div class="container">
     <!-- Top Floating Header -->
     <header>
-      <div class="brand-meta">
+      <div class="brand-group">
         <div class="brand-sigil">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/>
             <path d="M12 22V12"/>
             <path d="M22 8.5L12 12 2 8.5"/>
             <path d="M2 15.5L12 12 22 15.5"/>
           </svg>
         </div>
-        <div>
-          <div class="brand-title">
-            HoneyChain ML Diagnostic Studio
-            <span class="editorial-tag">Precision Engine</span>
-          </div>
-          <div class="brand-sub">Tier T48 Full-Window Model • Continuous Apiary Vitality</div>
+        <div class="brand-title">
+          HoneyChain ML Diagnostic Studio
+          <span class="editorial-tag">Console</span>
         </div>
       </div>
 
-      <div class="header-pills">
-        <div class="system-status-pill">
-          <div id="statusDot" class="status-orb">
-            <span class="glow"></span>
+      <!-- Segmented Mode Tabs -->
+      <nav class="nav-modes">
+        <button id="modeOverviewBtn" class="mode-btn active" onclick="switchViewMode('overview')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          Diagnostics & Chart
+        </button>
+        <button id="modeMatrixBtn" class="mode-btn" onclick="switchViewMode('matrix')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+          Data Matrix (49h)
+        </button>
+        <button id="modeJsonBtn" class="mode-btn" onclick="switchViewMode('json')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Raw JSON
+        </button>
+      </nav>
+
+      <div class="header-aside">
+        <div class="system-badge">
+          <div id="statusDot" class="pulse-orb">
+            <span class="ring"></span>
             <span class="dot"></span>
           </div>
-          <span id="statusText">Connecting Engine...</span>
+          <span id="statusText">Engine Active</span>
         </div>
-        <a href="https://github.com/Honey-Chain/HoneyChain_ML" target="_blank" rel="noopener" class="btn-github-pill">
-          <svg width="13" height="13" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-          <span>HoneyChain_ML</span>
+        <a href="https://github.com/Honey-Chain/HoneyChain_ML" target="_blank" rel="noopener" class="btn-gh-link">
+          <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          <span>GitHub</span>
         </a>
       </div>
     </header>
 
-    <!-- SECTION 1: Command Center Chassis (Vitality Dial + Clinical Narrative) -->
-    <div class="chassis">
-      <div class="chassis-inner">
-        <div class="hero-diagnostic-grid">
-          <!-- Swiss Chronograph Dial -->
-          <div class="chronograph-dial">
-            <svg class="dial-svg" viewBox="0 0 220 220">
-              <circle class="dial-track" cx="110" cy="110" r="90"></circle>
-              <circle class="dial-ticks" cx="110" cy="110" r="76"></circle>
-              <circle id="gaugeProgress" class="dial-progress-arc" cx="110" cy="110" r="90" stroke="var(--emerald)"></circle>
-            </svg>
-            <div class="dial-center-content">
-              <span id="metricHealthScore" class="dial-score">85.0</span>
-              <span class="dial-sub">Vitality Index</span>
-            </div>
+    <!-- Sleek Scenario Track (Single Row Minimalist Selector) -->
+    <div class="scenario-track-wrapper">
+      <div class="scenario-track-header">
+        <span class="scenario-track-label">48-Hour Field Archival Scenario</span>
+        <span class="scenario-track-current-desc" id="scenarioCurrentDesc">Dual circadian equilibrium (+0.7kg normal forage)</span>
+      </div>
+      <div class="scenario-strip">
+        <button class="scenario-pill active" data-scenario="healthy" onclick="loadScenario('healthy')">
+          <div class="scenario-pill-top">
+            <span class="scenario-pill-name">Equilibrium</span>
+            <span class="scenario-pill-tag">BAL</span>
           </div>
+          <span class="scenario-pill-sub">Circadian stability</span>
+        </button>
 
-          <!-- Narrative Diagnostic Block -->
-          <div class="diagnostic-narrative">
-            <div class="narrative-header">
-              <div class="narrative-headline">
-                Colony Health <em>Evaluation</em>
-              </div>
-              <div style="display: flex; gap: 8px; align-items: center;">
-                <span id="inferenceTierBadge" class="badge-tier-luxury">Tier: T48 (48h Window)</span>
-                <span id="metricStressRisk" class="badge-stress-capsule stress-LOW">LOW STRESS</span>
-              </div>
-            </div>
-
-            <!-- Clinical Advisory Box -->
-            <div id="recBanner" class="advisory-box">
-              <div class="advisory-meta-row">
-                <span class="advisory-eyebrow">Diagnostic Synthesis</span>
-                <span id="metricStressProb" style="font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: var(--text-muted);">Stress Prob: 0.0%</span>
-              </div>
-              <div id="recText" class="advisory-text">Colony in circadian equilibrium. Temperature regulation and foraging flow operate within physiological baselines.</div>
-            </div>
-
-            <!-- 5 Telemetry Drivers Ribbon -->
-            <div class="drivers-ribbon">
-              <div class="driver-ribbon-item">
-                <div class="driver-ribbon-label">Activity Dev</div>
-                <div id="drvActivity" class="driver-ribbon-val">-0.42</div>
-              </div>
-              <div class="driver-ribbon-item">
-                <div class="driver-ribbon-label">Thermal Drift</div>
-                <div id="drvTemp" class="driver-ribbon-val">+0.15°C</div>
-              </div>
-              <div class="driver-ribbon-item">
-                <div class="driver-ribbon-label">48h Weight Delta</div>
-                <div id="drvTrend" class="driver-ribbon-val">+0.72kg</div>
-              </div>
-              <div class="driver-ribbon-item">
-                <div class="driver-ribbon-label">Acute Drop</div>
-                <div id="drvDrop" class="driver-ribbon-val">0.00kg</div>
-              </div>
-              <div class="driver-ribbon-item">
-                <div class="driver-ribbon-label">Net Flight</div>
-                <div id="drvFlow" class="driver-ribbon-val">+50/m</div>
-              </div>
-            </div>
-
-            <!-- Anomaly Line -->
-            <div class="anomaly-strip">
-              <span>Baseline Anomaly Deviation:</span>
-              <div class="anomaly-track">
-                <div id="abnormalityBar" class="anomaly-fill" style="width: 30.1%;"></div>
-              </div>
-              <span id="metricAbnormalityLabel" style="color: #fff; font-weight: 700;">30.1%</span>
-            </div>
+        <button class="scenario-pill" data-scenario="swarm" onclick="loadScenario('swarm')">
+          <div class="scenario-pill-top">
+            <span class="scenario-pill-name">Swarm Event</span>
+            <span class="scenario-pill-tag">SWM</span>
           </div>
-        </div>
+          <span class="scenario-pill-sub">-2.4kg drop at 26h</span>
+        </button>
 
-        <!-- Integrated 48h Telemetry Canvas -->
-        <div class="chart-box-outer">
-          <div class="chart-controls">
-            <span class="chart-section-title">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-              48-Hour Multi-Stream Dynamics
-            </span>
-            <div class="stream-pills">
-              <button class="stream-pill-btn active" id="chipWeight" onclick="toggleStream(0, this)">Weight (kg)</button>
-              <button class="stream-pill-btn active" id="chipTemp" onclick="toggleStream(1, this)">Temp (°C)</button>
-              <button class="stream-pill-btn active" id="chipFlow" onclick="toggleStream(2, this)">Net Flight</button>
-            </div>
+        <button class="scenario-pill" data-scenario="starvation" onclick="loadScenario('starvation')">
+          <div class="scenario-pill-top">
+            <span class="scenario-pill-name">Depletion</span>
+            <span class="scenario-pill-tag">DEP</span>
           </div>
-          <div class="canvas-container">
-            <canvas id="telemetryChart"></canvas>
-          </div>
-        </div>
+          <span class="scenario-pill-sub">Store starvation</span>
+        </button>
 
-        <!-- Detection Scope Micro Tags -->
-        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px;" id="scopeTags">
-          <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-muted); background: rgba(255,255,255,0.03); padding: 3px 8px; border-radius: 5px; border: 1px solid var(--border-hairline);">colony activity anomaly</span>
-          <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-muted); background: rgba(255,255,255,0.03); padding: 3px 8px; border-radius: 5px; border: 1px solid var(--border-hairline);">fast weight drop (robbing / swarm)</span>
-          <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-muted); background: rgba(255,255,255,0.03); padding: 3px 8px; border-radius: 5px; border: 1px solid var(--border-hairline);">sustained weight decline (starvation)</span>
-        </div>
+        <button class="scenario-pill" data-scenario="robbing" onclick="loadScenario('robbing')">
+          <div class="scenario-pill-top">
+            <span class="scenario-pill-name">Robbing</span>
+            <span class="scenario-pill-tag">ROB</span>
+          </div>
+          <span class="scenario-pill-sub">Raiding frenzy</span>
+        </button>
+
+        <button class="scenario-pill" data-scenario="nectar_surge" onclick="loadScenario('nectar_surge')">
+          <div class="scenario-pill-top">
+            <span class="scenario-pill-name">Honey Flow</span>
+            <span class="scenario-pill-tag">SUR</span>
+          </div>
+          <span class="scenario-pill-sub">+1.9kg bloom surge</span>
+        </button>
+
+        <button class="scenario-pill" data-scenario="real_wurzburg" onclick="loadScenario('real_wurzburg')">
+          <div class="scenario-pill-top">
+            <span class="scenario-pill-name">Würzburg IoT</span>
+            <span class="scenario-pill-tag">IOT</span>
+          </div>
+          <span class="scenario-pill-sub">Authentic sensor data</span>
+        </button>
       </div>
     </div>
 
-    <!-- SECTION 2: Workbench Split Chassis (Archival Presets & Telemetry Matrix) -->
-    <div class="chassis">
-      <div class="chassis-inner">
-        <div class="workbench-split">
-          <!-- Left: Curated 48h Telemetry Archival Presets -->
-          <div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-              <span style="font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">
-                Curated Telemetry Archives
-              </span>
-              <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--gold-400);">48-Hour Full Windows</span>
-            </div>
-
-            <div class="presets-subgrid">
-              <button class="preset-card-luxury active" data-scenario="healthy" onclick="loadScenario('healthy')">
-                <div class="preset-header">
-                  <div class="preset-name">
-                    <span class="preset-sigil">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                    </span>
-                    <span>Equilibrium</span>
-                  </div>
-                  <span class="preset-code">BAL • 48H</span>
-                </div>
-                <span class="preset-summary">Dual circadian solar cycle with steady nectar store gain (+0.7kg).</span>
-              </button>
-
-              <button class="preset-card-luxury" data-scenario="swarm" onclick="loadScenario('swarm')">
-                <div class="preset-header">
-                  <div class="preset-name">
-                    <span class="preset-sigil">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14m-7-7l7 7 7-7"/></svg>
-                    </span>
-                    <span>Swarm Event</span>
-                  </div>
-                  <span class="preset-code">SWM • 48H</span>
-                </div>
-                <span class="preset-summary">Mid-window swarm departure at hour 26 (-2.4kg drop & -320 bee loss).</span>
-              </button>
-
-              <button class="preset-card-luxury" data-scenario="starvation" onclick="loadScenario('starvation')">
-                <div class="preset-header">
-                  <div class="preset-name">
-                    <span class="preset-sigil">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M19 17l-6-6-4 4-4-5"/></svg>
-                    </span>
-                    <span>Depletion</span>
-                  </div>
-                  <span class="preset-code">DEP • 48H</span>
-                </div>
-                <span class="preset-summary">Continuous multi-day starvation decline (-3.6kg) without foraging.</span>
-              </button>
-
-              <button class="preset-card-luxury" data-scenario="robbing" onclick="loadScenario('robbing')">
-                <div class="preset-header">
-                  <div class="preset-name">
-                    <span class="preset-sigil">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    </span>
-                    <span>Robbing Onset</span>
-                  </div>
-                  <span class="preset-code">ROB • 48H</span>
-                </div>
-                <span class="preset-summary">Crepuscular raiding frenzy with rapid store loss & agitated hive heat.</span>
-              </button>
-
-              <button class="preset-card-luxury" data-scenario="nectar_surge" onclick="loadScenario('nectar_surge')">
-                <div class="preset-header">
-                  <div class="preset-name">
-                    <span class="preset-sigil">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                    </span>
-                    <span>Honey Flow</span>
-                  </div>
-                  <span class="preset-code">SUR • 48H</span>
-                </div>
-                <span class="preset-summary">Intense bloom honeyflow: massive incoming bee flow & +1.9kg gain.</span>
-              </button>
-
-              <button class="preset-card-luxury" data-scenario="real_wurzburg" onclick="loadScenario('real_wurzburg')">
-                <div class="preset-header">
-                  <div class="preset-name">
-                    <span class="preset-sigil">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                    </span>
-                    <span>Würzburg Sensor</span>
-                  </div>
-                  <span class="preset-code">IOT • 48H</span>
-                </div>
-                <span class="preset-summary">Authentic 48h Bavarian apiary sensor telemetry recorded during swarm.</span>
-              </button>
-            </div>
-
-            <!-- Parameters -->
-            <div class="config-pair">
-              <div class="config-field">
-                <label for="hiveIdInput">Hive Node ID</label>
-                <input type="text" id="hiveIdInput" value="HIVE-KV-201" placeholder="e.g. HIVE-KV-201">
-              </div>
-              <div class="config-field" style="flex: 1.2;">
-                <label for="apiKeyInput">Authorization Key (X-ML-API-Key)</label>
-                <input type="password" id="apiKeyInput" placeholder="Optional (configured in Render)">
-              </div>
-            </div>
-          </div>
-
-          <!-- Right: Telemetry Matrix Editor -->
-          <div>
-            <div class="table-toolbar">
-              <div class="tab-pills-luxury">
-                <button id="tabTableBtn" class="tab-btn-luxury active" onclick="switchTab('table')">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-                  Telemetry Matrix
-                </button>
-                <button id="tabJsonBtn" class="tab-btn-luxury" onclick="switchTab('json')">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                  Raw JSON
-                </button>
-              </div>
-
-              <div style="display: flex; gap: 5px; align-items: center; flex-wrap: wrap;">
-                <span id="rowCountBadge" style="font-size: 9.5px; font-weight: 700; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-right: 4px;">49 READINGS</span>
-                <button class="tool-chip" onclick="filterDay(1)" title="Jump to Day 1 (0-24h)">Day 1</button>
-                <button class="tool-chip" onclick="filterDay(2)" title="Jump to Day 2 (25-48h)">Day 2</button>
-                <button class="tool-chip" onclick="injectNoise()" title="Simulate realistic sensor jitter">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v7L20 10h-6V3L4 14z"/></svg>
-                  Jitter
-                </button>
-                <button class="tool-chip" onclick="exportCsv()" title="Export CSV matrix">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                  CSV
-                </button>
-                <button class="tool-chip" onclick="addRow()">+ Hour</button>
-                <button class="tool-chip" onclick="clearRows()">Clear</button>
-              </div>
-            </div>
-
-            <!-- Table View -->
-            <div id="tableView">
-              <div class="scroll-table-wrapper" id="tableScrollContainer">
-                <table class="matrix-table" id="readingsTable">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Timestamp (ISO)</th>
-                      <th>Temp (°C)</th>
-                      <th>Humidity (%)</th>
-                      <th>Weight (kg)</th>
-                      <th>Net Flight</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody id="readingsBody"></tbody>
-                </table>
-              </div>
-            </div>
-
-            <!-- JSON View -->
-            <div id="jsonView" style="display: none;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-size: 11px; color: var(--text-muted);">Directly edit 48h payload matrix:</span>
-                <button class="tool-chip" onclick="formatJsonEditor()">Format JSON</button>
-              </div>
-              <textarea id="jsonEditor" rows="11" class="raw-json-textarea"></textarea>
-            </div>
-
-            <!-- Actions row -->
-            <div class="workbench-actions-row">
-              <div style="font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
-                <span>Trigger:</span>
-                <kbd class="hotkey-badge">Ctrl + Enter</kbd>
-              </div>
-              <button id="btnRun" class="btn-satin-gold" onclick="runInference()">
-                <span id="btnRunText">Run 48h Diagnostic</span>
-                <span class="btn-sigil-island" id="btnRunIconWrapper">
-                  <span id="btnRunIcon">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                  </span>
-                </span>
-              </button>
-            </div>
+    <!-- VIEW 1: Overview & Telemetry Mode -->
+    <div id="viewOverview" class="chassis-box">
+      <!-- Top Diagnostic Command Deck -->
+      <div class="overview-hero-grid">
+        <!-- 1. Swiss Dial -->
+        <div class="dial-unit">
+          <svg class="dial-vector" viewBox="0 0 170 170">
+            <circle class="dial-track-circle" cx="85" cy="85" r="72"></circle>
+            <circle class="dial-ticks-circle" cx="85" cy="85" r="60"></circle>
+            <circle id="gaugeProgress" class="dial-progress-arc" cx="85" cy="85" r="72" stroke="var(--emerald)"></circle>
+          </svg>
+          <div class="dial-readout">
+            <span id="metricHealthScore" class="dial-number">85.0</span>
+            <span class="dial-caption">Vitality Index</span>
           </div>
         </div>
 
-        <!-- Raw Model JSON Inspection Drawer -->
-        <details class="code-drawer">
-          <summary>
-            <span>Inspect Microservice Response Payload (JSON)</span>
-            <span style="font-size: 9.5px;">view raw</span>
-          </summary>
-          <div class="code-mirror-box">
-            <button class="btn-copy-terminal" onclick="copyRawJson(this)">Copy JSON</button>
-            <pre id="rawJsonResponse" class="code-terminal">{}</pre>
+        <!-- 2. Center Narrative & Advisory -->
+        <div class="narrative-column">
+          <div class="narrative-headline">
+            Colony Vitality <em>Evaluation</em>
+            <span id="inferenceTierBadge" class="tier-badge">Tier: T48 (48h Window)</span>
           </div>
-        </details>
+
+          <div id="recBanner" class="advisory-card-clean">
+            <div class="advisory-meta">
+              <span class="advisory-title">Clinical Diagnostic Synthesis</span>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <span id="metricStressProb" style="font-size: 10.5px; font-family: 'JetBrains Mono', monospace; color: var(--text-muted);">Stress Prob: 0.0%</span>
+                <span id="metricStressRisk" class="stress-badge stress-LOW">LOW STRESS</span>
+              </div>
+            </div>
+            <div id="recText" class="advisory-text">Colony in circadian equilibrium. Core temperature and foraging flow operate within physiological baselines.</div>
+          </div>
+
+          <div class="anomaly-row">
+            <span>Seasonal Baseline Deviation:</span>
+            <div class="anomaly-bar-track">
+              <div id="abnormalityBar" class="anomaly-bar-fill" style="width: 30.1%;"></div>
+            </div>
+            <span id="metricAbnormalityLabel" style="color: #fff; font-weight: 700;">30.1%</span>
+          </div>
+        </div>
+
+        <!-- 3. Key Telemetry Drivers Column -->
+        <div class="drivers-column">
+          <div class="driver-line">
+            <span class="driver-line-name">Activity Drift</span>
+            <span id="drvActivity" class="driver-line-val">-0.42</span>
+          </div>
+          <div class="driver-line">
+            <span class="driver-line-name">Thermal Drift</span>
+            <span id="drvTemp" class="driver-line-val">+0.15°C</span>
+          </div>
+          <div class="driver-line">
+            <span class="driver-line-name">48h Weight Delta</span>
+            <span id="drvTrend" class="driver-line-val">+0.72kg</span>
+          </div>
+          <div class="driver-line">
+            <span class="driver-line-name">Acute Drop</span>
+            <span id="drvDrop" class="driver-line-val">0.00kg</span>
+          </div>
+          <div class="driver-line">
+            <span class="driver-line-name">Net Flight</span>
+            <span id="drvFlow" class="driver-line-val">+50/m</span>
+          </div>
+        </div>
       </div>
+
+      <!-- 48-Hour Multi-Stream Telemetry Canvas -->
+      <div>
+        <div class="chart-section-bar">
+          <span class="chart-heading">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            48-Hour Continuous Multi-Stream Dynamics
+          </span>
+          <div class="chart-stream-toggles">
+            <button class="chip-btn active" id="chipWeight" onclick="toggleStream(0, this)">Weight (kg)</button>
+            <button class="chip-btn active" id="chipTemp" onclick="toggleStream(1, this)">Temp (°C)</button>
+            <button class="chip-btn active" id="chipFlow" onclick="toggleStream(2, this)">Net Flight</button>
+          </div>
+        </div>
+        <div class="chart-canvas-area">
+          <canvas id="telemetryChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Scope tags hidden in DOM for accessibility & test contracts -->
+      <div id="scopeTags" style="display: none;"></div>
+
+      <!-- Action Strip -->
+      <div class="overview-action-strip">
+        <div class="overview-action-aside">
+          <span>Node: <strong id="nodeDisplayLabel" style="color: #fff; font-family: 'JetBrains Mono', monospace;">HIVE-KV-201</strong></span>
+          <span>•</span>
+          <a class="link-matrix-jump" onclick="switchViewMode('matrix')">
+            Inspect Data Matrix (49 readings) →
+          </a>
+        </div>
+        <button id="btnRun" class="btn-action-primary" onclick="runInference()">
+          <span id="btnRunText">Run 48h Diagnostic</span>
+          <span class="btn-action-sigil" id="btnRunIconWrapper">
+            <span id="btnRunIcon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </span>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- VIEW 2: Data Matrix Chamber (Dedicated Workspace) -->
+    <div id="viewMatrix" class="chassis-box matrix-view-container">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div>
+          <h2 style="font-size: 16px; font-weight: 700; color: #fff;">48-Hour Telemetry Matrix Chamber</h2>
+          <p style="font-size: 11.5px; color: var(--text-muted);">Inspect or modify individual hourly sensor readings across the two solar cycles.</p>
+        </div>
+        <button class="tool-btn" onclick="switchViewMode('overview')">← Back to Diagnostics</button>
+      </div>
+
+      <!-- Config inputs -->
+      <div class="matrix-config-bar">
+        <div class="matrix-field-group">
+          <label for="hiveIdInput">Hive Node ID</label>
+          <input type="text" id="hiveIdInput" class="field-input" value="HIVE-KV-201" onchange="syncHiveNodeLabel(this.value)">
+        </div>
+        <div class="matrix-field-group" style="flex: 1.5;">
+          <label for="apiKeyInput">Authorization Secret Key (X-ML-API-Key)</label>
+          <input type="password" id="apiKeyInput" class="field-input" placeholder="Optional (configured in Render environment)">
+        </div>
+      </div>
+
+      <!-- Secondary matrix toolbar -->
+      <div class="matrix-toolbar">
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <span id="rowCountBadge" style="font-size: 10.5px; font-weight: 700; color: var(--gold-400); font-family: 'JetBrains Mono', monospace; margin-right: 6px;">49 READINGS</span>
+          <button class="tool-btn" onclick="filterDay(1)">Day 1 (0-24h)</button>
+          <button class="tool-btn" onclick="filterDay(2)">Day 2 (25-48h)</button>
+          <button class="tool-btn" onclick="injectNoise()" title="Simulate realistic sensor jitter">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v7L20 10h-6V3L4 14z"/></svg>
+            ± Jitter
+          </button>
+          <button class="tool-btn" onclick="exportCsv()" title="Export CSV">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            CSV
+          </button>
+        </div>
+        <div style="display: flex; gap: 6px;">
+          <button class="tool-btn" onclick="addRow()">+ Hour</button>
+          <button class="tool-btn" onclick="clearRows()">Clear</button>
+        </div>
+      </div>
+
+      <!-- Matrix Table Scroll Chamber -->
+      <div id="tableView">
+        <div class="table-scroll-chamber" id="tableScrollContainer">
+          <table class="matrix-table" id="readingsTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Timestamp (ISO)</th>
+                <th>Temp (°C)</th>
+                <th>Humidity (%)</th>
+                <th>Weight (kg)</th>
+                <th>Net Flight</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="readingsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Action Footer -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-subtle);">
+        <span style="font-size: 11px; color: var(--text-muted);">Quick trigger: <kbd class="hotkey-tag">Ctrl + Enter</kbd></span>
+        <button class="btn-action-primary" onclick="runInference(); switchViewMode('overview');">
+          <span>Run 48h Diagnostic & View Results →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- VIEW 3: Raw JSON View -->
+    <div id="viewJson" class="chassis-box json-view-container">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <div>
+          <h2 style="font-size: 16px; font-weight: 700; color: #fff;">Raw JSON Telemetry Interface</h2>
+          <p style="font-size: 11.5px; color: var(--text-muted);">Directly edit JSON request payloads or inspect model responses.</p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="tool-btn" onclick="formatJsonEditor()">Format JSON</button>
+          <button class="tool-btn" onclick="copyRawJson(this)">Copy Response</button>
+          <button class="tool-btn" onclick="switchViewMode('overview')">← Back to Diagnostics</button>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div>
+          <label style="display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; font-family: 'JetBrains Mono', monospace;">
+            Input Payload (Request)
+          </label>
+          <textarea id="jsonEditor" rows="18" class="raw-json-box"></textarea>
+        </div>
+        <div>
+          <label style="display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; font-family: 'JetBrains Mono', monospace;">
+            Inference Response (Model Output)
+          </label>
+          <pre id="rawJsonResponse" class="raw-json-box" style="height: 380px; overflow: auto; margin: 0;">{}</pre>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 18px;">
+        <button class="btn-action-primary" onclick="runInference(); switchViewMode('overview');">
+          <span>Apply JSON & Run Diagnostic →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Hidden compatibility elements to guarantee contracts -->
+    <div style="display: none;">
+      <button id="tabTableBtn"></button>
+      <button id="tabJsonBtn"></button>
+      <div id="jsonView"></div>
     </div>
   </div>
 
@@ -1394,10 +1342,44 @@
   <script>
     // State management
     let currentReadings = [];
-    let currentTab = 'table';
+    let currentViewMode = 'overview';
     let chartInstance = null;
     let selectedScenario = 'healthy';
     let previousScore = 85.0;
+
+    const scenarioDescriptions = {
+      healthy: 'Dual circadian equilibrium (+0.7kg normal forage)',
+      swarm: 'Acute mid-window swarm departure at 26h (-2.4kg drop)',
+      starvation: 'Continuous multi-day starvation drain (-3.6kg loss)',
+      robbing: 'Crepuscular raiding frenzy with thermal agitation',
+      nectar_surge: 'Peak bloom flow: intense flight & +1.9kg gain',
+      real_wurzburg: 'Authentic 48h Bavarian apiary IoT sensor stream'
+    };
+
+    // View switcher (Overview vs Matrix vs JSON)
+    function switchViewMode(mode) {
+      currentViewMode = mode;
+      document.getElementById('viewOverview').style.display = (mode === 'overview') ? 'block' : 'none';
+      document.getElementById('viewMatrix').style.display = (mode === 'matrix') ? 'block' : 'none';
+      document.getElementById('viewJson').style.display = (mode === 'json') ? 'block' : 'none';
+
+      document.getElementById('modeOverviewBtn').className = 'mode-btn' + (mode === 'overview' ? ' active' : '');
+      document.getElementById('modeMatrixBtn').className = 'mode-btn' + (mode === 'matrix' ? ' active' : '');
+      document.getElementById('modeJsonBtn').className = 'mode-btn' + (mode === 'json' ? ' active' : '');
+
+      if (mode === 'matrix') {
+        updateReadingsFromJson();
+        renderTable();
+      } else if (mode === 'json') {
+        updateJsonFromReadings();
+      } else if (mode === 'overview') {
+        renderChart(currentReadings);
+      }
+    }
+
+    function syncHiveNodeLabel(val) {
+      document.getElementById('nodeDisplayLabel').innerText = val || 'HIVE-KV-201';
+    }
 
     // Persist API key
     const savedKey = localStorage.getItem('honeychain_ml_key');
@@ -1431,13 +1413,13 @@
         const latency = Math.round(performance.now() - startTime);
         if (res.ok) {
           const data = await res.json();
-          document.getElementById('statusDot').className = 'status-orb';
-          document.getElementById('statusText').innerText = `Online • ${latency}ms • 48h Engine`;
+          document.getElementById('statusDot').className = 'pulse-orb';
+          document.getElementById('statusText').innerText = `Online • ${latency}ms • T48 Engine`;
         } else {
           throw new Error('Non-200 status');
         }
       } catch (err) {
-        document.getElementById('statusDot').className = 'status-orb offline';
+        document.getElementById('statusDot').className = 'pulse-orb offline';
         document.getElementById('statusText').innerText = 'Microservice Offline';
       }
     }
@@ -1453,19 +1435,17 @@
         let temp, hum, weight, flow;
 
         if (type === 'healthy') {
-          // Equilibrium: 2 solar cycles, steady gain (+0.7kg)
           flow = isDay ? 50 : 0;
           temp = 34.8 + (h >= 11 && h <= 15 ? 0.4 : -0.2);
           weight = 35.0 + (i * 0.015);
           hum = 58.0;
         } else if (type === 'swarm') {
-          // Swarm: Acute drop at hour 26 (Day 2, 14:00)
           if (i < 26) {
             weight = 36.5;
             flow = isDay ? 40 : 0;
             temp = 34.8;
           } else if (i === 26) {
-            weight = 34.1; // -2.4kg drop!
+            weight = 34.1;
             flow = -320;
             temp = 37.0;
           } else {
@@ -1475,20 +1455,17 @@
           }
           hum = 55.0;
         } else if (type === 'starvation') {
-          // Depletion: Continuous downward store loss
           flow = isDay ? -5 : -2;
           temp = 34.0 - (i * 0.03);
           weight = 35.0 - (i * 0.075);
           hum = 60.0;
         } else if (type === 'robbing') {
-          // Robbing: Raiding frenzy in afternoons
           const isRobbingHour = isDay && (h >= 12 && h <= 16);
           flow = isRobbingHour ? -150 : (isDay ? 15 : 0);
           temp = isRobbingHour ? 35.5 : 34.7;
           weight = 36.0 - (i * 0.05);
           hum = 52.0;
         } else if (type === 'nectar_surge') {
-          // Nectar surge: High flow and storage
           flow = isDay ? 85 : 0;
           temp = 34.9 + (h >= 11 && h <= 15 ? 0.3 : -0.1);
           weight = 35.0 + (i * 0.04);
@@ -1510,7 +1487,7 @@
     // Load Scenario
     async function loadScenario(type) {
       selectedScenario = type;
-      document.querySelectorAll('.preset-card-luxury').forEach(b => {
+      document.querySelectorAll('.scenario-pill').forEach(b => {
         if (b.getAttribute('data-scenario') === type) {
           b.classList.add('active');
         } else {
@@ -1518,24 +1495,25 @@
         }
       });
 
+      document.getElementById('scenarioCurrentDesc').innerText = scenarioDescriptions[type] || '';
+
       if (type === 'real_wurzburg') {
-        const desc = document.querySelector('[data-scenario="real_wurzburg"] .preset-summary');
-        const orig = desc ? desc.innerText : '';
-        if (desc) desc.innerText = 'Retrieving IoT file...';
         try {
           const res = await fetch('/api/sample-input');
           const data = await res.json();
           currentReadings = data.readings || [];
-          document.getElementById('hiveIdInput').value = data.hiveId || 'WURZBURG';
+          const hid = data.hiveId || 'WURZBURG';
+          document.getElementById('hiveIdInput').value = hid;
+          syncHiveNodeLabel(hid);
         } catch (err) {
           alert('Could not load sample_input.json: ' + err.message);
           currentReadings = getScenarioData('swarm');
-        } finally {
-          if (desc) desc.innerText = orig;
         }
       } else {
         currentReadings = getScenarioData(type);
-        document.getElementById('hiveIdInput').value = `HIVE-48H-${type.toUpperCase()}`;
+        const hid = `HIVE-48H-${type.toUpperCase()}`;
+        document.getElementById('hiveIdInput').value = hid;
+        syncHiveNodeLabel(hid);
       }
 
       renderTable();
@@ -1557,7 +1535,7 @@
           <td><input type="number" step="0.1" value="${r.humidity}" onchange="updateRow(${idx}, 'humidity', parseFloat(this.value))" style="width: 68px;"></td>
           <td><input type="number" step="0.01" value="${r.weight}" onchange="updateRow(${idx}, 'weight', parseFloat(this.value))" style="width: 78px;"></td>
           <td><input type="number" step="1" value="${r.flow}" onchange="updateRow(${idx}, 'flow', parseFloat(this.value))" style="width: 68px;"></td>
-          <td><button class="btn-del-mini" title="Delete Row" onclick="deleteRow(${idx})">
+          <td><button class="btn-row-remove" title="Delete Row" onclick="deleteRow(${idx})">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button></td>
         `;
@@ -1611,7 +1589,7 @@
       updateJsonFromReadings();
     }
 
-    // Scroll to day index
+    // Jump to day in matrix table
     function filterDay(dayNum) {
       const targetIndex = dayNum === 1 ? 0 : Math.min(24, currentReadings.length - 1);
       const row = document.getElementById(`row-${targetIndex}`);
@@ -1622,7 +1600,7 @@
       }
     }
 
-    // Sensor variance simulator
+    // Realistic IoT Sensor Variance Simulator
     function injectNoise() {
       currentReadings.forEach(r => {
         r.temperature = Number((r.temperature + (Math.random() * 0.2 - 0.1)).toFixed(2));
@@ -1633,7 +1611,7 @@
       });
       renderTable();
       updateJsonFromReadings();
-      showToast('Simulated IoT sensor variance injected');
+      showToast('Injected simulated sensor noise');
       runInference();
     }
 
@@ -1653,25 +1631,6 @@
       showToast('Exported 48-Hour CSV dataset');
     }
 
-    // Tab switcher
-    function switchTab(tab) {
-      currentTab = tab;
-      if (tab === 'table') {
-        document.getElementById('tableView').style.display = 'block';
-        document.getElementById('jsonView').style.display = 'none';
-        document.getElementById('tabTableBtn').className = 'tab-btn-luxury active';
-        document.getElementById('tabJsonBtn').className = 'tab-btn-luxury';
-        updateReadingsFromJson();
-        renderTable();
-      } else {
-        document.getElementById('tableView').style.display = 'none';
-        document.getElementById('jsonView').style.display = 'block';
-        document.getElementById('tabTableBtn').className = 'tab-btn-luxury';
-        document.getElementById('tabJsonBtn').className = 'tab-btn-luxury active';
-        updateJsonFromReadings();
-      }
-    }
-
     function updateJsonFromReadings() {
       const payload = {
         hiveId: document.getElementById('hiveIdInput').value || 'HIVE-KV-201',
@@ -1688,9 +1647,10 @@
         }
         if (parsed.hiveId) {
           document.getElementById('hiveIdInput').value = parsed.hiveId;
+          syncHiveNodeLabel(parsed.hiveId);
         }
       } catch (e) {
-        // keep current
+        // preserve
       }
     }
 
@@ -1698,19 +1658,19 @@
       try {
         const parsed = JSON.parse(document.getElementById('jsonEditor').value);
         document.getElementById('jsonEditor').value = JSON.stringify(parsed, null, 2);
-        showToast('JSON Formatted');
+        showToast('JSON formatted');
       } catch (e) {
         alert('Invalid JSON: ' + e.message);
       }
     }
 
-    // Execute Inference
+    // Inference Execution
     async function runInference() {
       const btn = document.getElementById('btnRun');
       const btnText = document.getElementById('btnRunText');
       const btnIcon = document.getElementById('btnRunIcon');
 
-      if (currentTab === 'json') {
+      if (currentViewMode === 'json') {
         updateReadingsFromJson();
       }
 
@@ -1724,7 +1684,7 @@
 
       btn.disabled = true;
       btnIcon.innerHTML = '<div class="spinner-disc"></div>';
-      btnText.innerText = 'Evaluating 48h Telemetry...';
+      btnText.innerText = 'Evaluating 48h...';
 
       const headers = { 'Content-Type': 'application/json' };
       if (apiKey) {
@@ -1756,7 +1716,7 @@
       }
     }
 
-    // Smooth counter roll
+    // Number Roll Animation
     function animateScore(start, end, duration = 800) {
       const el = document.getElementById('metricHealthScore');
       if (isNaN(end)) {
@@ -1796,19 +1756,19 @@
       }
 
       const gauge = document.getElementById('gaugeProgress');
-      const circumference = 565; // 2 * PI * 90
+      const circumference = 452; // 2 * PI * 72
       if (!isNaN(score)) {
         const offset = circumference - (score / 100) * circumference;
         gauge.style.strokeDashoffset = offset;
         if (score >= 75) {
           gauge.style.stroke = 'var(--emerald)';
-          gauge.style.filter = 'drop-shadow(0 0 12px rgba(16, 185, 129, 0.45))';
+          gauge.style.filter = 'drop-shadow(0 0 10px rgba(16, 185, 129, 0.45))';
         } else if (score >= 50) {
           gauge.style.stroke = 'var(--gold-400)';
-          gauge.style.filter = 'drop-shadow(0 0 12px rgba(212, 163, 89, 0.45))';
+          gauge.style.filter = 'drop-shadow(0 0 10px rgba(212, 163, 89, 0.45))';
         } else {
           gauge.style.stroke = 'var(--crimson)';
-          gauge.style.filter = 'drop-shadow(0 0 12px rgba(244, 63, 94, 0.45))';
+          gauge.style.filter = 'drop-shadow(0 0 10px rgba(244, 63, 94, 0.45))';
         }
       } else {
         gauge.style.strokeDashoffset = circumference;
@@ -1818,9 +1778,9 @@
       const risk = data.stressRisk || 'UNKNOWN';
       const riskEl = document.getElementById('metricStressRisk');
       riskEl.innerText = `${risk} STRESS`;
-      riskEl.className = `badge-stress-capsule stress-${risk}`;
+      riskEl.className = `stress-badge stress-${risk}`;
 
-      let probText = 'Prob: --';
+      let probText = 'Stress Prob: --';
       if (data.stressProbability !== null && data.stressProbability !== undefined) {
         probText = `Stress Prob: ${(data.stressProbability * 100).toFixed(1)}%`;
       }
@@ -1836,9 +1796,9 @@
       document.getElementById('recText').innerText = rec;
       const recBanner = document.getElementById('recBanner');
       if (risk === 'HIGH') {
-        recBanner.className = 'advisory-box danger-mode';
+        recBanner.className = 'advisory-card-clean alert-danger';
       } else {
-        recBanner.className = 'advisory-box';
+        recBanner.className = 'advisory-card-clean';
       }
 
       // 6. Detection Scope
@@ -1851,12 +1811,11 @@
       ];
       scopes.forEach(scope => {
         const tag = document.createElement('span');
-        tag.style.cssText = "font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-muted); background: rgba(255,255,255,0.03); padding: 3px 8px; border-radius: 5px; border: 1px solid var(--border-hairline);";
         tag.innerText = scope;
         scopeContainer.appendChild(tag);
       });
 
-      // 7. Telemetry Drivers Ribbon
+      // 7. Telemetry Drivers
       const d = data.drivers || {};
       document.getElementById('drvActivity').innerText = d.activityDeviation !== undefined ? Number(d.activityDeviation).toFixed(2) : '--';
       document.getElementById('drvTemp').innerText = d.temperatureDeviation !== undefined ? `${d.temperatureDeviation > 0 ? '+' : ''}${Number(d.temperatureDeviation).toFixed(2)}°C` : '--';
@@ -1886,9 +1845,11 @@
         chartInstance.destroy();
       }
 
-      const ctx = document.getElementById('telemetryChart').getContext('2d');
+      const canvas = document.getElementById('telemetryChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
 
-      const gradientWeight = ctx.createLinearGradient(0, 0, 0, 240);
+      const gradientWeight = ctx.createLinearGradient(0, 0, 0, 250);
       gradientWeight.addColorStop(0, 'rgba(212, 163, 89, 0.22)');
       gradientWeight.addColorStop(1, 'rgba(212, 163, 89, 0.00)');
 
@@ -1904,14 +1865,14 @@
               backgroundColor: gradientWeight,
               yAxisID: 'yWeight',
               borderWidth: 2,
-              tension: 0.32,
+              tension: 0.3,
               fill: true,
               pointRadius: readings.length > 50 ? 0 : 2,
               pointHoverRadius: 5,
               pointBackgroundColor: '#e5b869'
             },
             {
-              label: 'Core Temperature (°C)',
+              label: 'Core Temp (°C)',
               data: temps,
               borderColor: '#f43f5e',
               backgroundColor: 'transparent',
@@ -1947,12 +1908,12 @@
               display: false
             },
             tooltip: {
-              backgroundColor: 'rgba(16, 16, 20, 0.96)',
+              backgroundColor: 'rgba(17, 17, 22, 0.96)',
               titleColor: '#fff',
-              bodyColor: '#a1a1aa',
+              bodyColor: '#9ea0a8',
               borderColor: 'rgba(212, 163, 89, 0.25)',
               borderWidth: 1,
-              padding: 11,
+              padding: 10,
               cornerRadius: 8,
               bodyFont: { family: "'JetBrains Mono', monospace", size: 10.5 },
               titleFont: { family: "'Plus Jakarta Sans', sans-serif", size: 11.5, weight: 700 }
@@ -2000,12 +1961,15 @@
       const text = document.getElementById('rawJsonResponse').innerText;
       navigator.clipboard.writeText(text).then(() => {
         showToast('Copied JSON payload');
-        btn.innerText = 'Copied!';
-        setTimeout(() => { btn.innerText = 'Copy JSON'; }, 1800);
+        if (btn) {
+          const orig = btn.innerText;
+          btn.innerText = 'Copied!';
+          setTimeout(() => { btn.innerText = orig; }, 1800);
+        }
       });
     }
 
-    // Initialization
+    // Startup
     window.addEventListener('DOMContentLoaded', () => {
       checkHealth();
       loadScenario('healthy');
