@@ -61,6 +61,12 @@
       height: 0;
     }
 
+    html, body {
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden; /* Completely prevents landing page from scrolling */
+    }
+
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background-color: var(--canvas);
@@ -69,18 +75,26 @@
         radial-gradient(ellipse 50% 30% at 100% 100%, rgba(16, 185, 129, 0.02), transparent 50%);
       background-attachment: fixed;
       color: var(--text-main);
-      line-height: 1.5;
-      padding: 24px 20px 48px;
-      min-height: 100vh;
+      line-height: 1.4;
+      padding: 12px 18px;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
       -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
     }
 
     .container {
       max-width: 1380px;
+      width: 100%;
       margin: 0 auto;
       position: relative;
       z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
     }
 
     /* Ambient Living Canvas (Pollen / Dust Motes) */
@@ -109,8 +123,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 20px;
-      margin-bottom: 24px;
+      padding: 8px 18px;
+      margin-bottom: 10px;
+      flex-shrink: 0;
       background: rgba(16, 16, 21, 0.82);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
@@ -299,19 +314,20 @@
 
     /* Minimalist 1-Row Scenario Track */
     .scenario-track-wrapper {
-      margin-bottom: 22px;
+      margin-bottom: 10px;
+      flex-shrink: 0;
     }
 
     .scenario-track-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       padding: 0 4px;
     }
 
     .scenario-track-label {
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.12em;
@@ -320,7 +336,7 @@
     }
 
     .scenario-track-current-desc {
-      font-size: 11px;
+      font-size: 10.5px;
       color: var(--gold-400);
       font-family: 'JetBrains Mono', monospace;
     }
@@ -346,14 +362,14 @@
     .scenario-pill {
       background: rgba(16, 16, 21, 0.6);
       border: 1px solid var(--border-hairline);
-      border-radius: 10px;
-      padding: 10px 12px;
+      border-radius: 9px;
+      padding: 7px 10px;
       text-align: left;
       cursor: pointer;
       transition: all 0.2s var(--ease-fluid);
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 2px;
     }
 
     .scenario-pill:hover {
@@ -375,13 +391,13 @@
     }
 
     .scenario-pill-name {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
       color: #fff;
     }
 
     .scenario-pill-tag {
-      font-size: 9px;
+      font-size: 8.5px;
       font-weight: 700;
       color: var(--text-muted);
       font-family: 'JetBrains Mono', monospace;
@@ -392,7 +408,7 @@
     }
 
     .scenario-pill-sub {
-      font-size: 10.5px;
+      font-size: 9.5px;
       color: var(--text-muted);
       white-space: nowrap;
       overflow: hidden;
@@ -403,26 +419,32 @@
     .chassis-box {
       background: var(--card-bg);
       border: 1px solid var(--border-hairline);
-      border-radius: 20px;
-      padding: 24px 28px;
+      border-radius: 16px;
+      padding: 16px 22px;
       box-shadow: 0 20px 48px -15px rgba(0, 0, 0, 0.7);
-      margin-bottom: 22px;
+      margin-bottom: 0;
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
     }
 
     /* VIEW 1: Overview & Telemetry Mode */
     .overview-hero-grid {
       display: grid;
-      grid-template-columns: 200px 1fr 280px;
-      gap: 28px;
+      grid-template-columns: 140px 1fr 240px;
+      gap: 18px;
       align-items: center;
-      padding-bottom: 24px;
+      padding-bottom: 12px;
       border-bottom: 1px solid var(--border-subtle);
-      margin-bottom: 22px;
+      margin-bottom: 10px;
+      flex-shrink: 0;
     }
 
     @media (max-width: 1000px) {
       .overview-hero-grid {
-        grid-template-columns: 180px 1fr;
+        grid-template-columns: 140px 1fr;
       }
       .overview-hero-grid > .drivers-column {
         grid-column: span 2;
@@ -442,8 +464,8 @@
     /* Swiss Horological Vitality Dial with Radar Sweep */
     .dial-unit {
       position: relative;
-      width: 170px;
-      height: 170px;
+      width: 130px;
+      height: 130px;
       margin: 0 auto;
       display: flex;
       align-items: center;
@@ -508,7 +530,7 @@
     }
 
     .dial-number {
-      font-size: 38px;
+      font-size: 30px;
       font-weight: 700;
       letter-spacing: -0.04em;
       color: #fff;
@@ -522,7 +544,7 @@
       font-weight: 700;
       letter-spacing: 0.16em;
       color: var(--text-muted);
-      margin-top: 5px;
+      margin-top: 4px;
       font-family: 'JetBrains Mono', monospace;
     }
 
@@ -530,17 +552,17 @@
     .narrative-column {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 8px;
     }
 
     .narrative-headline {
       font-family: 'Instrument Serif', Georgia, serif;
-      font-size: 26px;
+      font-size: 20px;
       font-weight: 400;
       color: #fff;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
@@ -552,9 +574,9 @@
     .tier-badge {
       display: inline-flex;
       align-items: center;
-      padding: 3px 9px;
+      padding: 2px 8px;
       border-radius: 9999px;
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 700;
       background: rgba(212, 163, 89, 0.08);
       border: 1px solid var(--border-gold);
@@ -565,8 +587,8 @@
     .advisory-card-clean {
       background: rgba(14, 14, 18, 0.6);
       border: 1px solid var(--border-hairline);
-      border-radius: 12px;
-      padding: 14px 16px;
+      border-radius: 10px;
+      padding: 8px 12px;
       position: relative;
       overflow: hidden;
     }
@@ -594,13 +616,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       flex-wrap: wrap;
       gap: 6px;
     }
 
     .advisory-title {
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
@@ -615,9 +637,9 @@
     .stress-badge {
       display: inline-flex;
       align-items: center;
-      padding: 2px 8px;
+      padding: 2px 7px;
       border-radius: 9999px;
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 700;
       font-family: 'JetBrains Mono', monospace;
       letter-spacing: 0.04em;
@@ -643,17 +665,17 @@
     }
 
     .advisory-text {
-      font-size: 13px;
+      font-size: 11.5px;
       color: var(--text-main);
       font-weight: 400;
-      line-height: 1.45;
+      line-height: 1.4;
     }
 
     .anomaly-row {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 10.5px;
+      gap: 8px;
+      font-size: 9.5px;
       color: var(--text-muted);
       font-family: 'JetBrains Mono', monospace;
     }
@@ -677,21 +699,21 @@
     .drivers-column {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
 
     .driver-line {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 12px;
+      padding: 4px 8px;
       background: rgba(14, 14, 18, 0.5);
       border: 1px solid var(--border-hairline);
-      border-radius: 8px;
+      border-radius: 6px;
     }
 
     .driver-line-name {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -700,7 +722,7 @@
     }
 
     .driver-line-val {
-      font-size: 12.5px;
+      font-size: 11px;
       font-weight: 700;
       color: #fff;
       font-family: 'JetBrains Mono', monospace;
@@ -711,13 +733,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
+      flex-shrink: 0;
     }
 
     .chart-heading {
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.12em;
@@ -740,8 +763,8 @@
       background: rgba(212, 163, 89, 0.12);
       border: 1px solid var(--border-gold);
       color: var(--gold-300);
-      font-size: 10.5px;
-      padding: 4px 11px;
+      font-size: 10px;
+      padding: 3px 9px;
       border-radius: 6px;
       cursor: pointer;
       font-weight: 700;
@@ -772,9 +795,9 @@
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--border-hairline);
       color: var(--text-muted);
-      font-size: 10px;
-      padding: 3px 9px;
-      border-radius: 6px;
+      font-size: 9.5px;
+      padding: 2px 8px;
+      border-radius: 5px;
       cursor: pointer;
       font-weight: 600;
       font-family: 'JetBrains Mono', monospace;
@@ -795,11 +818,12 @@
       background: rgba(14, 14, 18, 0.5);
       border: 1px solid var(--border-hairline);
       border-radius: 6px;
-      padding: 4px 10px;
-      margin-bottom: 10px;
-      font-size: 10px;
+      padding: 3px 8px;
+      margin-bottom: 6px;
+      font-size: 9px;
       font-family: 'JetBrains Mono', monospace;
       color: var(--text-muted);
+      flex-shrink: 0;
     }
 
     .solar-cycle-item {
@@ -815,14 +839,24 @@
 
     /* Live Scrubbing HUD Bar */
     #scrubberHud {
-      font-size: 10.5px;
+      font-size: 10px;
       font-family: 'JetBrains Mono', monospace;
       color: var(--gold-300);
     }
 
+    .chart-stream-container {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
     .chart-canvas-area {
       position: relative;
-      height: 250px;
+      flex: 1;
+      min-height: 120px;
+      height: 100%;
       width: 100%;
     }
 
@@ -831,11 +865,12 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 18px;
-      padding-top: 16px;
+      margin-top: 8px;
+      padding-top: 8px;
       border-top: 1px solid var(--border-subtle);
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 10px;
+      flex-shrink: 0;
     }
 
     .overview-action-aside {
@@ -926,13 +961,18 @@
     /* VIEW 2: Data Matrix Chamber */
     .matrix-view-container {
       display: none;
+      flex: 1;
+      min-height: 0;
+      flex-direction: column;
+      overflow: hidden;
     }
 
     .matrix-config-bar {
       display: flex;
       gap: 14px;
-      margin-bottom: 18px;
+      margin-bottom: 12px;
       flex-wrap: wrap;
+      flex-shrink: 0;
     }
 
     .matrix-field-group {
@@ -957,8 +997,8 @@
       border: 1px solid var(--border-hairline);
       border-radius: 8px;
       color: var(--text-main);
-      padding: 8px 12px;
-      font-size: 12px;
+      padding: 7px 11px;
+      font-size: 11.5px;
       font-family: 'JetBrains Mono', monospace;
       transition: border-color 0.15s;
     }
@@ -973,9 +1013,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       flex-wrap: wrap;
       gap: 8px;
+      flex-shrink: 0;
     }
 
     .tool-btn {
@@ -983,7 +1024,7 @@
       color: var(--text-secondary);
       border: 1px solid var(--border-hairline);
       font-size: 11px;
-      padding: 5px 11px;
+      padding: 4px 10px;
       border-radius: 6px;
       font-weight: 600;
       cursor: pointer;
@@ -999,10 +1040,19 @@
       border-color: rgba(255, 255, 255, 0.2);
     }
 
+    #tableView {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
     .table-scroll-chamber {
-      max-height: 380px;
-      overflow-y: auto;
-      overflow-x: auto;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto !important;
+      overflow-x: auto !important;
       border: 1px solid var(--border-hairline);
       border-radius: 10px;
       background: var(--canvas);
@@ -1084,10 +1134,42 @@
     /* VIEW 3: Raw JSON View */
     .json-view-container {
       display: none;
+      flex: 1;
+      min-height: 0;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .json-grid-chamber {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .json-col {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 0;
+    }
+
+    .json-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      flex-shrink: 0;
     }
 
     .raw-json-box {
       width: 100%;
+      flex: 1;
+      min-height: 0;
       background: var(--input-bg);
       border: 1px solid var(--border-hairline);
       border-radius: 10px;
@@ -1096,6 +1178,8 @@
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
       line-height: 1.5;
+      resize: none;
+      overflow: auto;
     }
 
     .raw-json-box:focus {
@@ -1333,7 +1417,7 @@
       </div>
 
       <!-- 48-Hour Multi-Stream Telemetry Canvas with Interactive Time-Lapse -->
-      <div>
+      <div class="chart-stream-container">
         <div class="chart-section-bar">
           <span class="chart-heading">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
@@ -1403,10 +1487,10 @@
 
     <!-- VIEW 2: Data Matrix Chamber -->
     <div id="viewMatrix" class="chassis-box matrix-view-container">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-shrink: 0;">
         <div>
-          <h2 style="font-size: 16px; font-weight: 700; color: #fff;">48-Hour Telemetry Matrix Chamber</h2>
-          <p style="font-size: 11.5px; color: var(--text-muted);">Inspect or modify individual hourly sensor readings across the two solar cycles.</p>
+          <h2 style="font-size: 15px; font-weight: 700; color: #fff;">48-Hour Telemetry Matrix Chamber</h2>
+          <p style="font-size: 11px; color: var(--text-muted);">Inspect or modify individual hourly sensor readings across the two solar cycles.</p>
         </div>
         <button class="tool-btn" onclick="switchViewMode('overview')">← Back to Diagnostics</button>
       </div>
@@ -1426,7 +1510,7 @@
       <!-- Secondary matrix toolbar -->
       <div class="matrix-toolbar">
         <div style="display: flex; gap: 6px; align-items: center;">
-          <span id="rowCountBadge" style="font-size: 10.5px; font-weight: 700; color: var(--gold-400); font-family: 'JetBrains Mono', monospace; margin-right: 6px;">49 READINGS</span>
+          <span id="rowCountBadge" style="font-size: 10px; font-weight: 700; color: var(--gold-400); font-family: 'JetBrains Mono', monospace; margin-right: 6px;">49 READINGS</span>
           <button class="tool-btn" onclick="filterDay(1)">Day 1 (0-24h)</button>
           <button class="tool-btn" onclick="filterDay(2)">Day 2 (25-48h)</button>
           <button class="tool-btn" onclick="injectNoise()" title="Simulate realistic sensor jitter">
@@ -1465,7 +1549,7 @@
       </div>
 
       <!-- Action Footer -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-subtle);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border-subtle); flex-shrink: 0;">
         <span style="font-size: 11px; color: var(--text-muted);">Quick trigger: <kbd class="hotkey-tag">Ctrl + Enter</kbd></span>
         <button class="btn-action-primary" onclick="runInference(); switchViewMode('overview');">
           <span>Run 48h Diagnostic & View Results →</span>
@@ -1475,10 +1559,10 @@
 
     <!-- VIEW 3: Raw JSON View -->
     <div id="viewJson" class="chassis-box json-view-container">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-shrink: 0;">
         <div>
-          <h2 style="font-size: 16px; font-weight: 700; color: #fff;">Raw JSON Telemetry Interface</h2>
-          <p style="font-size: 11.5px; color: var(--text-muted);">Directly edit JSON request payloads or inspect model responses.</p>
+          <h2 style="font-size: 15px; font-weight: 700; color: #fff;">Raw JSON Telemetry Interface</h2>
+          <p style="font-size: 11px; color: var(--text-muted);">Directly edit JSON request payloads or inspect model responses.</p>
         </div>
         <div style="display: flex; gap: 8px;">
           <button class="tool-btn" onclick="formatJsonEditor()">Format JSON</button>
@@ -1487,22 +1571,22 @@
         </div>
       </div>
 
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-        <div>
-          <label style="display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; font-family: 'JetBrains Mono', monospace;">
+      <div class="json-grid-chamber">
+        <div class="json-col">
+          <label class="json-label">
             Input Payload (Request)
           </label>
-          <textarea id="jsonEditor" rows="18" class="raw-json-box"></textarea>
+          <textarea id="jsonEditor" class="raw-json-box"></textarea>
         </div>
-        <div>
-          <label style="display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; font-family: 'JetBrains Mono', monospace;">
+        <div class="json-col">
+          <label class="json-label">
             Inference Response (Model Output)
           </label>
-          <pre id="rawJsonResponse" class="raw-json-box" style="height: 380px; overflow: auto; margin: 0;">{}</pre>
+          <pre id="rawJsonResponse" class="raw-json-box">{}</pre>
         </div>
       </div>
 
-      <div style="display: flex; justify-content: flex-end; margin-top: 18px;">
+      <div style="display: flex; justify-content: flex-end; margin-top: 12px; flex-shrink: 0;">
         <button class="btn-action-primary" onclick="runInference(); switchViewMode('overview');">
           <span>Apply JSON & Run Diagnostic →</span>
         </button>
@@ -1694,9 +1778,9 @@
     function switchViewMode(mode) {
       playHapticTick(520, 0.02, 0.05);
       currentViewMode = mode;
-      document.getElementById('viewOverview').style.display = (mode === 'overview') ? 'block' : 'none';
-      document.getElementById('viewMatrix').style.display = (mode === 'matrix') ? 'block' : 'none';
-      document.getElementById('viewJson').style.display = (mode === 'json') ? 'block' : 'none';
+      document.getElementById('viewOverview').style.display = (mode === 'overview') ? 'flex' : 'none';
+      document.getElementById('viewMatrix').style.display = (mode === 'matrix') ? 'flex' : 'none';
+      document.getElementById('viewJson').style.display = (mode === 'json') ? 'flex' : 'none';
 
       document.getElementById('modeOverviewBtn').className = 'mode-btn' + (mode === 'overview' ? ' active' : '');
       document.getElementById('modeMatrixBtn').className = 'mode-btn' + (mode === 'matrix' ? ' active' : '');
