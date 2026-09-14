@@ -4,42 +4,43 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HoneyChain ML Diagnostic Studio • Precision Colony Intelligence</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23f59e0b%22 stroke-width=%222%22><path d=%22M12 2L2 7v10l10 5 10-5V7l-10-5z%22/><path d=%22M12 22V12%22/><path d=%22M22 7l-10 5-10-5%22/></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23d4a359%22 stroke-width=%221.75%22><polygon points=%2212 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2%22/><path d=%22M12 22V12%22/><path d=%22M22 8.5L12 12 2 8.5%22/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --bg-canvas: #08080a;
-      --bg-chassis: rgba(18, 18, 22, 0.7);
-      --bg-core: #0d0d11;
-      --bg-surface: #131318;
-      --bg-surface-hover: #191921;
-      --bg-input: #0a0a0d;
+      --canvas: #09090b;
+      --chassis: #101014;
+      --card-core: #141419;
+      --surface-elevated: #1a1a22;
+      --surface-hover: #22222d;
+      --input-bg: #0c0c0f;
       
-      --border-subtle: rgba(255, 255, 255, 0.06);
-      --border-chassis: rgba(255, 255, 255, 0.08);
-      --border-focus: rgba(245, 158, 11, 0.5);
+      --gold-300: #f3d8a2;
+      --gold-400: #e5b869;
+      --gold-500: #d4a359;
+      --gold-600: #b07e36;
+      --gold-glow: rgba(212, 163, 89, 0.18);
       
-      --text-main: #f4f4f5;
-      --text-muted: #a1a1aa;
-      --text-dim: #71717a;
-      --text-dark: #52525b;
+      --border-hairline: rgba(255, 255, 255, 0.07);
+      --border-subtle: rgba(255, 255, 255, 0.04);
+      --border-gold: rgba(212, 163, 89, 0.3);
       
-      --amber: #f59e0b;
-      --amber-light: #fbbf24;
-      --amber-glow: rgba(245, 158, 11, 0.18);
+      --text-hero: #fafafa;
+      --text-primary: #ededed;
+      --text-secondary: #9999a1;
+      --text-muted: #666672;
       
       --emerald: #10b981;
-      --emerald-glow: rgba(16, 185, 129, 0.16);
-      --rose: #f43f5e;
-      --rose-glow: rgba(244, 63, 94, 0.16);
+      --emerald-glow: rgba(16, 185, 129, 0.18);
+      --crimson: #f43f5e;
+      --crimson-glow: rgba(244, 63, 94, 0.18);
       --cyan: #06b6d4;
-      --cyan-glow: rgba(6, 182, 212, 0.16);
       
-      --ease-fluid: cubic-bezier(0.16, 1, 0.3, 1);
-      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-haptic: cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     * {
@@ -50,655 +51,264 @@
 
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--bg-canvas);
+      background-color: var(--canvas);
       background-image: 
-        radial-gradient(ellipse 90% 50% at 50% -10%, rgba(245, 158, 11, 0.07), transparent 70%),
-        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(16, 185, 129, 0.03), transparent 60%);
+        radial-gradient(ellipse 80% 40% at 50% -15%, rgba(212, 163, 89, 0.08), transparent 70%),
+        radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.02), transparent 50%),
+        radial-gradient(circle at 0% 100%, rgba(6, 182, 212, 0.02), transparent 50%);
       background-attachment: fixed;
-      color: var(--text-main);
+      color: var(--text-primary);
       line-height: 1.5;
-      padding: 24px 20px;
+      padding: 24px;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
     }
 
     .container {
-      max-width: 1540px;
+      max-width: 1480px;
       margin: 0 auto;
     }
 
-    /* Floating Island Header */
+    /* Noise Texture Overlay */
+    .bg-noise {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      opacity: 0.025;
+      z-index: 999;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* Top Floating Island Header */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 22px;
-      margin-bottom: 24px;
-      background: rgba(13, 13, 17, 0.82);
+      padding: 12px 24px;
+      margin-bottom: 28px;
+      background: rgba(16, 16, 20, 0.75);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
-      border: 1px solid var(--border-chassis);
+      border: 1px solid var(--border-hairline);
       border-radius: 9999px;
-      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.06);
       flex-wrap: wrap;
       gap: 16px;
     }
 
-    .brand {
+    .brand-meta {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
 
-    .brand-icon-box {
+    .brand-sigil {
       width: 36px;
       height: 36px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.04) 100%);
-      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 9px;
+      background: linear-gradient(145deg, rgba(212, 163, 89, 0.2) 0%, rgba(212, 163, 89, 0.03) 100%);
+      border: 1px solid var(--border-gold);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--amber-light);
-      box-shadow: 0 0 20px var(--amber-glow);
+      color: var(--gold-400);
+      box-shadow: 0 0 20px var(--gold-glow);
     }
 
-    .brand-text h1 {
-      font-size: 16px;
+    .brand-title {
+      font-size: 14px;
       font-weight: 700;
-      letter-spacing: -0.025em;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       color: #fff;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .brand-text h1 span.pill-meta {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--amber);
-      background: rgba(245, 158, 11, 0.1);
-      border: 1px solid rgba(245, 158, 11, 0.25);
-      padding: 1px 7px;
-      border-radius: 5px;
+    .brand-title span.editorial-tag {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 16px;
+      font-style: italic;
+      text-transform: none;
+      color: var(--gold-400);
+      letter-spacing: normal;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: var(--text-muted);
       font-family: 'JetBrains Mono', monospace;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.02em;
     }
 
-    .brand-text p {
-      font-size: 11.5px;
-      color: var(--text-dim);
-      font-weight: 500;
-    }
-
-    .header-actions {
+    .header-pills {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
-    .status-pill {
+    .system-status-pill {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: var(--bg-surface);
+      background: var(--card-core);
       padding: 5px 14px;
       border-radius: 9999px;
-      border: 1px solid var(--border-subtle);
+      border: 1px solid var(--border-hairline);
       font-size: 11.5px;
       font-weight: 600;
-      color: var(--text-muted);
+      color: var(--text-secondary);
       font-family: 'JetBrains Mono', monospace;
     }
 
-    .pulse-indicator {
+    .status-orb {
       position: relative;
       display: flex;
       width: 7px;
       height: 7px;
     }
 
-    .pulse-indicator .dot {
+    .status-orb .dot {
       position: absolute;
       inset: 0;
       border-radius: 50%;
       background-color: var(--emerald);
     }
 
-    .pulse-indicator .ring {
+    .status-orb .glow {
       position: absolute;
       inset: -3px;
       border-radius: 50%;
       background-color: var(--emerald);
-      opacity: 0.6;
-      animation: pingRing 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+      opacity: 0.5;
+      animation: orbPulse 2s cubic-bezier(0, 0, 0.2, 1) infinite;
     }
 
-    @keyframes pingRing {
+    @keyframes orbPulse {
       75%, 100% {
-        transform: scale(2.3);
+        transform: scale(2.4);
         opacity: 0;
       }
     }
 
-    .pulse-indicator.offline .dot { background-color: var(--rose); }
-    .pulse-indicator.offline .ring { display: none; }
+    .status-orb.offline .dot { background-color: var(--crimson); }
+    .status-orb.offline .glow { display: none; }
 
-    .btn-link-gh {
+    .btn-github-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-muted);
+      background: var(--card-core);
+      border: 1px solid var(--border-hairline);
+      color: var(--text-secondary);
       padding: 5px 13px;
       border-radius: 9999px;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
       text-decoration: none;
-      transition: all 0.2s var(--ease-fluid);
+      transition: all 0.2s var(--ease-editorial);
     }
 
-    .btn-link-gh:hover {
+    .btn-github-pill:hover {
       color: #fff;
-      border-color: rgba(255, 255, 255, 0.2);
-      background: var(--bg-surface-hover);
+      border-color: rgba(255, 255, 255, 0.22);
+      background: var(--surface-elevated);
       transform: translateY(-1px);
-    }
-
-    /* Asymmetric 2-Column Bento Grid */
-    .grid-workbench {
-      display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-      gap: 22px;
-      align-items: start;
-    }
-
-    @media (max-width: 1120px) {
-      .grid-workbench {
-        grid-template-columns: 1fr;
-      }
     }
 
     /* Doppelrand Chassis Enclosure */
-    .chassis-outer {
-      background: var(--bg-chassis);
-      border: 1px solid var(--border-chassis);
-      border-radius: 20px;
-      padding: 5px;
-      box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-      margin-bottom: 22px;
-      transition: border-color 0.25s var(--ease-fluid);
+    .chassis {
+      background: var(--chassis);
+      border: 1px solid var(--border-hairline);
+      border-radius: 24px;
+      padding: 6px;
+      box-shadow: 0 24px 60px -15px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      margin-bottom: 24px;
+      transition: border-color 0.3s var(--ease-editorial);
     }
 
-    .chassis-outer:hover {
-      border-color: rgba(255, 255, 255, 0.14);
+    .chassis:hover {
+      border-color: rgba(255, 255, 255, 0.12);
     }
 
     .chassis-inner {
-      background: var(--bg-core);
+      background: var(--card-core);
       border: 1px solid var(--border-subtle);
-      border-radius: calc(20px - 5px);
-      padding: 22px 24px;
+      border-radius: calc(24px - 6px);
+      padding: 28px 30px;
     }
 
-    .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .panel-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.015em;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .pill-scope {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--amber-light);
-      background: rgba(245, 158, 11, 0.1);
-      border: 1px solid rgba(245, 158, 11, 0.25);
-      padding: 3px 9px;
-      border-radius: 9999px;
-      font-family: 'JetBrains Mono', monospace;
-      letter-spacing: 0.04em;
-    }
-
-    /* Sleek Bento Presets Selector */
-    .presets-bento {
+    /* SECTION 1: Master Diagnostic Intelligence Showcase */
+    .hero-diagnostic-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 18px;
+      grid-template-columns: 280px 1fr;
+      gap: 32px;
+      align-items: center;
+      margin-bottom: 24px;
     }
 
-    @media (max-width: 768px) {
-      .presets-bento {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 480px) {
-      .presets-bento {
+    @media (max-width: 900px) {
+      .hero-diagnostic-grid {
         grid-template-columns: 1fr;
       }
     }
 
-    .preset-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 12px 14px;
-      text-align: left;
-      cursor: pointer;
-      transition: all 0.2s var(--ease-fluid);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 6px;
-      min-height: 86px;
+    /* Bespoke Horological Vitality Dial */
+    .chronograph-dial {
       position: relative;
-    }
-
-    .preset-card:hover {
-      background: var(--bg-surface-hover);
-      border-color: rgba(255, 255, 255, 0.16);
-      transform: translateY(-1px);
-    }
-
-    .preset-card.active {
-      background: linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, rgba(245, 158, 11, 0.02) 100%);
-      border-color: var(--amber);
-      box-shadow: 0 0 16px rgba(245, 158, 11, 0.14), inset 0 1px 0 rgba(245, 158, 11, 0.25);
-    }
-
-    .preset-card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .preset-card-heading {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 12.5px;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    .preset-icon {
-      color: var(--text-dim);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: color 0.2s;
-    }
-
-    .preset-card.active .preset-icon {
-      color: var(--amber-light);
-    }
-
-    .preset-tag {
-      font-size: 9.5px;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 4px;
-      background: rgba(255, 255, 255, 0.06);
-      color: var(--text-muted);
-      font-family: 'JetBrains Mono', monospace;
-      letter-spacing: 0.04em;
-    }
-
-    .preset-card.active .preset-tag {
-      background: rgba(245, 158, 11, 0.2);
-      color: var(--amber-light);
-    }
-
-    .preset-card-desc {
-      font-size: 11px;
-      color: var(--text-dim);
-      line-height: 1.35;
-    }
-
-    /* Configuration Inputs */
-    .config-strip {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-
-    .input-wrapper {
-      flex: 1;
-      min-width: 160px;
-    }
-
-    label.field-label {
-      display: block;
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--text-dim);
-      margin-bottom: 5px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    input.field-input, textarea.field-input {
-      width: 100%;
-      background: var(--bg-input);
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
-      color: var(--text-main);
-      padding: 9px 12px;
-      font-size: 12.5px;
-      font-family: inherit;
-      transition: all 0.18s var(--ease-fluid);
-    }
-
-    input.field-input:focus, textarea.field-input:focus {
-      outline: none;
-      border-color: var(--border-focus);
-      box-shadow: 0 0 0 1px var(--border-focus);
-      background: #0f0f14;
-    }
-
-    /* Tab Switcher & Micro Controls */
-    .workbench-nav-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--border-subtle);
-      margin-bottom: 14px;
-      padding-bottom: 10px;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .segmented-control {
-      display: flex;
-      background: var(--bg-surface);
-      padding: 3px;
-      border-radius: 10px;
-      border: 1px solid var(--border-subtle);
-      gap: 2px;
-    }
-
-    .segment-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-dim);
-      padding: 5px 12px;
-      border-radius: 7px;
-      cursor: pointer;
-      font-size: 11.5px;
-      font-weight: 600;
-      transition: all 0.18s var(--ease-fluid);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .segment-btn.active {
-      color: #fff;
-      background: var(--bg-core);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
-    }
-
-    .action-chip {
-      background: var(--bg-surface);
-      color: var(--text-muted);
-      border: 1px solid var(--border-subtle);
-      font-size: 11px;
-      padding: 5px 10px;
-      border-radius: 7px;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      transition: all 0.15s;
-    }
-
-    .action-chip:hover {
-      background: var(--bg-surface-hover);
-      color: #fff;
-      border-color: rgba(255, 255, 255, 0.16);
-    }
-
-    /* Telemetry Table Container */
-    .table-container-scroll {
-      max-height: 310px;
-      overflow-y: auto;
-      overflow-x: auto;
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      margin-bottom: 16px;
-      background: var(--bg-surface);
-      -webkit-overflow-scrolling: touch;
-    }
-
-    table.data-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    table.data-table th {
-      background: #0f0f13;
-      position: sticky;
-      top: 0;
-      color: var(--text-dim);
-      font-weight: 700;
-      text-transform: uppercase;
-      font-size: 9.5px;
-      letter-spacing: 0.08em;
-      padding: 9px 12px;
-      text-align: left;
-      border-bottom: 1px solid var(--border-subtle);
-      z-index: 2;
-      white-space: nowrap;
-    }
-
-    table.data-table td {
-      padding: 5px 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-      white-space: nowrap;
-    }
-
-    table.data-table tr:hover td {
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    table.data-table td input {
-      padding: 4px 7px;
-      font-size: 11.5px;
-      border-radius: 6px;
-      background: #0a0a0e;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      color: var(--text-main);
-      font-family: 'JetBrains Mono', monospace;
-      transition: border-color 0.15s;
-    }
-
-    table.data-table td input:focus {
-      outline: none;
-      border-color: var(--border-focus);
-      background: #111117;
-    }
-
-    .btn-row-del {
-      background: transparent;
-      border: none;
-      color: var(--rose);
-      cursor: pointer;
-      padding: 3px 6px;
-      border-radius: 4px;
-      font-size: 13px;
-      opacity: 0.5;
-      transition: all 0.15s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .btn-row-del:hover {
-      opacity: 1;
-      background: rgba(244, 63, 94, 0.12);
-    }
-
-    /* Primary CTA Execution Button */
-    .footer-action-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .btn-execute-inference {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 7px 8px 7px 20px;
-      border-radius: 9999px;
-      background: linear-gradient(180deg, #fef3c7 0%, #f59e0b 100%);
-      color: #08080a;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      cursor: pointer;
-      border: none;
-      box-shadow: 0 4px 18px rgba(245, 158, 11, 0.35);
-      transition: all 0.2s var(--ease-fluid);
-      user-select: none;
-    }
-
-    .btn-execute-inference:hover {
-      background: linear-gradient(180deg, #ffffff 0%, #fbbf24 100%);
-      box-shadow: 0 6px 24px rgba(245, 158, 11, 0.5);
-      transform: translateY(-1px);
-    }
-
-    .btn-execute-inference:active {
-      transform: scale(0.98);
-    }
-
-    .btn-execute-inference:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .btn-icon-capsule {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: rgba(8, 8, 10, 0.18);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.25s var(--ease-spring);
-    }
-
-    .btn-execute-inference:hover .btn-icon-capsule {
-      transform: scale(1.1) rotate(6deg);
-    }
-
-    kbd.hotkey-chip {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      padding: 2px 5px;
-      border-radius: 4px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10.5px;
-      color: var(--text-dim);
-    }
-
-    /* RIGHT COLUMN: Diagnostic Telemetry Analysis */
-    .hero-metric-display {
-      display: grid;
-      grid-template-columns: 156px 1fr;
-      gap: 20px;
-      background: linear-gradient(180deg, #101015 0%, #0d0d12 100%);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      padding: 18px 20px;
-      margin-bottom: 18px;
-      align-items: center;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    }
-
-    @media (max-width: 640px) {
-      .hero-metric-display {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
-    }
-
-    /* Precision Speedometer / Radial Arc */
-    .speedo-wrap {
-      position: relative;
-      width: 140px;
-      height: 140px;
+      width: 220px;
+      height: 220px;
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .speedo-svg {
+    .dial-svg {
       transform: rotate(-90deg);
       width: 100%;
       height: 100%;
     }
 
-    .speedo-bg-track {
+    .dial-track {
       fill: none;
       stroke: rgba(255, 255, 255, 0.05);
-      stroke-width: 9;
+      stroke-width: 8;
     }
 
-    .speedo-ticks {
+    .dial-ticks {
       fill: none;
-      stroke: rgba(255, 255, 255, 0.1);
-      stroke-width: 2;
-      stroke-dasharray: 2 10;
+      stroke: rgba(255, 255, 255, 0.12);
+      stroke-width: 1.5;
+      stroke-dasharray: 2 10.5;
     }
 
-    .speedo-progress {
+    .dial-progress-arc {
       fill: none;
-      stroke-width: 9;
+      stroke-width: 8;
       stroke-linecap: round;
-      stroke-dasharray: 377;
-      stroke-dashoffset: 377;
-      transition: stroke-dashoffset 0.85s var(--ease-fluid), stroke 0.35s ease;
-      filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.4));
+      stroke-dasharray: 565; /* 2 * PI * 90 */
+      stroke-dashoffset: 565;
+      transition: stroke-dashoffset 0.9s var(--ease-editorial), stroke 0.4s ease;
+      filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.45));
     }
 
-    .speedo-center-data {
+    .dial-center-content {
       position: absolute;
       inset: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      text-align: center;
     }
 
-    .speedo-score-number {
-      font-size: 34px;
+    .dial-score {
+      font-size: 46px;
       font-weight: 700;
       letter-spacing: -0.04em;
       color: #fff;
@@ -706,44 +316,48 @@
       line-height: 1;
     }
 
-    .speedo-label-sub {
-      font-size: 9px;
+    .dial-sub {
+      font-size: 9.5px;
       text-transform: uppercase;
       font-weight: 700;
-      letter-spacing: 0.12em;
-      color: var(--text-dim);
-      margin-top: 4px;
-    }
-
-    /* Risk Breakdown Info */
-    .risk-breakdown {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .risk-meta-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .badge-tier-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: 9999px;
-      font-size: 11px;
-      font-weight: 700;
-      background: rgba(6, 182, 212, 0.1);
-      border: 1px solid rgba(6, 182, 212, 0.3);
-      color: #67e8f9;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+      margin-top: 6px;
       font-family: 'JetBrains Mono', monospace;
     }
 
-    .badge-stress-risk {
+    /* Right Side Diagnostic Insight Statement & Drivers */
+    .diagnostic-narrative {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .narrative-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .narrative-headline {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .narrative-headline em {
+      font-style: italic;
+      color: var(--gold-400);
+    }
+
+    .badge-tier-luxury {
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -751,9 +365,75 @@
       border-radius: 9999px;
       font-size: 11px;
       font-weight: 700;
+      background: rgba(212, 163, 89, 0.08);
+      border: 1px solid var(--border-gold);
+      color: var(--gold-300);
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.04em;
+    }
+
+    /* Clinical Advisory Card */
+    .advisory-box {
+      background: linear-gradient(180deg, rgba(20, 20, 26, 0.8) 0%, rgba(16, 16, 21, 0.8) 100%);
+      border: 1px solid var(--border-hairline);
+      border-radius: 14px;
+      padding: 16px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .advisory-box::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--gold-500);
+    }
+
+    .advisory-box.danger-mode {
+      background: linear-gradient(180deg, rgba(35, 16, 22, 0.5) 0%, rgba(20, 16, 21, 0.8) 100%);
+      border-color: rgba(244, 63, 94, 0.3);
+    }
+
+    .advisory-box.danger-mode::before {
+      background: var(--crimson);
+    }
+
+    .advisory-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .advisory-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold-400);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .danger-mode .advisory-eyebrow {
+      color: #fda4af;
+    }
+
+    .badge-stress-capsule {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-size: 10.5px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      font-family: 'JetBrains Mono', monospace;
     }
 
     .stress-LOW {
@@ -763,194 +443,129 @@
     }
 
     .stress-MEDIUM {
-      background: var(--amber-glow);
-      border: 1px solid rgba(245, 158, 11, 0.35);
-      color: #fde68a;
+      background: var(--gold-glow);
+      border: 1px solid var(--border-gold);
+      color: var(--gold-300);
     }
 
     .stress-HIGH {
-      background: var(--rose-glow);
-      border: 1px solid rgba(244, 63, 94, 0.35);
+      background: var(--crimson-glow);
+      border: 1px solid rgba(244, 63, 94, 0.4);
       color: #fca5a5;
     }
 
-    .linear-meter-box {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
+    .advisory-text {
+      font-size: 13.5px;
+      color: var(--text-primary);
+      font-weight: 400;
+      line-height: 1.45;
     }
 
-    .meter-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 10.5px;
-      color: var(--text-dim);
-      font-weight: 600;
-    }
-
-    .meter-track {
-      height: 5px;
-      border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.06);
-      overflow: hidden;
-    }
-
-    .meter-bar {
-      height: 100%;
-      border-radius: 9999px;
-      transition: width 0.7s var(--ease-fluid);
-    }
-
-    /* Clinical Recommendation Banner */
-    .advisory-card {
-      background: rgba(245, 158, 11, 0.04);
-      border: 1px solid rgba(245, 158, 11, 0.2);
-      border-radius: 12px;
-      padding: 12px 14px;
-      margin-bottom: 18px;
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .advisory-card::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 3px;
-      background: var(--amber);
-    }
-
-    .advisory-card.alert-danger {
-      background: rgba(244, 63, 94, 0.06);
-      border-color: rgba(244, 63, 94, 0.25);
-    }
-
-    .advisory-card.alert-danger::before {
-      background: var(--rose);
-    }
-
-    .advisory-icon {
-      color: var(--amber);
-      margin-top: 1px;
-      flex-shrink: 0;
-    }
-
-    .alert-danger .advisory-icon {
-      color: var(--rose);
-    }
-
-    .advisory-title {
-      font-size: 9.5px;
-      font-weight: 700;
-      color: var(--amber-light);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-family: 'JetBrains Mono', monospace;
-      margin-bottom: 2px;
-    }
-
-    .alert-danger .advisory-title {
-      color: #fca5a5;
-    }
-
-    .advisory-content {
-      font-size: 13px;
-      color: #e4e4e7;
-      font-weight: 500;
-      line-height: 1.4;
-    }
-
-    /* Detection Scope Tags */
-    .scope-chips-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 18px;
-    }
-
-    .scope-chip {
-      font-size: 10.5px;
-      font-weight: 600;
-      padding: 3px 9px;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      color: var(--text-dim);
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* Key Telemetry Drivers (Divide Grid) */
-    .telemetry-drivers-grid {
+    /* Etched Telemetry Driver Ribbon (5 Pillars) */
+    .drivers-ribbon {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 6px;
-      margin-bottom: 18px;
+      background: rgba(14, 14, 18, 0.6);
+      border: 1px solid var(--border-hairline);
+      border-radius: 12px;
+      overflow: hidden;
     }
 
     @media (max-width: 768px) {
-      .telemetry-drivers-grid {
+      .drivers-ribbon {
         grid-template-columns: repeat(2, 1fr);
       }
     }
 
-    .driver-cell {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
-      padding: 9px 8px;
+    .driver-ribbon-item {
+      padding: 12px 14px;
+      border-right: 1px solid var(--border-hairline);
       text-align: center;
-      transition: transform 0.2s var(--ease-fluid), border-color 0.2s;
     }
 
-    .driver-cell:hover {
-      border-color: rgba(255, 255, 255, 0.15);
-      background: var(--bg-surface-hover);
-      transform: translateY(-1px);
+    .driver-ribbon-item:last-child {
+      border-right: none;
     }
 
-    .driver-cell-label {
+    .driver-ribbon-label {
       font-size: 9px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-dim);
-      margin-bottom: 3px;
       font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
       font-family: 'JetBrains Mono', monospace;
     }
 
-    .driver-cell-val {
-      font-size: 13.5px;
+    .driver-ribbon-val {
+      font-size: 15px;
       font-weight: 700;
       color: #fff;
       font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Chart Container & Stream Selectors */
-    .chart-header-row {
+    /* Anomaly Bar */
+    .anomaly-strip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .anomaly-track {
+      flex: 1;
+      height: 4px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.06);
+      overflow: hidden;
+    }
+
+    .anomaly-fill {
+      height: 100%;
+      border-radius: 9999px;
+      background: linear-gradient(90deg, #10b981, #d4a359);
+      transition: width 0.8s var(--ease-editorial);
+    }
+
+    /* SECTION 2: Cinematic 48h Telemetry Canvas */
+    .chart-box-outer {
+      margin-top: 10px;
+    }
+
+    .chart-controls {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 10px;
     }
 
-    .stream-toggle-chips {
+    .chart-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .stream-pills {
       display: flex;
       gap: 6px;
     }
 
-    .stream-chip {
+    .stream-pill-btn {
       background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      color: var(--text-dim);
-      font-size: 10px;
-      padding: 3px 9px;
+      border: 1px solid var(--border-hairline);
+      color: var(--text-muted);
+      font-size: 10.5px;
+      padding: 4px 10px;
       border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
@@ -958,49 +573,410 @@
       transition: all 0.15s;
     }
 
-    .stream-chip.active {
-      background: rgba(245, 158, 11, 0.12);
-      border-color: rgba(245, 158, 11, 0.4);
-      color: var(--amber-light);
+    .stream-pill-btn.active {
+      background: rgba(212, 163, 89, 0.12);
+      border-color: var(--border-gold);
+      color: var(--gold-300);
     }
 
-    .canvas-chart-box {
+    .canvas-container {
       position: relative;
       height: 240px;
       width: 100%;
     }
 
-    /* Collapsible Payload Inspection */
-    details.payload-drawer {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: 10px;
-      padding: 10px 14px;
-      margin-top: 16px;
+    /* SECTION 3: Workbench Split Grid (Archival Presets & Telemetry Matrix) */
+    .workbench-split {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+      gap: 24px;
+      align-items: start;
     }
 
-    details.payload-drawer summary {
+    @media (max-width: 1080px) {
+      .workbench-split {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Presets Bento */
+    .presets-subgrid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 600px) {
+      .presets-subgrid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .preset-card-luxury {
+      background: rgba(20, 20, 26, 0.6);
+      border: 1px solid var(--border-hairline);
+      border-radius: 12px;
+      padding: 13px 15px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.22s var(--ease-editorial);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+      min-height: 94px;
+      position: relative;
+    }
+
+    .preset-card-luxury:hover {
+      background: var(--surface-elevated);
+      border-color: rgba(255, 255, 255, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .preset-card-luxury.active {
+      background: linear-gradient(180deg, rgba(212, 163, 89, 0.1) 0%, rgba(20, 20, 26, 0.8) 100%);
+      border-color: var(--gold-500);
+      box-shadow: 0 0 20px rgba(212, 163, 89, 0.12), inset 0 1px 0 rgba(212, 163, 89, 0.3);
+    }
+
+    .preset-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .preset-name {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .preset-sigil {
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .preset-card-luxury.active .preset-sigil {
+      color: var(--gold-400);
+    }
+
+    .preset-code {
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.04em;
+    }
+
+    .preset-card-luxury.active .preset-code {
+      background: rgba(212, 163, 89, 0.2);
+      color: var(--gold-300);
+    }
+
+    .preset-summary {
+      font-size: 11px;
+      color: var(--text-secondary);
+      line-height: 1.35;
+    }
+
+    /* Configuration strip */
+    .config-pair {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .config-field {
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .config-field label {
+      display: block;
+      font-size: 9.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .config-field input, .raw-json-textarea {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border-hairline);
+      border-radius: 9px;
+      color: var(--text-primary);
+      padding: 8px 12px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      transition: all 0.18s var(--ease-editorial);
+    }
+
+    .config-field input:focus, .raw-json-textarea:focus {
+      outline: none;
+      border-color: var(--border-gold);
+      box-shadow: 0 0 0 1px var(--border-gold);
+      background: #111116;
+    }
+
+    /* Matrix Controls & Table */
+    .table-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-hairline);
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tab-pills-luxury {
+      display: flex;
+      background: var(--card-core);
+      padding: 3px;
+      border-radius: 9px;
+      border: 1px solid var(--border-hairline);
+      gap: 2px;
+    }
+
+    .tab-btn-luxury {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: 6px;
       cursor: pointer;
       font-size: 11.5px;
       font-weight: 600;
-      color: var(--text-dim);
+      transition: all 0.18s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tab-btn-luxury.active {
+      color: #fff;
+      background: var(--surface-elevated);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    .tool-chip {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-hairline);
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+
+    .tool-chip:hover {
+      background: var(--surface-elevated);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .scroll-table-wrapper {
+      max-height: 290px;
+      overflow-y: auto;
+      overflow-x: auto;
+      border: 1px solid var(--border-hairline);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      background: var(--card-core);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table.matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    table.matrix-table th {
+      background: #111116;
+      position: sticky;
+      top: 0;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      padding: 8px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-hairline);
+      z-index: 2;
+      white-space: nowrap;
+    }
+
+    table.matrix-table td {
+      padding: 4px 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.025);
+      white-space: nowrap;
+    }
+
+    table.matrix-table tr:hover td {
+      background: rgba(255, 255, 255, 0.015);
+    }
+
+    table.matrix-table td input {
+      padding: 4px 6px;
+      font-size: 11px;
+      border-radius: 5px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-primary);
+      font-family: 'JetBrains Mono', monospace;
+      transition: border-color 0.15s;
+    }
+
+    table.matrix-table td input:hover {
+      border-color: rgba(255, 255, 255, 0.08);
+      background: var(--input-bg);
+    }
+
+    table.matrix-table td input:focus {
+      outline: none;
+      border-color: var(--border-gold);
+      background: #101015;
+    }
+
+    .btn-del-mini {
+      background: transparent;
+      border: none;
+      color: var(--crimson);
+      cursor: pointer;
+      padding: 3px 5px;
+      border-radius: 4px;
+      font-size: 12px;
+      opacity: 0.45;
+      transition: all 0.15s;
+    }
+
+    .btn-del-mini:hover {
+      opacity: 1;
+      background: rgba(244, 63, 94, 0.15);
+    }
+
+    /* Primary Action Trigger */
+    .workbench-actions-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-satin-gold {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px 8px 22px;
+      border-radius: 9999px;
+      background: linear-gradient(180deg, #f7dfaf 0%, #d4a359 100%);
+      color: #0b0b0e;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 4px 20px rgba(212, 163, 89, 0.35);
+      transition: all 0.2s var(--ease-editorial);
+      user-select: none;
+    }
+
+    .btn-satin-gold:hover {
+      background: linear-gradient(180deg, #fff2d1 0%, #e5b869 100%);
+      box-shadow: 0 6px 28px rgba(212, 163, 89, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-satin-gold:active {
+      transform: scale(0.98);
+    }
+
+    .btn-satin-gold:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-sigil-island {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(11, 11, 14, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.25s var(--ease-haptic);
+    }
+
+    .btn-satin-gold:hover .btn-sigil-island {
+      transform: scale(1.1) rotate(6deg);
+    }
+
+    kbd.hotkey-badge {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    /* Drawer for Raw JSON */
+    details.code-drawer {
+      background: var(--card-core);
+      border: 1px solid var(--border-hairline);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-top: 14px;
+    }
+
+    details.code-drawer summary {
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
       display: flex;
       justify-content: space-between;
       align-items: center;
       user-select: none;
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    details.payload-drawer summary:hover {
+    details.code-drawer summary:hover {
       color: #fff;
     }
 
-    .code-mirror-wrap {
+    .code-mirror-box {
       position: relative;
       margin-top: 8px;
     }
 
-    pre.code-block {
-      background: #09090c;
+    pre.code-terminal {
+      background: #0a0a0d;
       border: 1px solid rgba(255, 255, 255, 0.05);
       border-radius: 8px;
       padding: 10px;
@@ -1008,10 +984,10 @@
       font-size: 11px;
       overflow-x: auto;
       color: #67e8f9;
-      max-height: 220px;
+      max-height: 200px;
     }
 
-    .btn-copy-code {
+    .btn-copy-terminal {
       position: absolute;
       top: 6px;
       right: 6px;
@@ -1019,38 +995,38 @@
       border: 1px solid rgba(255, 255, 255, 0.12);
       color: #fff;
       padding: 3px 8px;
-      border-radius: 5px;
-      font-size: 10.5px;
+      border-radius: 4px;
+      font-size: 10px;
       cursor: pointer;
       font-weight: 600;
       transition: all 0.15s;
     }
 
-    .btn-copy-code:hover {
+    .btn-copy-terminal:hover {
       background: rgba(255, 255, 255, 0.18);
     }
 
-    /* Sleek Floating Toast Notification */
+    /* Floating Toast Notification */
     #toast {
       position: fixed;
       bottom: 24px;
       right: 24px;
-      background: #111116;
-      border: 1px solid var(--border-chassis);
+      background: #15151a;
+      border: 1px solid var(--border-gold);
       color: #fff;
       padding: 9px 16px;
       border-radius: 8px;
       font-size: 12px;
       font-weight: 600;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
       transform: translateY(80px);
       opacity: 0;
-      transition: all 0.25s var(--ease-fluid);
-      z-index: 100;
+      transition: all 0.25s var(--ease-editorial);
+      z-index: 1000;
       pointer-events: none;
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 8px;
     }
 
     #toast.show {
@@ -1059,11 +1035,11 @@
     }
 
     .spinner-disc {
-      width: 14px;
-      height: 14px;
-      border: 2px solid rgba(0, 0, 0, 0.2);
+      width: 13px;
+      height: 13px;
+      border: 2px solid rgba(11, 11, 14, 0.25);
       border-radius: 50%;
-      border-top-color: #08080a;
+      border-top-color: #0b0b0e;
       animation: spinDisc 0.7s linear infinite;
     }
 
@@ -1073,182 +1049,284 @@
   </style>
 </head>
 <body>
+  <div class="bg-noise"></div>
   <div class="container">
-    <!-- Top Floating Island Header -->
+    <!-- Top Floating Header -->
     <header>
-      <div class="brand">
-        <div class="brand-icon-box">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2L2 7v10l10 5 10-5V7l-10-5z"/>
+      <div class="brand-meta">
+        <div class="brand-sigil">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/>
             <path d="M12 22V12"/>
-            <path d="M22 7l-10 5-10-5"/>
-            <path d="M2 17l10-5 10 5"/>
+            <path d="M22 8.5L12 12 2 8.5"/>
+            <path d="M2 15.5L12 12 22 15.5"/>
           </svg>
         </div>
-        <div class="brand-text">
-          <h1>
+        <div>
+          <div class="brand-title">
             HoneyChain ML Diagnostic Studio
-            <span class="pill-meta">T48 ENGINE</span>
-          </h1>
-          <p>Continuous Colony Health Intelligence • Full 48-Hour Telemetry Matrix</p>
+            <span class="editorial-tag">Precision Engine</span>
+          </div>
+          <div class="brand-sub">Tier T48 Full-Window Model • Continuous Apiary Vitality</div>
         </div>
       </div>
 
-      <div class="header-actions">
-        <div class="status-pill">
-          <div id="statusDot" class="pulse-indicator">
-            <span class="ring"></span>
+      <div class="header-pills">
+        <div class="system-status-pill">
+          <div id="statusDot" class="status-orb">
+            <span class="glow"></span>
             <span class="dot"></span>
           </div>
-          <span id="statusText">Connecting...</span>
+          <span id="statusText">Connecting Engine...</span>
         </div>
-        <a href="https://github.com/Honey-Chain/HoneyChain_ML" target="_blank" rel="noopener" class="btn-link-gh">
+        <a href="https://github.com/Honey-Chain/HoneyChain_ML" target="_blank" rel="noopener" class="btn-github-pill">
           <svg width="13" height="13" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
           <span>HoneyChain_ML</span>
         </a>
       </div>
     </header>
 
-    <!-- Asymmetric Bento Workbench -->
-    <div class="grid-workbench">
-      <!-- Left Column: Input Telemetry Panel -->
-      <div class="left-col">
-        <div class="chassis-outer">
-          <div class="chassis-inner">
-            <div class="panel-header">
-              <span class="panel-title">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21v-7m0-4V3m8 18v-9m0-4V3m8 18v-5m0-4V3M1 14h6m2-6h6m2 8h6"/></svg>
-                Telemetry Matrix Presets
-              </span>
-              <span class="pill-scope">Window: 48 Hours</span>
+    <!-- SECTION 1: Command Center Chassis (Vitality Dial + Clinical Narrative) -->
+    <div class="chassis">
+      <div class="chassis-inner">
+        <div class="hero-diagnostic-grid">
+          <!-- Swiss Chronograph Dial -->
+          <div class="chronograph-dial">
+            <svg class="dial-svg" viewBox="0 0 220 220">
+              <circle class="dial-track" cx="110" cy="110" r="90"></circle>
+              <circle class="dial-ticks" cx="110" cy="110" r="76"></circle>
+              <circle id="gaugeProgress" class="dial-progress-arc" cx="110" cy="110" r="90" stroke="var(--emerald)"></circle>
+            </svg>
+            <div class="dial-center-content">
+              <span id="metricHealthScore" class="dial-score">85.0</span>
+              <span class="dial-sub">Vitality Index</span>
+            </div>
+          </div>
+
+          <!-- Narrative Diagnostic Block -->
+          <div class="diagnostic-narrative">
+            <div class="narrative-header">
+              <div class="narrative-headline">
+                Colony Health <em>Evaluation</em>
+              </div>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <span id="inferenceTierBadge" class="badge-tier-luxury">Tier: T48 (48h Window)</span>
+                <span id="metricStressRisk" class="badge-stress-capsule stress-LOW">LOW STRESS</span>
+              </div>
             </div>
 
-            <!-- 6 Dedicated 48h Presets -->
-            <div class="presets-bento">
-              <button class="preset-card active" data-scenario="healthy" onclick="loadScenario('healthy')">
-                <div class="preset-card-top">
-                  <div class="preset-card-heading">
-                    <span class="preset-icon">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            <!-- Clinical Advisory Box -->
+            <div id="recBanner" class="advisory-box">
+              <div class="advisory-meta-row">
+                <span class="advisory-eyebrow">Diagnostic Synthesis</span>
+                <span id="metricStressProb" style="font-size: 11px; font-weight: 700; font-family: 'JetBrains Mono', monospace; color: var(--text-muted);">Stress Prob: 0.0%</span>
+              </div>
+              <div id="recText" class="advisory-text">Colony in circadian equilibrium. Temperature regulation and foraging flow operate within physiological baselines.</div>
+            </div>
+
+            <!-- 5 Telemetry Drivers Ribbon -->
+            <div class="drivers-ribbon">
+              <div class="driver-ribbon-item">
+                <div class="driver-ribbon-label">Activity Dev</div>
+                <div id="drvActivity" class="driver-ribbon-val">-0.42</div>
+              </div>
+              <div class="driver-ribbon-item">
+                <div class="driver-ribbon-label">Thermal Drift</div>
+                <div id="drvTemp" class="driver-ribbon-val">+0.15°C</div>
+              </div>
+              <div class="driver-ribbon-item">
+                <div class="driver-ribbon-label">48h Weight Delta</div>
+                <div id="drvTrend" class="driver-ribbon-val">+0.72kg</div>
+              </div>
+              <div class="driver-ribbon-item">
+                <div class="driver-ribbon-label">Acute Drop</div>
+                <div id="drvDrop" class="driver-ribbon-val">0.00kg</div>
+              </div>
+              <div class="driver-ribbon-item">
+                <div class="driver-ribbon-label">Net Flight</div>
+                <div id="drvFlow" class="driver-ribbon-val">+50/m</div>
+              </div>
+            </div>
+
+            <!-- Anomaly Line -->
+            <div class="anomaly-strip">
+              <span>Baseline Anomaly Deviation:</span>
+              <div class="anomaly-track">
+                <div id="abnormalityBar" class="anomaly-fill" style="width: 30.1%;"></div>
+              </div>
+              <span id="metricAbnormalityLabel" style="color: #fff; font-weight: 700;">30.1%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Integrated 48h Telemetry Canvas -->
+        <div class="chart-box-outer">
+          <div class="chart-controls">
+            <span class="chart-section-title">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              48-Hour Multi-Stream Dynamics
+            </span>
+            <div class="stream-pills">
+              <button class="stream-pill-btn active" id="chipWeight" onclick="toggleStream(0, this)">Weight (kg)</button>
+              <button class="stream-pill-btn active" id="chipTemp" onclick="toggleStream(1, this)">Temp (°C)</button>
+              <button class="stream-pill-btn active" id="chipFlow" onclick="toggleStream(2, this)">Net Flight</button>
+            </div>
+          </div>
+          <div class="canvas-container">
+            <canvas id="telemetryChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Detection Scope Micro Tags -->
+        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px;" id="scopeTags">
+          <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-muted); background: rgba(255,255,255,0.03); padding: 3px 8px; border-radius: 5px; border: 1px solid var(--border-hairline);">colony activity anomaly</span>
+          <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-muted); background: rgba(255,255,255,0.03); padding: 3px 8px; border-radius: 5px; border: 1px solid var(--border-hairline);">fast weight drop (robbing / swarm)</span>
+          <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-muted); background: rgba(255,255,255,0.03); padding: 3px 8px; border-radius: 5px; border: 1px solid var(--border-hairline);">sustained weight decline (starvation)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: Workbench Split Chassis (Archival Presets & Telemetry Matrix) -->
+    <div class="chassis">
+      <div class="chassis-inner">
+        <div class="workbench-split">
+          <!-- Left: Curated 48h Telemetry Archival Presets -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <span style="font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">
+                Curated Telemetry Archives
+              </span>
+              <span style="font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--gold-400);">48-Hour Full Windows</span>
+            </div>
+
+            <div class="presets-subgrid">
+              <button class="preset-card-luxury active" data-scenario="healthy" onclick="loadScenario('healthy')">
+                <div class="preset-header">
+                  <div class="preset-name">
+                    <span class="preset-sigil">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                     </span>
-                    <span>Balance</span>
+                    <span>Equilibrium</span>
                   </div>
-                  <span class="preset-tag">48H • BAL</span>
+                  <span class="preset-code">BAL • 48H</span>
                 </div>
-                <span class="preset-card-desc">Dual circadian solar cycle with progressive weight gain (+0.7kg).</span>
+                <span class="preset-summary">Dual circadian solar cycle with steady nectar store gain (+0.7kg).</span>
               </button>
 
-              <button class="preset-card" data-scenario="swarm" onclick="loadScenario('swarm')">
-                <div class="preset-card-top">
-                  <div class="preset-card-heading">
-                    <span class="preset-icon">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14m-7-7l7 7 7-7"/></svg>
+              <button class="preset-card-luxury" data-scenario="swarm" onclick="loadScenario('swarm')">
+                <div class="preset-header">
+                  <div class="preset-name">
+                    <span class="preset-sigil">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14m-7-7l7 7 7-7"/></svg>
                     </span>
-                    <span>Swarm</span>
+                    <span>Swarm Event</span>
                   </div>
-                  <span class="preset-tag">48H • SWM</span>
+                  <span class="preset-code">SWM • 48H</span>
                 </div>
-                <span class="preset-card-desc">Acute swarm event at hour 26 (-2.4kg drop & -320 flight loss).</span>
+                <span class="preset-summary">Mid-window swarm departure at hour 26 (-2.4kg drop & -320 bee loss).</span>
               </button>
 
-              <button class="preset-card" data-scenario="starvation" onclick="loadScenario('starvation')">
-                <div class="preset-card-top">
-                  <div class="preset-card-heading">
-                    <span class="preset-icon">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M19 17l-6-6-4 4-4-5"/></svg>
+              <button class="preset-card-luxury" data-scenario="starvation" onclick="loadScenario('starvation')">
+                <div class="preset-header">
+                  <div class="preset-name">
+                    <span class="preset-sigil">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M19 17l-6-6-4 4-4-5"/></svg>
                     </span>
                     <span>Depletion</span>
                   </div>
-                  <span class="preset-tag">48H • DEP</span>
+                  <span class="preset-code">DEP • 48H</span>
                 </div>
-                <span class="preset-card-desc">Continuous multi-day starvation decline (-3.6kg) without foraging.</span>
+                <span class="preset-summary">Continuous multi-day starvation decline (-3.6kg) without foraging.</span>
               </button>
 
-              <button class="preset-card" data-scenario="robbing" onclick="loadScenario('robbing')">
-                <div class="preset-card-top">
-                  <div class="preset-card-heading">
-                    <span class="preset-icon">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <button class="preset-card-luxury" data-scenario="robbing" onclick="loadScenario('robbing')">
+                <div class="preset-header">
+                  <div class="preset-name">
+                    <span class="preset-sigil">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                     </span>
-                    <span>Robbing</span>
+                    <span>Robbing Onset</span>
                   </div>
-                  <span class="preset-tag">48H • ROB</span>
+                  <span class="preset-code">ROB • 48H</span>
                 </div>
-                <span class="preset-card-desc">Afternoon raiding frenzies with store depletion & agitated hive heat.</span>
+                <span class="preset-summary">Crepuscular raiding frenzy with rapid store loss & agitated hive heat.</span>
               </button>
 
-              <button class="preset-card" data-scenario="nectar_surge" onclick="loadScenario('nectar_surge')">
-                <div class="preset-card-top">
-                  <div class="preset-card-heading">
-                    <span class="preset-icon">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              <button class="preset-card-luxury" data-scenario="nectar_surge" onclick="loadScenario('nectar_surge')">
+                <div class="preset-header">
+                  <div class="preset-name">
+                    <span class="preset-sigil">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
                     </span>
-                    <span>Honey Surge</span>
+                    <span>Honey Flow</span>
                   </div>
-                  <span class="preset-tag">48H • SUR</span>
+                  <span class="preset-code">SUR • 48H</span>
                 </div>
-                <span class="preset-card-desc">Intense bloom honeyflow: massive incoming bee flow & +1.9kg gain.</span>
+                <span class="preset-summary">Intense bloom honeyflow: massive incoming bee flow & +1.9kg gain.</span>
               </button>
 
-              <button class="preset-card" data-scenario="real_wurzburg" onclick="loadScenario('real_wurzburg')">
-                <div class="preset-card-top">
-                  <div class="preset-card-heading">
-                    <span class="preset-icon">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <button class="preset-card-luxury" data-scenario="real_wurzburg" onclick="loadScenario('real_wurzburg')">
+                <div class="preset-header">
+                  <div class="preset-name">
+                    <span class="preset-sigil">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                     </span>
-                    <span>Würzburg File</span>
+                    <span>Würzburg Sensor</span>
                   </div>
-                  <span class="preset-tag">48H • IOT</span>
+                  <span class="preset-code">IOT • 48H</span>
                 </div>
-                <span class="preset-card-desc">Authentic 48h German apiary sensor telemetry recorded in real field.</span>
+                <span class="preset-summary">Authentic 48h Bavarian apiary sensor telemetry recorded during swarm.</span>
               </button>
             </div>
 
-            <!-- Configuration Parameters -->
-            <div class="config-strip">
-              <div class="input-wrapper" style="flex: 1;">
-                <label class="field-label" for="hiveIdInput">Hive Node ID</label>
-                <input type="text" id="hiveIdInput" class="field-input" value="HIVE-KV-201" placeholder="e.g. HIVE-KV-201">
+            <!-- Parameters -->
+            <div class="config-pair">
+              <div class="config-field">
+                <label for="hiveIdInput">Hive Node ID</label>
+                <input type="text" id="hiveIdInput" value="HIVE-KV-201" placeholder="e.g. HIVE-KV-201">
               </div>
-              <div class="input-wrapper" style="flex: 1.3;">
-                <label class="field-label" for="apiKeyInput">Authorization Secret (X-ML-API-Key)</label>
-                <input type="password" id="apiKeyInput" class="field-input" placeholder="Optional (configured in Render)">
+              <div class="config-field" style="flex: 1.2;">
+                <label for="apiKeyInput">Authorization Key (X-ML-API-Key)</label>
+                <input type="password" id="apiKeyInput" placeholder="Optional (configured in Render)">
               </div>
             </div>
+          </div>
 
-            <!-- Tabs Bar & Secondary Tools -->
-            <div class="workbench-nav-bar">
-              <div class="segmented-control">
-                <button id="tabTableBtn" class="segment-btn active" onclick="switchTab('table')">
+          <!-- Right: Telemetry Matrix Editor -->
+          <div>
+            <div class="table-toolbar">
+              <div class="tab-pills-luxury">
+                <button id="tabTableBtn" class="tab-btn-luxury active" onclick="switchTab('table')">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
                   Telemetry Matrix
                 </button>
-                <button id="tabJsonBtn" class="segment-btn" onclick="switchTab('json')">
+                <button id="tabJsonBtn" class="tab-btn-luxury" onclick="switchTab('json')">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
                   Raw JSON
                 </button>
               </div>
-              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-                <span id="rowCountBadge" style="font-size: 10px; font-weight: 700; color: var(--text-dark); font-family: 'JetBrains Mono', monospace; margin-right: 4px;">49 READINGS</span>
-                <button class="action-chip" onclick="filterDay(1)" title="Scroll to Day 1 (0-24h)">Day 1</button>
-                <button class="action-chip" onclick="filterDay(2)" title="Scroll to Day 2 (25-48h)">Day 2</button>
-                <button class="action-chip" onclick="injectNoise()" title="Simulate Realistic IoT Sensor Jitter">
+
+              <div style="display: flex; gap: 5px; align-items: center; flex-wrap: wrap;">
+                <span id="rowCountBadge" style="font-size: 9.5px; font-weight: 700; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; margin-right: 4px;">49 READINGS</span>
+                <button class="tool-chip" onclick="filterDay(1)" title="Jump to Day 1 (0-24h)">Day 1</button>
+                <button class="tool-chip" onclick="filterDay(2)" title="Jump to Day 2 (25-48h)">Day 2</button>
+                <button class="tool-chip" onclick="injectNoise()" title="Simulate realistic sensor jitter">
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v7L20 10h-6V3L4 14z"/></svg>
                   Jitter
                 </button>
-                <button class="action-chip" onclick="exportCsv()" title="Export CSV for analysis">
+                <button class="tool-chip" onclick="exportCsv()" title="Export CSV matrix">
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                   CSV
                 </button>
-                <button class="action-chip" onclick="addRow()">+ Hour</button>
-                <button class="action-chip" onclick="clearRows()">Clear</button>
+                <button class="tool-chip" onclick="addRow()">+ Hour</button>
+                <button class="tool-chip" onclick="clearRows()">Clear</button>
               </div>
             </div>
 
             <!-- Table View -->
             <div id="tableView">
-              <div class="table-container-scroll" id="tableScrollContainer">
-                <table class="data-table" id="readingsTable">
+              <div class="scroll-table-wrapper" id="tableScrollContainer">
+                <table class="matrix-table" id="readingsTable">
                   <thead>
                     <tr>
                       <th>#</th>
@@ -1256,7 +1334,7 @@
                       <th>Temp (°C)</th>
                       <th>Humidity (%)</th>
                       <th>Weight (kg)</th>
-                      <th>Net Flow</th>
+                      <th>Net Flight</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -1267,172 +1345,61 @@
 
             <!-- JSON View -->
             <div id="jsonView" style="display: none;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span style="font-size: 11px; color: var(--text-muted);">Directly edit or paste 48h reading matrix:</span>
-                <button class="action-chip" onclick="formatJsonEditor()">Format JSON</button>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-size: 11px; color: var(--text-muted);">Directly edit 48h payload matrix:</span>
+                <button class="tool-chip" onclick="formatJsonEditor()">Format JSON</button>
               </div>
-              <textarea id="jsonEditor" rows="12" class="field-input" style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px;"></textarea>
+              <textarea id="jsonEditor" rows="11" class="raw-json-textarea"></textarea>
             </div>
 
-            <!-- Bottom CTA Execution Bar -->
-            <div class="footer-action-bar" style="margin-top: 16px;">
-              <div style="font-size: 11.5px; color: var(--text-dark); display: flex; align-items: center; gap: 6px;">
-                <span>Trigger shortcut:</span>
-                <kbd class="hotkey-chip">Ctrl + Enter</kbd>
+            <!-- Actions row -->
+            <div class="workbench-actions-row">
+              <div style="font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+                <span>Trigger:</span>
+                <kbd class="hotkey-badge">Ctrl + Enter</kbd>
               </div>
-              <button id="btnRun" class="btn-execute-inference" onclick="runInference()">
+              <button id="btnRun" class="btn-satin-gold" onclick="runInference()">
                 <span id="btnRunText">Run 48h Diagnostic</span>
-                <span class="btn-icon-capsule" id="btnRunIconWrapper">
+                <span class="btn-sigil-island" id="btnRunIconWrapper">
                   <span id="btnRunIcon">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                   </span>
                 </span>
               </button>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Right Column: Diagnostic Intelligence Panel -->
-      <div class="right-col">
-        <div class="chassis-outer">
-          <div class="chassis-inner">
-            <div class="panel-header">
-              <span class="panel-title">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                Colony Vitality Assessment
-              </span>
-              <span id="inferenceTierBadge" class="badge-tier-pill">Tier: T48 (48h Window)</span>
-            </div>
-
-            <!-- Precision Health Arc & Stress Metrics -->
-            <div class="hero-metric-display">
-              <div class="speedo-wrap">
-                <svg class="speedo-svg" viewBox="0 0 140 140">
-                  <circle class="speedo-bg-track" cx="70" cy="70" r="58"></circle>
-                  <circle class="speedo-ticks" cx="70" cy="70" r="48"></circle>
-                  <circle id="gaugeProgress" class="speedo-progress" cx="70" cy="70" r="58" stroke="var(--emerald)"></circle>
-                </svg>
-                <div class="speedo-center-data">
-                  <span id="metricHealthScore" class="speedo-score-number">85.0</span>
-                  <span class="speedo-label-sub">Health Index</span>
-                </div>
-              </div>
-
-              <div class="risk-breakdown">
-                <div class="risk-meta-row">
-                  <span id="metricStressRisk" class="badge-stress-risk stress-LOW">LOW STRESS</span>
-                  <span id="metricStressProb" style="font-size: 11.5px; font-weight: 700; color: var(--text-main); font-family: 'JetBrains Mono', monospace;">Prob: 0.0%</span>
-                </div>
-
-                <!-- Linear Abnormality Deviation Bar -->
-                <div class="linear-meter-box">
-                  <div class="meter-labels">
-                    <span>Baseline Anomaly Deviation</span>
-                    <span id="metricAbnormalityLabel" style="font-family: 'JetBrains Mono', monospace; color: #fff;">30.1%</span>
-                  </div>
-                  <div class="meter-track">
-                    <div id="abnormalityBar" class="meter-bar" style="width: 30.1%; background: linear-gradient(90deg, #10b981, #f59e0b);"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Clinical Advisory Card -->
-            <div id="recBanner" class="advisory-card">
-              <div class="advisory-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              </div>
-              <div>
-                <div class="advisory-title">Clinical Diagnostic Advisory</div>
-                <div id="recText" class="advisory-content">Colony metrics stable. Circadian thermoregulation and foraging in equilibrium.</div>
-              </div>
-            </div>
-
-            <!-- Detection Scope Tags -->
-            <div class="scope-chips-row" id="scopeTags">
-              <span class="scope-chip">colony activity anomaly</span>
-              <span class="scope-chip">fast weight drop (robbing / swarm)</span>
-              <span class="scope-chip">sustained weight decline (starvation)</span>
-            </div>
-
-            <!-- Telemetry Key Drivers -->
-            <div>
-              <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); margin-bottom: 7px; font-family: 'JetBrains Mono', monospace;">
-                Diagnostic Telemetry Drivers (48h Cumulative)
-              </div>
-              <div class="telemetry-drivers-grid">
-                <div class="driver-cell">
-                  <div class="driver-cell-label">Activity Dev</div>
-                  <div id="drvActivity" class="driver-cell-val">-0.42</div>
-                </div>
-                <div class="driver-cell">
-                  <div class="driver-cell-label">Temp Drift</div>
-                  <div id="drvTemp" class="driver-cell-val">+0.15°C</div>
-                </div>
-                <div class="driver-cell">
-                  <div class="driver-cell-label">Weight Delta</div>
-                  <div id="drvTrend" class="driver-cell-val">+0.72kg</div>
-                </div>
-                <div class="driver-cell">
-                  <div class="driver-cell-label">Acute Drop</div>
-                  <div id="drvDrop" class="driver-cell-val">0.00kg</div>
-                </div>
-                <div class="driver-cell">
-                  <div class="driver-cell-label">Net Flight</div>
-                  <div id="drvFlow" class="driver-cell-val">+50/m</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Telemetry Multi-Stream Canvas -->
-            <div>
-              <div class="chart-header-row">
-                <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); font-family: 'JetBrains Mono', monospace;">
-                  48-Hour Multi-Stream Dynamics
-                </span>
-                <div class="stream-toggle-chips">
-                  <button class="stream-chip active" id="chipWeight" onclick="toggleStream(0, this)">Weight (kg)</button>
-                  <button class="stream-chip active" id="chipTemp" onclick="toggleStream(1, this)">Temp (°C)</button>
-                  <button class="stream-chip active" id="chipFlow" onclick="toggleStream(2, this)">Net Flight</button>
-                </div>
-              </div>
-              <div class="canvas-chart-box">
-                <canvas id="telemetryChart"></canvas>
-              </div>
-            </div>
-
-            <!-- Inspect Payload Drawer -->
-            <details class="payload-drawer">
-              <summary>
-                <span>Inspect Microservice Response Payload (JSON)</span>
-                <span style="font-size: 9.5px; font-family: 'JetBrains Mono', monospace;">view raw</span>
-              </summary>
-              <div class="code-mirror-wrap">
-                <button class="btn-copy-code" onclick="copyRawJson(this)">Copy JSON</button>
-                <pre id="rawJsonResponse" class="code-block">{}</pre>
-              </div>
-            </details>
+        <!-- Raw Model JSON Inspection Drawer -->
+        <details class="code-drawer">
+          <summary>
+            <span>Inspect Microservice Response Payload (JSON)</span>
+            <span style="font-size: 9.5px;">view raw</span>
+          </summary>
+          <div class="code-mirror-box">
+            <button class="btn-copy-terminal" onclick="copyRawJson(this)">Copy JSON</button>
+            <pre id="rawJsonResponse" class="code-terminal">{}</pre>
           </div>
-        </div>
+        </details>
       </div>
     </div>
   </div>
 
+  <!-- Toast Notification -->
   <div id="toast">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-    <span id="toastMsg">Action completed</span>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold-400)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toastMsg">Action confirmed</span>
   </div>
 
   <script>
-    // App State
+    // State management
     let currentReadings = [];
     let currentTab = 'table';
     let chartInstance = null;
     let selectedScenario = 'healthy';
     let previousScore = 85.0;
 
-    // Storage for API Key
+    // Persist API key
     const savedKey = localStorage.getItem('honeychain_ml_key');
     if (savedKey) {
       document.getElementById('apiKeyInput').value = savedKey;
@@ -1441,7 +1408,7 @@
       localStorage.setItem('honeychain_ml_key', e.target.value.trim());
     });
 
-    // Hotkey: Ctrl + Enter / Cmd + Enter
+    // Hotkey: Ctrl + Enter
     document.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         e.preventDefault();
@@ -1456,7 +1423,7 @@
       setTimeout(() => { toast.classList.remove('show'); }, 2200);
     }
 
-    // Ping check with microservice
+    // Health latency test
     async function checkHealth() {
       const startTime = performance.now();
       try {
@@ -1464,18 +1431,18 @@
         const latency = Math.round(performance.now() - startTime);
         if (res.ok) {
           const data = await res.json();
-          document.getElementById('statusDot').className = 'pulse-indicator';
+          document.getElementById('statusDot').className = 'status-orb';
           document.getElementById('statusText').innerText = `Online • ${latency}ms • 48h Engine`;
         } else {
-          throw new Error('Non-200 response');
+          throw new Error('Non-200 status');
         }
       } catch (err) {
-        document.getElementById('statusDot').className = 'pulse-indicator offline';
+        document.getElementById('statusDot').className = 'status-orb offline';
         document.getElementById('statusText').innerText = 'Microservice Offline';
       }
     }
 
-    // 48-Hour Reading Matrix Generator
+    // 48-Hour Scenario Matrix Generator
     function getScenarioData(type) {
       const readings = [];
 
@@ -1486,13 +1453,13 @@
         let temp, hum, weight, flow;
 
         if (type === 'healthy') {
-          // 48h Circadian rhythm with stable gain
+          // Equilibrium: 2 solar cycles, steady gain (+0.7kg)
           flow = isDay ? 50 : 0;
           temp = 34.8 + (h >= 11 && h <= 15 ? 0.4 : -0.2);
           weight = 35.0 + (i * 0.015);
           hum = 58.0;
         } else if (type === 'swarm') {
-          // 48h Swarm: Sudden departure drop at hour 26
+          // Swarm: Acute drop at hour 26 (Day 2, 14:00)
           if (i < 26) {
             weight = 36.5;
             flow = isDay ? 40 : 0;
@@ -1508,20 +1475,20 @@
           }
           hum = 55.0;
         } else if (type === 'starvation') {
-          // 48h Starvation: continuous store drainage
+          // Depletion: Continuous downward store loss
           flow = isDay ? -5 : -2;
           temp = 34.0 - (i * 0.03);
           weight = 35.0 - (i * 0.075);
           hum = 60.0;
         } else if (type === 'robbing') {
-          // 48h Robbing: Raiding frenzy in afternoons
+          // Robbing: Raiding frenzy in afternoons
           const isRobbingHour = isDay && (h >= 12 && h <= 16);
           flow = isRobbingHour ? -150 : (isDay ? 15 : 0);
           temp = isRobbingHour ? 35.5 : 34.7;
           weight = 36.0 - (i * 0.05);
           hum = 52.0;
         } else if (type === 'nectar_surge') {
-          // 48h Heavy Nectar Accumulation
+          // Nectar surge: High flow and storage
           flow = isDay ? 85 : 0;
           temp = 34.9 + (h >= 11 && h <= 15 ? 0.3 : -0.1);
           weight = 35.0 + (i * 0.04);
@@ -1543,7 +1510,7 @@
     // Load Scenario
     async function loadScenario(type) {
       selectedScenario = type;
-      document.querySelectorAll('.preset-card').forEach(b => {
+      document.querySelectorAll('.preset-card-luxury').forEach(b => {
         if (b.getAttribute('data-scenario') === type) {
           b.classList.add('active');
         } else {
@@ -1552,19 +1519,19 @@
       });
 
       if (type === 'real_wurzburg') {
-        const descEl = document.querySelector('[data-scenario="real_wurzburg"] .preset-card-desc');
-        const origDesc = descEl ? descEl.innerText : '';
-        if (descEl) descEl.innerText = 'Streaming IoT file...';
+        const desc = document.querySelector('[data-scenario="real_wurzburg"] .preset-summary');
+        const orig = desc ? desc.innerText : '';
+        if (desc) desc.innerText = 'Retrieving IoT file...';
         try {
           const res = await fetch('/api/sample-input');
           const data = await res.json();
           currentReadings = data.readings || [];
           document.getElementById('hiveIdInput').value = data.hiveId || 'WURZBURG';
         } catch (err) {
-          alert('Could not fetch sample_input.json: ' + err.message);
+          alert('Could not load sample_input.json: ' + err.message);
           currentReadings = getScenarioData('swarm');
         } finally {
-          if (descEl) descEl.innerText = origDesc;
+          if (desc) desc.innerText = orig;
         }
       } else {
         currentReadings = getScenarioData(type);
@@ -1584,14 +1551,14 @@
         const tr = document.createElement('tr');
         tr.id = `row-${idx}`;
         tr.innerHTML = `
-          <td style="color: var(--text-dark); font-weight: 600;">${idx + 1}</td>
+          <td style="color: var(--text-muted); font-weight: 600;">${idx + 1}</td>
           <td><input type="text" value="${r.timestamp}" onchange="updateRow(${idx}, 'timestamp', this.value)" style="width: 155px;"></td>
-          <td><input type="number" step="0.1" value="${r.temperature}" onchange="updateRow(${idx}, 'temperature', parseFloat(this.value))" style="width: 75px;"></td>
-          <td><input type="number" step="0.1" value="${r.humidity}" onchange="updateRow(${idx}, 'humidity', parseFloat(this.value))" style="width: 70px;"></td>
-          <td><input type="number" step="0.01" value="${r.weight}" onchange="updateRow(${idx}, 'weight', parseFloat(this.value))" style="width: 80px;"></td>
-          <td><input type="number" step="1" value="${r.flow}" onchange="updateRow(${idx}, 'flow', parseFloat(this.value))" style="width: 70px;"></td>
-          <td><button class="btn-row-del" title="Delete Row" onclick="deleteRow(${idx})">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <td><input type="number" step="0.1" value="${r.temperature}" onchange="updateRow(${idx}, 'temperature', parseFloat(this.value))" style="width: 72px;"></td>
+          <td><input type="number" step="0.1" value="${r.humidity}" onchange="updateRow(${idx}, 'humidity', parseFloat(this.value))" style="width: 68px;"></td>
+          <td><input type="number" step="0.01" value="${r.weight}" onchange="updateRow(${idx}, 'weight', parseFloat(this.value))" style="width: 78px;"></td>
+          <td><input type="number" step="1" value="${r.flow}" onchange="updateRow(${idx}, 'flow', parseFloat(this.value))" style="width: 68px;"></td>
+          <td><button class="btn-del-mini" title="Delete Row" onclick="deleteRow(${idx})">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button></td>
         `;
         tbody.appendChild(tr);
@@ -1644,18 +1611,18 @@
       updateJsonFromReadings();
     }
 
-    // Scroll to Day
+    // Scroll to day index
     function filterDay(dayNum) {
       const targetIndex = dayNum === 1 ? 0 : Math.min(24, currentReadings.length - 1);
       const row = document.getElementById(`row-${targetIndex}`);
       if (row) {
         row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        row.style.backgroundColor = 'rgba(245, 158, 11, 0.15)';
+        row.style.backgroundColor = 'rgba(212, 163, 89, 0.15)';
         setTimeout(() => { row.style.backgroundColor = ''; }, 1200);
       }
     }
 
-    // Realistic IoT Sensor Variance
+    // Sensor variance simulator
     function injectNoise() {
       currentReadings.forEach(r => {
         r.temperature = Number((r.temperature + (Math.random() * 0.2 - 0.1)).toFixed(2));
@@ -1666,7 +1633,7 @@
       });
       renderTable();
       updateJsonFromReadings();
-      showToast('Simulated sensor noise injected');
+      showToast('Simulated IoT sensor variance injected');
       runInference();
     }
 
@@ -1683,24 +1650,24 @@
       a.download = `honeychain_48h_${selectedScenario}.csv`;
       a.click();
       URL.revokeObjectURL(url);
-      showToast('Exported 48h CSV dataset');
+      showToast('Exported 48-Hour CSV dataset');
     }
 
-    // Switch between matrix table and JSON
+    // Tab switcher
     function switchTab(tab) {
       currentTab = tab;
       if (tab === 'table') {
         document.getElementById('tableView').style.display = 'block';
         document.getElementById('jsonView').style.display = 'none';
-        document.getElementById('tabTableBtn').className = 'segment-btn active';
-        document.getElementById('tabJsonBtn').className = 'segment-btn';
+        document.getElementById('tabTableBtn').className = 'tab-btn-luxury active';
+        document.getElementById('tabJsonBtn').className = 'tab-btn-luxury';
         updateReadingsFromJson();
         renderTable();
       } else {
         document.getElementById('tableView').style.display = 'none';
         document.getElementById('jsonView').style.display = 'block';
-        document.getElementById('tabTableBtn').className = 'segment-btn';
-        document.getElementById('tabJsonBtn').className = 'segment-btn active';
+        document.getElementById('tabTableBtn').className = 'tab-btn-luxury';
+        document.getElementById('tabJsonBtn').className = 'tab-btn-luxury active';
         updateJsonFromReadings();
       }
     }
@@ -1723,7 +1690,7 @@
           document.getElementById('hiveIdInput').value = parsed.hiveId;
         }
       } catch (e) {
-        // preserve
+        // keep current
       }
     }
 
@@ -1731,7 +1698,7 @@
       try {
         const parsed = JSON.parse(document.getElementById('jsonEditor').value);
         document.getElementById('jsonEditor').value = JSON.stringify(parsed, null, 2);
-        showToast('JSON Formatted cleanly');
+        showToast('JSON Formatted');
       } catch (e) {
         alert('Invalid JSON: ' + e.message);
       }
@@ -1784,13 +1751,13 @@
         alert('Connection error: ' + err.message);
       } finally {
         btn.disabled = false;
-        btnIcon.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
+        btnIcon.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
         btnText.innerText = 'Run 48h Diagnostic';
       }
     }
 
-    // Number Roll Animation
-    function animateScore(start, end, duration = 750) {
+    // Smooth counter roll
+    function animateScore(start, end, duration = 800) {
       const el = document.getElementById('metricHealthScore');
       if (isNaN(end)) {
         el.innerText = '--';
@@ -1812,14 +1779,14 @@
       requestAnimationFrame(update);
     }
 
-    // Render Diagnostic Evaluation
+    // Render results
     function renderResults(data) {
       // 1. Tier Badge
       const tier = data.tier || 'T48';
       const hours = data.hoursAvailable ? ` (${data.hoursAvailable}h Window)` : ' (48h Window)';
       document.getElementById('inferenceTierBadge').innerText = `Tier: ${tier}${hours}`;
 
-      // 2. Health Score Gauge
+      // 2. Health Score Dial
       const score = (data.healthScore !== null && data.healthScore !== undefined) ? Number(data.healthScore) : NaN;
       if (!isNaN(score)) {
         animateScore(previousScore, score);
@@ -1829,33 +1796,33 @@
       }
 
       const gauge = document.getElementById('gaugeProgress');
-      const circumference = 377; // 2 * PI * 60
+      const circumference = 565; // 2 * PI * 90
       if (!isNaN(score)) {
         const offset = circumference - (score / 100) * circumference;
         gauge.style.strokeDashoffset = offset;
         if (score >= 75) {
           gauge.style.stroke = 'var(--emerald)';
-          gauge.style.filter = 'drop-shadow(0 0 8px rgba(16, 185, 129, 0.45))';
+          gauge.style.filter = 'drop-shadow(0 0 12px rgba(16, 185, 129, 0.45))';
         } else if (score >= 50) {
-          gauge.style.stroke = 'var(--amber)';
-          gauge.style.filter = 'drop-shadow(0 0 8px rgba(245, 158, 11, 0.45))';
+          gauge.style.stroke = 'var(--gold-400)';
+          gauge.style.filter = 'drop-shadow(0 0 12px rgba(212, 163, 89, 0.45))';
         } else {
-          gauge.style.stroke = 'var(--rose)';
-          gauge.style.filter = 'drop-shadow(0 0 8px rgba(244, 63, 94, 0.45))';
+          gauge.style.stroke = 'var(--crimson)';
+          gauge.style.filter = 'drop-shadow(0 0 12px rgba(244, 63, 94, 0.45))';
         }
       } else {
         gauge.style.strokeDashoffset = circumference;
       }
 
-      // 3. Stress Risk & Probability
+      // 3. Stress Risk
       const risk = data.stressRisk || 'UNKNOWN';
       const riskEl = document.getElementById('metricStressRisk');
       riskEl.innerText = `${risk} STRESS`;
-      riskEl.className = `badge-stress-risk stress-${risk}`;
+      riskEl.className = `badge-stress-capsule stress-${risk}`;
 
       let probText = 'Prob: --';
       if (data.stressProbability !== null && data.stressProbability !== undefined) {
-        probText = `Prob: ${(data.stressProbability * 100).toFixed(1)}%`;
+        probText = `Stress Prob: ${(data.stressProbability * 100).toFixed(1)}%`;
       }
       document.getElementById('metricStressProb').innerText = probText;
 
@@ -1864,14 +1831,14 @@
       document.getElementById('metricAbnormalityLabel').innerText = `${abn}%`;
       document.getElementById('abnormalityBar').style.width = `${Math.min(100, Math.max(0, abn))}%`;
 
-      // 5. Clinical Recommendation Banner
-      const rec = data.recommendation || 'No recommendation provided.';
+      // 5. Clinical Advisory Box
+      const rec = data.recommendation || 'No clinical recommendation provided.';
       document.getElementById('recText').innerText = rec;
       const recBanner = document.getElementById('recBanner');
       if (risk === 'HIGH') {
-        recBanner.className = 'advisory-card alert-danger';
+        recBanner.className = 'advisory-box danger-mode';
       } else {
-        recBanner.className = 'advisory-card';
+        recBanner.className = 'advisory-box';
       }
 
       // 6. Detection Scope
@@ -1884,12 +1851,12 @@
       ];
       scopes.forEach(scope => {
         const tag = document.createElement('span');
-        tag.className = 'scope-chip';
+        tag.style.cssText = "font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-muted); background: rgba(255,255,255,0.03); padding: 3px 8px; border-radius: 5px; border: 1px solid var(--border-hairline);";
         tag.innerText = scope;
         scopeContainer.appendChild(tag);
       });
 
-      // 7. Telemetry Drivers
+      // 7. Telemetry Drivers Ribbon
       const d = data.drivers || {};
       document.getElementById('drvActivity').innerText = d.activityDeviation !== undefined ? Number(d.activityDeviation).toFixed(2) : '--';
       document.getElementById('drvTemp').innerText = d.temperatureDeviation !== undefined ? `${d.temperatureDeviation > 0 ? '+' : ''}${Number(d.temperatureDeviation).toFixed(2)}°C` : '--';
@@ -1897,11 +1864,11 @@
       document.getElementById('drvDrop').innerText = d.weightDrop !== undefined ? `${Number(d.weightDrop).toFixed(2)}kg` : '--';
       document.getElementById('drvFlow').innerText = d.netFlow !== undefined ? `${d.netFlow > 0 ? '+' : ''}${Number(d.netFlow).toFixed(0)}/m` : '--';
 
-      // 8. Dynamic Chart.js Timeline
+      // 8. Multi-Stream Canvas
       renderChart(currentReadings);
     }
 
-    // Chart.js Multi-Stream Visualization
+    // Chart.js Visualization
     function renderChart(readings) {
       if (!readings || readings.length === 0) return;
 
@@ -1922,8 +1889,8 @@
       const ctx = document.getElementById('telemetryChart').getContext('2d');
 
       const gradientWeight = ctx.createLinearGradient(0, 0, 0, 240);
-      gradientWeight.addColorStop(0, 'rgba(245, 158, 11, 0.2)');
-      gradientWeight.addColorStop(1, 'rgba(245, 158, 11, 0.0)');
+      gradientWeight.addColorStop(0, 'rgba(212, 163, 89, 0.22)');
+      gradientWeight.addColorStop(1, 'rgba(212, 163, 89, 0.00)');
 
       chartInstance = new Chart(ctx, {
         type: 'line',
@@ -1931,20 +1898,20 @@
           labels: labels,
           datasets: [
             {
-              label: 'Weight (kg)',
+              label: 'Colony Weight (kg)',
               data: weights,
-              borderColor: '#f59e0b',
+              borderColor: '#e5b869',
               backgroundColor: gradientWeight,
               yAxisID: 'yWeight',
               borderWidth: 2,
-              tension: 0.3,
+              tension: 0.32,
               fill: true,
               pointRadius: readings.length > 50 ? 0 : 2,
               pointHoverRadius: 5,
-              pointBackgroundColor: '#f59e0b'
+              pointBackgroundColor: '#e5b869'
             },
             {
-              label: 'Temp (°C)',
+              label: 'Core Temperature (°C)',
               data: temps,
               borderColor: '#f43f5e',
               backgroundColor: 'transparent',
@@ -1957,7 +1924,7 @@
               pointBackgroundColor: '#f43f5e'
             },
             {
-              label: 'Net Flow (bees/m)',
+              label: 'Net Flight (bees/m)',
               data: flows,
               borderColor: '#06b6d4',
               backgroundColor: 'rgba(6, 182, 212, 0.25)',
@@ -1980,12 +1947,12 @@
               display: false
             },
             tooltip: {
-              backgroundColor: 'rgba(13, 13, 17, 0.94)',
+              backgroundColor: 'rgba(16, 16, 20, 0.96)',
               titleColor: '#fff',
               bodyColor: '#a1a1aa',
-              borderColor: 'rgba(255, 255, 255, 0.1)',
+              borderColor: 'rgba(212, 163, 89, 0.25)',
               borderWidth: 1,
-              padding: 10,
+              padding: 11,
               cornerRadius: 8,
               bodyFont: { family: "'JetBrains Mono', monospace", size: 10.5 },
               titleFont: { family: "'Plus Jakarta Sans', sans-serif", size: 11.5, weight: 700 }
@@ -1993,15 +1960,15 @@
           },
           scales: {
             x: {
-              ticks: { color: '#52525b', font: { family: "'JetBrains Mono', monospace", size: 9.5 }, maxTicksLimit: 12 },
-              grid: { color: 'rgba(255, 255, 255, 0.03)' }
+              ticks: { color: '#555562', font: { family: "'JetBrains Mono', monospace", size: 9.5 }, maxTicksLimit: 12 },
+              grid: { color: 'rgba(255, 255, 255, 0.025)' }
             },
             yWeight: {
               type: 'linear',
               position: 'left',
-              title: { display: true, text: 'Weight (kg)', color: '#f59e0b', font: { size: 10, weight: 700 } },
-              ticks: { color: '#f59e0b', font: { family: "'JetBrains Mono', monospace", size: 9.5 } },
-              grid: { color: 'rgba(255, 255, 255, 0.03)' }
+              title: { display: true, text: 'Colony Weight (kg)', color: '#e5b869', font: { size: 10, weight: 700 } },
+              ticks: { color: '#e5b869', font: { family: "'JetBrains Mono', monospace", size: 9.5 } },
+              grid: { color: 'rgba(255, 255, 255, 0.025)' }
             },
             yTemp: {
               type: 'linear',
@@ -2038,7 +2005,7 @@
       });
     }
 
-    // Init
+    // Initialization
     window.addEventListener('DOMContentLoaded', () => {
       checkHealth();
       loadScenario('healthy');
