@@ -84,6 +84,15 @@ class MLRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(response_bytes)
 
+    def _send_bytes(self, status_code, content_type, data):
+        self.send_response(status_code)
+        self.send_header('Content-Type', content_type)
+        self.send_header('Content-Length', str(len(data)))
+        self.send_header('Cache-Control', 'public, max-age=86400')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
+        self.wfile.write(data)
+
     def do_OPTIONS(self):
         self.send_response(204)
         self.send_header('Access-Control-Allow-Origin', '*')
@@ -147,6 +156,17 @@ class MLRequestHandler(BaseHTTPRequestHandler):
                 self._send_json(200, data)
             else:
                 self._send_json(404, {"error": "sample_input.json not found"})
+        elif clean_path.endswith(('/logoml.png', '/favicon.ico', '/favicon.png', '/favicon-32x32.png')):
+            base_name = os.path.basename(clean_path)
+            file_path = os.path.join(BASE_DIR, base_name)
+            if not os.path.exists(file_path):
+                file_path = os.path.join(BASE_DIR, 'logoml.png')
+            if os.path.exists(file_path):
+                ctype = 'image/x-icon' if file_path.endswith('.ico') else 'image/png'
+                with open(file_path, 'rb') as f:
+                    self._send_bytes(200, ctype, f.read())
+            else:
+                self._send_json(404, {"error": "Icon not found"})
         else:
             self._send_json(404, {"error": "Not Found", "path": self.path})
 

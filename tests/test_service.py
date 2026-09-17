@@ -151,5 +151,20 @@ class TestHoneyChainMLService(unittest.TestCase):
             data = json.loads(resp.read().decode('utf-8'))
             self.assertEqual(data["status"], "ok")
 
+    def test_07_static_assets(self):
+        for path, expected_ctype in [
+            ('/favicon.ico', 'image/x-icon'),
+            ('/logoml.png', 'image/png'),
+            ('/favicon.png', 'image/png'),
+            ('/favicon-32x32.png', 'image/png'),
+            ('/dashboard/logoml.png', 'image/png')
+        ]:
+            req = urllib.request.Request(f"{BASE_URL}{path}")
+            with urllib.request.urlopen(req) as resp:
+                self.assertEqual(resp.status, 200)
+                self.assertIn(expected_ctype, resp.headers.get("Content-Type", ""))
+                content = resp.read()
+                self.assertGreater(len(content), 0)
+
 if __name__ == '__main__':
     unittest.main()
